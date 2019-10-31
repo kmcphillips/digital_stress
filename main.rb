@@ -13,17 +13,30 @@ logger.level = Logger::INFO
 
 raise "env var DISCORDRB_TOKEN must be set" unless token
 
+QUACKS = [
+  "Quack",
+  "Quack.",
+  "Hwain",
+  "Quack quack",
+  "Quack!",
+  "Quack?",
+  "quack",
+  "quack quack quack",
+  "Quack, Quack",
+  "Quack",
+]
+
 bot = Discordrb::Bot.new(token: token)
 
 bot.mention do |event|
   logger.info("mention #{event.author.name}: #{event.message.content}")
-  event.respond("I'm a secret to everybody.")
+  event.respond(QUACKS.sample)
 end
 
 bot.message do |event|
   if event.channel.pm?
     logger.info("pm #{event.author.name}: #{event.message.content}")
-    event.respond("Yes, tell me more.")
+    event.respond(QUACKS.sample)
   end
 end
 
