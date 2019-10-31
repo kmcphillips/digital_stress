@@ -4,8 +4,10 @@ require "active_support/all"
 require "dotenv/load"
 require "discordrb"
 require "logger"
+require "sqlite3"
 
 require_relative "quack"
+require_relative "datastore"
 
 token = ENV["DISCORDRB_TOKEN"].presence
 
