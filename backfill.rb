@@ -1,11 +1,7 @@
 # frozen_string_literal: true
-require "pry"
-require "active_support/all"
-require "dotenv/load"
-require "sqlite3"
-require "csv"
+require_relative "base"
 
-require_relative "datastore"
+require "csv"
 
 datastore = Datastore.new
 datastore.setup!
