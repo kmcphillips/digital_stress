@@ -53,3 +53,4 @@ build-iPhoneSimulator/
 /.env
 *.sqlite3
 *.csv
+nohup.out
