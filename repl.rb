@@ -6,5 +6,10 @@ require "sqlite3"
 
 require_relative "datastore"
 
-db = Datastore.new
+datastore = Datastore.new
+puts datastore.peek
+
+
+
+db = datastore.db
 binding.pry

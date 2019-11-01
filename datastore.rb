@@ -2,6 +2,8 @@
 class Datastore
   FILENAME = "chat.sqlite3"
 
+  attr_reader :db
+
   def initialize
     @db = SQLite3::Database.new(File.join(File.dirname(__FILE__), FILENAME))
   end
@@ -17,6 +19,22 @@ class Datastore
 
   def dump(username)
     # Time.at()
+  end
+
+  def peek
+    lines = []
+
+    lines << "Totals:"
+    @db.execute("select username, count(*) from messages group by username").each do |row|
+      lines << "  #{row[0]}: #{row[1]}"
+    end
+    lines << ""
+    lines << "Recent:"
+    @db.execute("select username, message, timestamp from messages order by timestamp desc limit 10").reverse.each do |row|
+      lines << "  #{row[0]} (#{Time.at(row[2])}): #{row[1]}"
+    end
+
+    lines.join("\n")
   end
 
   private
