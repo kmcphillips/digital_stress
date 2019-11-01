@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 class Datastore
   FILENAME = "chat.sqlite3"
+  USERNAMES = {
+    "dave" => [ "Dave" ],
+    "eliot" => [ "Eliot" ],
+    "patrick" => [ "P-DOG" ],
+    "kevin" => [ "kmcphillips" ],
+  }.freeze
 
   attr_reader :db
 
@@ -18,7 +24,11 @@ class Datastore
   end
 
   def dump(username)
-    # Time.at()
+    @db.execute("select message from messages where username = ? order by timestamp asc", [username]).map { |r| r.first }
+  end
+
+  def dump_all
+    USERNAMES.keys.each_with_object({}) { |username, result| result[username] = dump(username) }
   end
 
   def peek
@@ -53,14 +63,15 @@ class Datastore
   end
 
   def parse_username(input)
-    case input.gsub(/#\d+$/, "")
-    when "Dave" then "dave"
-    when "Eliot" then "eliot"
-    when "P-DOG" then "patrick"
-    when "kmcphillips" then "kevin"
-    else
-      raise "Unkonwn username #{input}"
+    scrubbed_input = input.gsub(/#\d+$/, "").downcase
+
+    USERNAMES.each do |username, matches|
+      matches.each do |match|
+        return username if match.downcase == scrubbed_input
+      end
     end
+
+    raise "Unkonwn username #{input}"
   end
 
   def parse_message(input)

@@ -8,6 +8,7 @@ require "csv"
 require_relative "datastore"
 
 datastore = Datastore.new
+datastore.setup!
 
 raise "pass in the CSV file" unless ARGV[0].present?
 
