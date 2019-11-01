@@ -1,0 +1,20 @@
+[Unit]
+Description=Discord bot
+After=network.target
+
+[Service]
+Type=simple
+User=deploy
+Environment=RBENV_ROOT=/home/deploy/.rbenv
+WorkingDirectory=/var/apps/digital_stress
+ExecStart=/home/deploy/.rbenv/bin/rbenv exec bundle exec ruby main.rb
+TimeoutSec=20
+Restart=always
+RestartSec=30
+StartLimitInterval=350
+StartLimitBurst=10
+KillMode=process
+SyslogIdentifier=digital_stress
+
+[Install]
+WantedBy=multi-user.target
