@@ -6,6 +6,7 @@ class Quack
 
   COMMANDS = [
     :ping,
+    :steam,
   ]
 
   QUACKS = [
@@ -58,7 +59,16 @@ class Quack
   private
 
   def ping(params:, event:)
-    event.respond(":robot: Quack")
+    event.respond(":white_check_mark: Quack")
+  end
+
+  def steam(params:, event:)
+    if params.blank?
+      event.respond("Quacking-search for something")
+    else
+      url = Steam.search_game_url(params)
+      event.respond(url || "Quack-all found")
+    end
   end
 
   def run_command(command:, event:, params:)

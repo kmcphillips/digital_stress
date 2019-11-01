@@ -5,7 +5,10 @@ require "dotenv/load"
 require "discordrb"
 require "logger"
 require "sqlite3"
+require "httparty"
+require "nokogiri"
 
+require_relative "steam"
 require_relative "quack"
 require_relative "datastore"
 
