@@ -43,6 +43,7 @@ class Duck
       if search.blank?
         "Quacking-search for something"
       else
+        event.channel.start_typing
         Steam.search_game_url(search) || "Quack-all found"
       end
     end
