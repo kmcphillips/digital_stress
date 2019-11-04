@@ -12,9 +12,11 @@ class Duck
     "Quack, Quack",
     "Quack",
   ].freeze
-
   COMMAND_PREFIX = "duck"
   T_MINUS_REGEX = /T-([^\s]+)\s?/i
+  RECORD_CHANNELS = [
+    "mandatemandate#general",
+  ]
 
   attr_reader :bot, :datastore
 
@@ -52,7 +54,7 @@ class Duck
 
     bot.message do |event|
       # duck is always watching
-      if event.channel.name == "general"
+      if record_event?(event)
         datastore.append(event.author.name, event.message.content, event.timestamp)
         Log.info("datastore.append(#{event.author.name}, #{event.message.content}, #{event.timestamp})")
       end
@@ -73,5 +75,16 @@ class Duck
     Log.info("Starting")
 
     bot.run
+  end
+
+  private
+
+  def record_event?(event)
+    RECORD_CHANNELS.each do |pair|
+      server, channel = pair.split("#")
+      return true if event.server.name == server && event.channel.name == channel
+    end
+    Log.warn("record_event? == false : #{ event.server.name }##{ event.channel.name }")
+    false
   end
 end
