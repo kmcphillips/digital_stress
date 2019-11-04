@@ -82,9 +82,9 @@ class Duck
   def record_event?(event)
     RECORD_CHANNELS.each do |pair|
       server, channel = pair.split("#")
-      return true if event.server.name == server && event.channel.name == channel
+      return true if event.server&.name == server && event.channel&.name == channel
     end
-    Log.warn("record_event? == false : #{ event.server.name }##{ event.channel.name }")
+    Log.warn("record_event? == false : #{ event.server&.name || 'nil' }##{ event.channel&.name || 'nil' }")
     false
   end
 end
