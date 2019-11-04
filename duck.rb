@@ -13,7 +13,7 @@ class Duck
     "Quack",
   ].freeze
   COMMAND_PREFIX = "duck"
-  T_MINUS_REGEX = /T-([^\s]+)\s?/i
+  T_MINUS_NUMBER_REGEX = /T-([0-9]+)/i
   RECORD_CHANNELS = [
     "mandatemandate#general",
   ]
@@ -60,11 +60,24 @@ class Duck
         Log.info("datastore.append(#{event.author.name}, #{event.message.content}, #{event.timestamp})")
       end
 
-      match = T_MINUS_REGEX.match(event.message.content)
+      match = T_MINUS_NUMBER_REGEX.match(event.message.content)
       if match
-        t_minus = match[1]
-        Log.info("handle T-#{ t_minus }")
-        # TODO
+        minutes = match[1].to_i
+        channel_id = event.channel.id
+        mention = event.user.mention
+        Log.info("handle T-#{ minutes } from: #{ event.message.content }")
+
+        if minutes > 300
+          event.respond("T-#{ minutes } minutes is too long to wait #{ mention }")
+        else
+          event.respond("T-#{ minutes } minutes and counting #{ mention }")
+          Thread.new do
+            sleep(minutes * 60)
+            event.channel.start_typing
+            sleep(4)
+            bot.send_message(channel_id, "T-#{ minutes } minutes is up #{ mention }")
+          end
+        end
       end
 
       if event.channel.pm? && !event.message.content.starts_with?(COMMAND_PREFIX)
