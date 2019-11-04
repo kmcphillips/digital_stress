@@ -7,7 +7,13 @@ module Steam
   def search_game_url(search)
     url = "https://store.steampowered.com/search/?term=#{ URI.encode(search.strip) }"
     response = HTTParty.get(url, { headers: { "User-Agent" => USERAGENT } })
-    document = Nokogiri::HTML(response.body)
+    begin
+      document = Nokogiri::HTML(response.body)
+    rescue HTTParty::Error => e
+      return ":bang: Quack error: #{ e.class } #{ e.message }"
+    end
+
+    return ":bang: Quack failure: #{ response.code }" unless response.success?
 
     if document.css("a.search_result_row").any?
       document.css("a.search_result_row").first.attribute("href").value.gsub(/\/\?.+/, "")
