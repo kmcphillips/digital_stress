@@ -14,6 +14,7 @@ class Duck
   ].freeze
 
   COMMAND_PREFIX = "duck"
+  T_MINUS_REGEX = /T-([^\s]+)\s?/i
 
   attr_reader :bot, :datastore
 
@@ -54,6 +55,13 @@ class Duck
       if event.channel.name == "general"
         datastore.append(event.author.name, event.message.content, event.timestamp)
         Log.info("datastore.append(#{event.author.name}, #{event.message.content}, #{event.timestamp})")
+      end
+
+      match = T_MINUS_REGEX.match(event.message.content)
+      if match
+        t_minus = match[1]
+        Log.info("handle T-#{ t_minus }")
+        # TODO
       end
 
       if event.channel.pm? && !event.message.content.starts_with?(COMMAND_PREFIX)
