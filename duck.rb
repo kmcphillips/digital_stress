@@ -60,29 +60,35 @@ class Duck
         Log.info("datastore.append(#{event.author.name}, #{event.message.content}, #{event.timestamp})")
       end
 
-      match = T_MINUS_NUMBER_REGEX.match(event.message.content)
-      if match
-        minutes = match[1].to_i
-        channel_id = event.channel.id
-        mention = event.user.mention
-        Log.info("handle T-#{ minutes } from: #{ event.message.content }")
-
-        if minutes > 300
-          event.respond("T-#{ minutes } minutes is too long to wait #{ mention }")
-        else
-          event.respond("T-#{ minutes } minutes and counting #{ mention }")
-          Thread.new do
-            sleep(minutes * 60)
-            event.channel.start_typing
-            sleep(4)
-            bot.send_message(channel_id, "T-#{ minutes } minutes is up #{ mention }")
-          end
-        end
-      end
-
-      if event.channel.pm? && !event.message.content.starts_with?(COMMAND_PREFIX)
+      if event.channel.pm?
+        !event.message.content.starts_with?(COMMAND_PREFIX)
         Log.info("pm #{event.author.name}: #{event.message.content}")
         event.respond(QUACKS.sample)
+      else # in a channel
+        match = T_MINUS_NUMBER_REGEX.match(event.message.content)
+        if  match
+          minutes = match[1].to_i
+          channel_id = event.channel.id
+          mention = event.user.mention
+          Log.info("handle T-#{ minutes } from: #{ event.message.content }")
+
+          if minutes > 300
+            event.respond("T-#{ minutes } minutes is too long to wait #{ mention }")
+          else
+            event.respond("T-#{ minutes } minutes and counting #{ mention }")
+            Thread.new do
+              sleep(minutes * 60)
+              event.channel.start_typing
+              sleep(2)
+              online = event.server.voice_channels.map{ |c| c.users.map(&:id) }.flatten.include?(event.user.id)
+              if online
+                bot.send_message(channel_id, "T-#{ minutes } minutes is up and #{ mention } made it on time :ok_hand:")
+              else
+                bot.send_message(channel_id, "T-#{ minutes } minutes is up and #{ mention } is late :alarm_clock:")
+              end
+            end
+          end
+        end
       end
     end
 
@@ -98,7 +104,7 @@ class Duck
       server, channel = pair.split("#")
       return true if event.server&.name == server && event.channel&.name == channel
     end
-    Log.warn("record_event? == false : #{ event.server&.name || 'nil' }##{ event.channel&.name || 'nil' }")
+    Log.warn("record_event(false) : #{ event.server&.name || 'nil' }##{ event.channel&.name || 'nil' }")
     false
   end
 end
