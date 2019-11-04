@@ -11,7 +11,7 @@ logger.level = Logger::INFO
 raise "env var DISCORDRB_TOKEN must be set" unless token
 
 begin
-  Quack.new(token: token, logger: logger).quack
+  Duck.new(token: token, logger: logger).quack
 rescue => e
   logger.error("Exception in Quack#quack: #{e.message}")
   logger.error(e)

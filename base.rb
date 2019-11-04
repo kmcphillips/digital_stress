@@ -9,5 +9,6 @@ require "httparty"
 require "nokogiri"
 
 require_relative "steam"
-require_relative "quack"
+require_relative "commands"
+require_relative "duck"
 require_relative "datastore"

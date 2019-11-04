@@ -1,13 +1,8 @@
 # frozen_string_literal: true
-class Quack
+class Duck
   BOT_NAMES = [
     "duck",
   ].freeze
-
-  COMMANDS = [
-    :ping,
-    :steam,
-  ]
 
   QUACKS = [
     "Quack",
@@ -58,23 +53,10 @@ class Quack
 
   private
 
-  def ping(params:, event:)
-    event.respond(":white_check_mark: Quack")
-  end
-
-  def steam(params:, event:)
-    if params.blank?
-      event.respond("Quacking-search for something")
-    else
-      url = Steam.search_game_url(params)
-      event.respond(url || "Quack-all found")
-    end
-  end
-
   def run_command(command:, event:, params:)
-    if COMMANDS.map{ |c| c.to_s.downcase }.include?(command)
+    if Commands.handles?(command)
       logger.info("command(#{ command }, '#{ params }')")
-      send(command, params: params, event: event)
+      Commands.send(command, params: params, event: event)
       true
     else
       logger.info("command #{ command } not found")
