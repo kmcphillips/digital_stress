@@ -8,6 +8,11 @@ require "sqlite3"
 require "httparty"
 require "nokogiri"
 
+logger_file = File.open("bot.log", File::WRONLY | File::APPEND | File::CREAT)
+logger_file.sync = true
+Log = Logger.new(logger_file)
+Log.level = Logger::INFO
+
 require_relative "steam"
 require_relative "duck"
 require_relative "datastore"
