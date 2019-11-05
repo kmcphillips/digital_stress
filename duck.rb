@@ -12,7 +12,7 @@ class Duck
     "Quack, Quack",
     "Quack",
   ].freeze
-  COMMAND_PREFIX = "duck"
+  COMMAND_PREFIXES = ["Duck", "duck"].freeze
   T_MINUS_NUMBER_REGEX = /T-([0-9]+)/i
   RECORD_CHANNELS = [
     "mandatemandate#general",
@@ -25,7 +25,7 @@ class Duck
     @datastore = Datastore.new
     @bot = Discordrb::Commands::CommandBot.new(
       token: token,
-      prefix: COMMAND_PREFIX,
+      prefix: COMMAND_PREFIXES,
       spaces_allowed: true,
       command_doesnt_exist_message: "Quack???"
     )
@@ -60,8 +60,7 @@ class Duck
         Log.info("datastore.append(#{ { username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp } }")
       end
 
-      if event.channel.pm?
-        !event.message.content.starts_with?(COMMAND_PREFIX)
+      if event.channel.pm? && COMMAND_PREFIXES.any?{ |c| !event.message.content.starts_with?(c) }
         Log.info("pm #{event.author.name}: #{event.message.content}")
         event.respond(QUACKS.sample)
       else # in a channel
