@@ -60,7 +60,7 @@ class Duck
         Log.info("datastore.append(#{ { username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp } }")
       end
 
-      if event.channel.pm? && COMMAND_PREFIXES.any?{ |c| !event.message.content.starts_with?(c) }
+      if event.channel.pm? && !COMMAND_PREFIXES.any?{ |c| event.message.content.starts_with?(c) }
         Log.info("pm #{event.author.name}: #{event.message.content}")
         event.respond(QUACKS.sample)
       else # in a channel
