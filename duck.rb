@@ -56,8 +56,8 @@ class Duck
     bot.message do |event|
       # duck is always watching
       if record_event?(event)
-        datastore.append(event.author.name, event.message.content, event.timestamp)
-        Log.info("datastore.append(#{event.author.name}, #{event.message.content}, #{event.timestamp})")
+        datastore.append(username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp)
+        Log.info("datastore.append(#{ { username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp } }")
       end
 
       if event.channel.pm?
@@ -66,7 +66,7 @@ class Duck
         event.respond(QUACKS.sample)
       else # in a channel
         match = T_MINUS_NUMBER_REGEX.match(event.message.content)
-        if  match
+        if match
           minutes = match[1].to_i
           channel_id = event.channel.id
           mention = event.user.mention

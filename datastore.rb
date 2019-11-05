@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 class Datastore
   FILENAME = "chat.sqlite3"
-  USERNAMES = {
-    "dave" => [ "Dave" ],
-    "eliot" => [ "Eliot" ],
-    "patrick" => [ "P-DOG" ],
-    "kevin" => [ "kmcphillips" ],
-  }.freeze
 
   attr_reader :db
 
@@ -18,9 +12,9 @@ class Datastore
     @db.execute("CREATE TABLE messages ( id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER, user_id INTEGER, username VARCHAR(255), message TEXT );")
   end
 
-  def append(username, message, time=nil)
-    input = [parse_timestamp(time), parse_username(username), parse_message(message)]
-    @db.execute("INSERT INTO messages ( timestamp, username, message ) VALUES ( ?, ?, ? )", input)
+  def append(username:, user_id:, message:, time:nil)
+    input = [parse_timestamp(time), user_id, username, parse_message(message)]
+    @db.execute("INSERT INTO messages ( timestamp, user_id, username, message ) VALUES ( ?, ?, ?, ? )", input)
   end
 
   def dump(username)
@@ -60,18 +54,6 @@ class Datastore
     else
       raise "Unknown time #{input}"
     end
-  end
-
-  def parse_username(input)
-    scrubbed_input = input.gsub(/#\d+$/, "").downcase
-
-    USERNAMES.each do |username, matches|
-      matches.each do |match|
-        return username if match.downcase == scrubbed_input
-      end
-    end
-
-    raise "Unkonwn username #{input}"
   end
 
   def parse_message(input)
