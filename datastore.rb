@@ -15,16 +15,16 @@ class Datastore
   end
 
   def setup!
-    @db.execute("create table messages ( timestamp integer, username varchar(255), message text );")
+    @db.execute("CREATE TABLE messages ( id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER, user_id INTEGER, username VARCHAR(255), message TEXT );")
   end
 
   def append(username, message, time=nil)
     input = [parse_timestamp(time), parse_username(username), parse_message(message)]
-    @db.execute("insert into messages ( timestamp, username, message ) values ( ?, ?, ? )", input)
+    @db.execute("INSERT INTO messages ( timestamp, username, message ) VALUES ( ?, ?, ? )", input)
   end
 
   def dump(username)
-    @db.execute("select message from messages where username = ? order by timestamp asc", [username]).map { |r| r.first }
+    @db.execute("SELECT message FROM messages WHERE username = ? ORDER BY timestamp ASC", [username]).map { |r| r.first }
   end
 
   def dump_all
@@ -35,13 +35,13 @@ class Datastore
     lines = []
 
     lines << "Totals:"
-    @db.execute("select username, count(*) from messages group by username").each do |row|
+    @db.execute("SELECT username, count(*) FROM messages GROUP BY username").each do |row|
       lines << "  #{row[0]}: #{row[1]}"
     end
     lines << ""
     lines << "Recent:"
-    @db.execute("select username, message, timestamp from messages order by timestamp desc limit 10").reverse.each do |row|
-      lines << "  #{row[0]} (#{Time.at(row[2])}): #{row[1]}"
+    @db.execute("SELECT id, username, message, timestamp FROM messages ORDER BY timestamp DESC LIMIT 10").reverse.each do |row|
+      lines << "  #{row[1]} (#{Time.at(row[3])} ##{row[0]}): #{row[2]}"
     end
 
     lines.join("\n")
