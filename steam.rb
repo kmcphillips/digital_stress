@@ -10,16 +10,16 @@ module Steam
     begin
       document = Nokogiri::HTML(response.body)
     rescue HTTParty::Error => e
-      Log.error("search_game_url failed for '#{ search }'")
+      Log.error("Steam#search_game_url failed for '#{ search }'")
       Log.error(e.message)
       Log.error(e)
-      return ":bang: Quack error: #{ e.class } #{ e.message }"
+      return ":bangbang: Quack error #{ e.class } #{ e.message }"
     end
 
     if !response.success?
-      Log.error("search_game_url returned HTTP #{ response.code }")
+      Log.error("Steam#search_game_url returned HTTP #{ response.code }")
       Log.error(response.body)
-      return ":bang: Quack failure: #{ response.code }"
+      return ":bangbang: Quack failure HTTP#{ response.code }"
     end
 
     if document.css("a.search_result_row").any?

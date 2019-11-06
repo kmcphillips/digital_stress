@@ -48,6 +48,17 @@ class Duck
       end
     end
 
+    bot.command [:image, :images], description: "Search for an image and post it." do |event, *params|
+      Log.info("command.#{ event.command.name }(#{ params })")
+      search = params.join(" ")
+      if search.blank?
+        "Quacking-search for something"
+      else
+        event.channel.start_typing
+        Azure.search_image_url(search) || "Quack-all found"
+      end
+    end
+
     bot.mention do |event|
       Log.info("mention #{event.author.name}: #{event.message.content}")
       event.respond(QUACKS.sample)
