@@ -70,6 +70,21 @@ class Duck
       end
     end
 
+    bot.command :status, description: "Check on status of the bot." do |event, *params|
+      Log.info("command.#{ event.command.name }(#{ params })")
+      event.channel.start_typing
+      ip_address = `hostname`.strip
+      hostname = `hostname -I`.split(" ").first
+      counts = datastore.counts
+      last = datastore.last
+      elapsed_seconds = Time.now.to_i - last[3]
+      lines = [
+        ":robot: `#{ hostname }` `(#{ ip_address })`",
+        "Last message by #{ last[0] } #{ elapsed_seconds } second#{ elapsed_seconds == 1 ? '' : 's' } ago",
+      ] + counts.map{ |r| "**#{ r[0] }**: #{ r[2] } messages" }
+      lines.reject(&:blank?).join("\n")
+    end
+
     bot.mention do |event|
       Log.info("mention #{event.author.name}: #{event.message.content}")
       event.respond(QUACKS.sample)

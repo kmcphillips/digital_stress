@@ -25,6 +25,14 @@ class Datastore
     USERNAMES.keys.each_with_object({}) { |username, result| result[username] = dump(username) }
   end
 
+  def counts
+    @db.execute("SELECT DISTINCT username, user_id, COUNT(*) FROM messages GROUP BY username ORDER BY username ASC")
+  end
+
+  def last
+    @db.execute("SELECT username, user_id, message, timestamp FROM messages ORDER BY timestamp DESC LIMIT 1").first
+  end
+
   def peek
     lines = []
 
