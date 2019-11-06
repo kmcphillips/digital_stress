@@ -15,5 +15,6 @@ Log.level = Logger::INFO
 
 require_relative "steam"
 require_relative "azure"
+require_relative "gif"
 require_relative "duck"
 require_relative "datastore"

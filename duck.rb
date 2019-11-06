@@ -59,6 +59,17 @@ class Duck
       end
     end
 
+    bot.command :gif, description: "Search for a gif and post it." do |event, *params|
+      Log.info("command.#{ event.command.name }(#{ params })")
+      search = params.join(" ")
+      if search.blank?
+        "Quacking-search for something"
+      else
+        event.channel.start_typing
+        Gif.search_url(search) || "Quack-all found"
+      end
+    end
+
     bot.mention do |event|
       Log.info("mention #{event.author.name}: #{event.message.content}")
       event.respond(QUACKS.sample)
