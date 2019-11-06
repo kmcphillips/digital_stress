@@ -3,7 +3,7 @@ module Azure
   extend self
 
   def search_image_url(search)
-    url = "https://api.cognitive.microsoft.com/bing/v7.0/images/search?q=#{ search }&count=10&offset=0&mkt=en-us&safeSearch=Off"
+    url = "https://api.cognitive.microsoft.com/bing/v7.0/images/search?q=#{ URI.encode(search.strip) }&count=10&offset=0&mkt=en-us&safeSearch=Off"
     response = HTTParty.get(url, { headers: { "Ocp-Apim-Subscription-Key" => ENV["AZURE_KEY"] } })
 
     if !response.success?
