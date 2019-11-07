@@ -77,11 +77,10 @@ class Duck
       hostname = `hostname -I`.split(" ").first
       counts = datastore.counts
       last = datastore.last
-      elapsed_seconds = Time.now.to_i - last[3]
       lines = [
-        ":robot: `#{ hostname }` `(#{ ip_address })`",
-        "Last message by #{ last[0] } #{ elapsed_seconds } second#{ elapsed_seconds == 1 ? '' : 's' } ago",
-      ] + counts.map{ |r| "**#{ r[0] }**: #{ r[2] } messages" }
+        ":duck: :robot: on `#{ hostname }` `(#{ ip_address })`",
+        "Last message by **#{ last[0] }** #{ TimeDifference.between(Time.at(last[3]), Time.now).humanize || 'a second' } ago",
+      ] + counts.map{ |r| "  **#{ r[0] }**: #{ r[2] } messages" }
       lines.reject(&:blank?).join("\n")
     end
 
