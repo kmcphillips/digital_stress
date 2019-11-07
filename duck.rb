@@ -78,7 +78,7 @@ class Duck
       counts = datastore.counts
       last = datastore.last
       lines = [
-        ":duck: :robot: on `#{ hostname }` `(#{ ip_address })`",
+        ":duck: on `#{ hostname }` `(#{ ip_address })`",
         "Last message by **#{ last[0] }** #{ TimeDifference.between(Time.at(last[3]), Time.now).humanize || 'a second' } ago",
       ] + counts.map{ |r| "  **#{ r[0] }**: #{ r[2] } messages" }
       lines.reject(&:blank?).join("\n")
