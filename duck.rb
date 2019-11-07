@@ -135,11 +135,15 @@ class Duck
   private
 
   def record_event?(event)
+    if event.message.text.downcase.starts_with?("http") || event.message.text.downcase.starts_with?("duck ")
+      Log.warn("record_event(false) ignoring : #{ event.message.text }")
+      return false
+    end
     RECORD_CHANNELS.each do |pair|
       server, channel = pair.split("#")
       return true if event.server&.name == server && event.channel&.name == channel
     end
-    Log.warn("record_event(false) : #{ event.server&.name || 'nil' }##{ event.channel&.name || 'nil' }")
+    Log.warn("record_event(false) #{ event.server&.name || 'nil' }##{ event.channel&.name || 'nil' } : #{ event.message.text }")
     false
   end
 end
