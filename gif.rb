@@ -12,6 +12,6 @@ module Gif
       return ":bangbang: Quack failure HTTP#{ response.code }"
     end
 
-    response["data"][0]["images"]["downsized_large"]["url"]
+    response.dig("data", 0, "images", "downsized_large", "url")
   end
 end

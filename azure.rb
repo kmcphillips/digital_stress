@@ -12,6 +12,6 @@ module Azure
       return ":bangbang: Quack failure HTTP#{ response.code }"
     end
 
-    response["value"][0]["contentUrl"]
+    response.dig("value", 0, "contentUrl")
   end
 end
