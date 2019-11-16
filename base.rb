@@ -8,6 +8,7 @@ require "sqlite3"
 require "httparty"
 require "nokogiri"
 require "time_difference"
+require "securerandom"
 
 logger_file = File.open("bot.log", File::WRONLY | File::APPEND | File::CREAT)
 logger_file.sync = true
