@@ -16,6 +16,8 @@ Log = Logger.new(logger_file)
 Log.level = Logger::INFO
 
 require_relative "subcommands"
+require_relative "status_command"
+
 require_relative "steam"
 require_relative "azure"
 require_relative "gif"

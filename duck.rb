@@ -72,17 +72,7 @@ class Duck
     end
 
     bot.command :status, description: "Check on status of the bot." do |event, *params|
-      Log.info("command.#{ event.command.name }(#{ params })")
-      event.channel.start_typing
-      ip_address = `hostname`.strip
-      hostname = `hostname -I`.split(" ").first
-      counts = datastore.counts
-      last = datastore.last
-      lines = [
-        ":duck: on `#{ hostname }` `(#{ ip_address })`",
-        "Last message by **#{ last[0] }** #{ TimeDifference.between(Time.at(last[3]), Time.now).humanize || 'a second' } ago",
-      ] + counts.map{ |r| "  **#{ r[0] }**: #{ r[2] } messages" }
-      lines.reject(&:blank?).join("\n")
+      StatusCommand.new(event: event, bot: bot, params: params, datastore: datastore).respond
     end
 
     bot.mention do |event|
