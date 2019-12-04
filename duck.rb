@@ -13,7 +13,7 @@ class Duck
     "Quack",
   ].freeze
   COMMAND_PREFIXES = ["Duck", "duck"].freeze
-  T_MINUS_NUMBER_REGEX = /^T-\s?([0-9]+)/i
+  T_MINUS_NUMBER_REGEX = /^T-\s?([0-9]+)(?:$|\s)/i
   RECORD_CHANNELS = [
     "mandatemandate#general",
   ]
