@@ -16,6 +16,7 @@ Log = Logger.new(logger_file)
 Log.level = Logger::INFO
 
 require_relative "subcommands"
+require_relative "games_command"
 require_relative "status_command"
 
 require_relative "steam"

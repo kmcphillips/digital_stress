@@ -11,6 +11,7 @@ class BaseCommand
 
   def respond
     Log.info("command.#{ @event.command.name }(#{ params })")
+    @event.channel.start_typing
     begin
       message = response
       message = message.join("\n") if message.is_a?(Array)
@@ -47,6 +48,14 @@ class BaseSubcommand < BaseCommand
 
   def subcommand
     params.first.presence.to_s.downcase if params.first.present?
+  end
+
+  def subcommand_params
+    if !@subcommand_params
+      @subcommand_params = params.dup
+      @subcommand_params.shift
+    end
+    @subcommand_params
   end
 
   def help

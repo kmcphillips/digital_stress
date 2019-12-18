@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class StatusCommand < BaseCommand
   def response
-    @event.channel.start_typing
     ip_address = `hostname`.strip
     hostname = `hostname -I`.split(" ").first
     counts = @datastore.counts

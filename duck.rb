@@ -75,6 +75,11 @@ class Duck
       StatusCommand.new(event: event, bot: bot, params: params, datastore: datastore).respond
     end
 
+    # TODO
+    # bot.command :games, description: "What should we play?" do |event, *params|
+    #   GamesCommand.new(event: event, bot: bot, params: params, datastore: datastore).respond
+    # end
+
     bot.mention do |event|
       Log.info("mention #{event.author.name}: #{event.message.content}")
       event.respond(QUACKS.sample)
