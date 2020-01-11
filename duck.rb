@@ -17,7 +17,7 @@ class Duck
     "mandatemandate#general",
   ]
   RESPONDERS = [
-    TMinus
+    TMinus,
   ].freeze
 
   attr_reader :bot, :datastore
@@ -31,7 +31,6 @@ class Duck
       spaces_allowed: true,
       command_doesnt_exist_message: "Quack???"
     )
-    @waiting = {}
   end
 
   def quack
@@ -98,7 +97,7 @@ class Duck
         Log.info("pm #{event.author.name}: #{event.message.content}")
         event.respond(QUACKS.sample)
       else # in a channel
-        RESPONDERS.each { |responder| responder.new(event).respond }
+        RESPONDERS.each { |responder| responder.new(event, bot: bot).respond }
       end
     end
 

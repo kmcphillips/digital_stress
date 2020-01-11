@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 class BaseResponder
-  attr_reader :event
+  attr_reader :event, :bot
 
-  def initialize(event)
+  def initialize(event, bot:)
     @event = event
+    @bot = bot
   end
 
   def respond

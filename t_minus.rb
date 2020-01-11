@@ -2,6 +2,12 @@
 class TMinus < BaseResponder
   T_MINUS_NUMBER_REGEX = /^T-\s?([0-9]+)(?:$|\s)/i
 
+  @waiting = {}
+
+  class << self
+    attr_reader :waiting
+  end
+
   def respond
     match = T_MINUS_NUMBER_REGEX.match(event.message.content)
     if match
@@ -14,16 +20,16 @@ class TMinus < BaseResponder
       if minutes > 300
         event.respond("T-#{ minutes } minutes is too long to wait #{ mention }")
       else
-        if @waiting[event.user.id]
+        if TMinus.waiting[event.user.id]
           event.respond("T-#{ minutes } minutes reset and counting #{ mention }")
         else
           event.respond("T-#{ minutes } minutes and counting #{ mention }")
         end
-        @waiting[event.user.id] = nonce
+        TMinus.waiting[event.user.id] = nonce
         Thread.new do
           sleep(minutes * 60)
-          if @waiting[event.user.id] == nonce
-            @waiting[event.user.id] = nil
+          if TMinus.waiting[event.user.id] == nonce
+            TMinus.waiting[event.user.id] = nil
             event.channel.start_typing
             sleep(2)
             online = event.server.voice_channels.map{ |c| c.users.map(&:id) }.flatten.include?(event.user.id)
