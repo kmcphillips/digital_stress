@@ -21,6 +21,7 @@ require_relative "status_command"
 
 require_relative "base_responder"
 require_relative "t_minus"
+require_relative "alchemy"
 
 require_relative "steam"
 require_relative "azure"

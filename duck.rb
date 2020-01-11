@@ -18,6 +18,7 @@ class Duck
   ]
   RESPONDERS = [
     TMinus,
+    Alchemy,
   ].freeze
 
   attr_reader :bot, :datastore
