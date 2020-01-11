@@ -19,8 +19,12 @@ require_relative "subcommands"
 require_relative "games_command"
 require_relative "status_command"
 
+require_relative "base_responder"
+require_relative "t_minus"
+
 require_relative "steam"
 require_relative "azure"
 require_relative "gif"
+
 require_relative "duck"
 require_relative "datastore"
