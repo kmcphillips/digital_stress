@@ -6,7 +6,7 @@ token = ENV["DISCORDRB_TOKEN"].presence
 raise "env var DISCORDRB_TOKEN must be set" unless token
 
 begin
-  Duck.new(token: token).quack
+  Duck.new(token: token).join
 rescue => e
   Log.error("Exception in Duck#quack: #{e.message}")
   Log.error(e)

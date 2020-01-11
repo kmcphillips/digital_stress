@@ -5,12 +5,12 @@ class ClusterCommand < BaseCommand
     days = (deadline - Date.today).to_i
 
     if days == 1
-      ":bangbang: #{ Duck::QUACKS.sample }, Cluster festival is tomorrow!"
+      ":bangbang: #{ Duck.quack }, Cluster festival is tomorrow!"
     elsif days <= 0
-      "#{ Duck::QUACKS.sample }, hope Cluster went ok."
+      "#{ Duck.quack }, hope Cluster went ok."
     else
       weeks = (days / 7).to_i
-      ":information_source: #{ Duck::QUACKS.sample }, Cluster festival is in #{ days } days (#{ weeks } weeks)."
+      ":information_source: #{ Duck.quack }, Cluster festival is in #{ days } days (#{ weeks } weeks)."
     end
   end
 end

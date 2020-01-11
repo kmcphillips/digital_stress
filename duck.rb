@@ -21,6 +21,12 @@ class Duck
     Alchemy,
   ].freeze
 
+  class << self
+    def quack
+      QUACKS.sample
+    end
+  end
+
   attr_reader :bot, :datastore
 
   def initialize(token:)
@@ -34,10 +40,10 @@ class Duck
     )
   end
 
-  def quack
+  def join
     bot.command :ping, description: "Hello, is it me you're looking for?" do |event, *params|
       Log.info("command.#{ event.command.name }(#{ params })")
-      ":white_check_mark: #{ QUACKS.sample }"
+      ":white_check_mark: #{ Duck.quack }"
     end
 
     bot.command :steam, description: "Paste a link to the steam game matching the search." do |event, *params|
@@ -88,7 +94,7 @@ class Duck
 
     bot.mention do |event|
       Log.info("mention #{event.author.name}: #{event.message.content}")
-      event.respond(QUACKS.sample)
+      event.respond(Duck.quack)
     end
 
     bot.message do |event|
@@ -100,7 +106,7 @@ class Duck
 
       if event.channel.pm? && !COMMAND_PREFIXES.any?{ |c| event.message.content.starts_with?(c) }
         Log.info("pm #{event.author.name}: #{event.message.content}")
-        event.respond(QUACKS.sample)
+        event.respond(Duck.quack)
       else # in a channel
         RESPONDERS.each { |responder| responder.new(event, bot: bot).respond }
       end
