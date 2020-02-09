@@ -19,14 +19,16 @@ class TMinus < BaseResponder
 
       if minutes > 300
         event.channel.start_typing
+        TMinus.waiting[event.user.id] = nil
         sleep(1)
         event.respond("T-#{ minutes } minutes is too long to wait #{ mention }")
       elsif minutes == 0
         event.channel.start_typing
+        TMinus.waiting[event.user.id] = nil
         if user_online?
-          event.respond("You say zero minutes #{ mention } but yet you are not here")
-        else
           event.respond("Oh #{ mention } I didn't see you there")
+        else
+          event.respond("You say zero minutes #{ mention } but yet you are not here")
         end
       else
         if TMinus.waiting[event.user.id]
