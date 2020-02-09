@@ -21,7 +21,7 @@ class TMinus < BaseResponder
         event.channel.start_typing
         sleep(1)
         event.respond("T-#{ minutes } minutes is too long to wait #{ mention }")
-      if minutes == 0
+      elsif minutes == 0
         event.channel.start_typing
         if user_online?
           event.respond("You say zero minutes #{ mention } but yet you are not here")
