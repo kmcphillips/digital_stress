@@ -18,7 +18,16 @@ class TMinus < BaseResponder
       Log.info("handle T-#{ minutes } from: #{ event.message.content }")
 
       if minutes > 300
+        event.channel.start_typing
+        sleep(1)
         event.respond("T-#{ minutes } minutes is too long to wait #{ mention }")
+      if minutes == 0
+        event.channel.start_typing
+        if user_online?
+          event.respond("You say zero minutes #{ mention } but yet you are not here")
+        else
+          event.respond("Oh #{ mention } I didn't see you there")
+        end
       else
         if TMinus.waiting[event.user.id]
           event.respond("T-#{ minutes } minutes reset and counting #{ mention }")
@@ -32,8 +41,7 @@ class TMinus < BaseResponder
             TMinus.waiting[event.user.id] = nil
             event.channel.start_typing
             sleep(2)
-            online = event.server.voice_channels.map{ |c| c.users.map(&:id) }.flatten.include?(event.user.id)
-            if online
+            if user_online?
               bot.send_message(channel_id, "T-#{ minutes } minutes is up and #{ mention } made it on time :ok_hand:")
             else
               bot.send_message(channel_id, "T-#{ minutes } minutes is up and #{ mention } is late :alarm_clock:")
@@ -42,5 +50,11 @@ class TMinus < BaseResponder
         end
       end
     end
+  end
+
+  private
+
+  def user_online?
+    event.server.voice_channels.map{ |c| c.users.map(&:id) }.flatten.include?(event.user.id)
   end
 end
