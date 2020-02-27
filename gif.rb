@@ -2,8 +2,8 @@
 module Gif
   extend self
 
-  def search_url(search)
-    url = "https://api.giphy.com/v1/gifs/search?api_key=#{ ENV["GIPHY_KEY"] }&q=#{ URI.encode(search.strip) }&limit=3&offset=0&rating=R&lang=en"
+  def search_urls(search)
+    url = "https://api.giphy.com/v1/gifs/search?api_key=#{ ENV["GIPHY_KEY"] }&q=#{ URI.encode(search.strip) }&limit=20&offset=0&rating=R&lang=en"
     response = HTTParty.get(url)
 
     if !response.success?
@@ -12,6 +12,6 @@ module Gif
       return ":bangbang: Quack failure HTTP#{ response.code }"
     end
 
-    response.dig("data", 0, "images", "downsized_large", "url")
+    (response["data"] || []).map{ |r| r.dig("images", "downsized_large", "url").presence }.compact
   end
 end

@@ -64,7 +64,7 @@ class Duck
         "Quacking-search for something"
       else
         event.channel.start_typing
-        Dedup.list(Azure.search_image_urls(search), namespace: ["Azure", "image", event.server&.name, event.channel&.name, search.strip]) || "Quack-all found"
+        Dedup.list(Azure.search_image_urls(search), namespace: ["Azure.image", event.server&.name, event.channel&.name, search.strip]) || "Quack-all found"
       end
     end
 
@@ -75,7 +75,7 @@ class Duck
         "Quacking-search for something"
       else
         event.channel.start_typing
-        Gif.search_url(search) || "Quack-all found"
+        Dedup.list(Gif.search_urls(search), namespace: ["Gif", event.server&.name, event.channel&.name, search.strip]) || "Quack-all found"
       end
     end
 
