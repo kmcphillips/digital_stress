@@ -64,7 +64,7 @@ class Duck
         "Quacking-search for something"
       else
         event.channel.start_typing
-        Azure.search_image_url(search) || "Quack-all found"
+        Dedup.list(Azure.search_image_urls(search), namespace: ["Azure", "image", event.server&.name, event.channel&.name, search.strip]) || "Quack-all found"
       end
     end
 

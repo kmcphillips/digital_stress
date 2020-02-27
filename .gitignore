@@ -54,3 +54,5 @@ build-iPhoneSimulator/
 *.sqlite3
 *.csv
 nohup.out
+
+/dedup.json
