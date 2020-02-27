@@ -40,7 +40,7 @@ GEM
     minitest (5.13.0)
     multi_xml (0.6.0)
     netrc (0.11.0)
-    nokogiri (1.10.5)
+    nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     opus-ruby (1.0.1)
       ffi
