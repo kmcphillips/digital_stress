@@ -9,7 +9,7 @@ require "httparty"
 require "nokogiri"
 require "time_difference"
 require "securerandom"
-require "json"
+require "lightly"
 
 logger_file = File.open("bot.log", File::WRONLY | File::APPEND | File::CREAT)
 logger_file.sync = true

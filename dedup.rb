@@ -2,16 +2,14 @@
 module Dedup
   extend self
 
-  FILENAME = "dedup.json"
+  CACHE = Lightly.new(dir: "tmp/dedup", life: "1d", hash: true)
 
   def found?(value, namespace:)
-    !!cache[format_namespace(namespace).concat(value)]
+    CACHE.cached?(key(value, namespace: namespace))
   end
 
   def register(value, namespace:)
-    cache[format_namespace(namespace).concat(value)] = true
-    write_file_cache
-    true
+    CACHE.save(key(value, namespace: namespace), value)
   end
 
   def list(values, namespace:)
@@ -28,19 +26,7 @@ module Dedup
 
   private
 
-  def cache
-    @cache ||= read_file_cache
-  end
-
-  def read_file_cache
-    JSON.load(File.read(FILENAME))
-  end
-
-  def write_file_cache
-    File.write(FILENAME, cache.to_json)
-  end
-
-  def format_namespace(namespace)
-    Array(namespace).map { |v| (v.presence || "").downcase.strip }.join("::").concat("::")
+  def key(value, namespace:)
+    Array(namespace).map { |v| (v.presence || "").downcase.strip }.join("__").concat("__").concat(value)
   end
 end
