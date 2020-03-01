@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class TMinus < BaseResponder
   T_MINUS_NUMBER_REGEX = /^T-\s?([0-9]+)(?:$|\s)/i
+  T_MINUS_CANCEL_REGEX = /^T-\s?(nevermind)/i
 
   @waiting = {}
 
@@ -9,11 +10,11 @@ class TMinus < BaseResponder
   end
 
   def respond
-    match = T_MINUS_NUMBER_REGEX.match(event.message.content)
-    if match
+    channel_id = event.channel.id
+    mention = event.user.mention
+
+    if match = T_MINUS_NUMBER_REGEX.match(event.message.content)
       minutes = match[1].to_i
-      channel_id = event.channel.id
-      mention = event.user.mention
       nonce = SecureRandom.hex
       Log.info("handle T-#{ minutes } from: #{ event.message.content }")
 
@@ -51,6 +52,10 @@ class TMinus < BaseResponder
           end
         end
       end
+    elsif match = T_MINUS_CANCEL_REGEX.match(event.message.content)
+      event.channel.start_typing
+      TMinus.waiting[event.user.id] = nil
+      event.respond("Ok fine #{ mention } see you another time then")
     end
   end
 
