@@ -13,6 +13,7 @@ class Duck
     "Quack",
   ].freeze
   COMMAND_PREFIXES = ["Duck", "duck"].freeze
+  MESSAGE_IGNORED_PREFIXES = ["http", "duck ", ">", "`"].freeze
   RECORD_CHANNELS = [
     "mandatemandate#general",
   ]
@@ -120,7 +121,7 @@ class Duck
   private
 
   def record_event?(event)
-    if event.message.text.downcase.starts_with?("http") || event.message.text.downcase.starts_with?("duck ")
+    if ignore_message_content?(event)
       Log.warn("record_event(false) ignoring : #{ event.message.text }")
       return false
     end
@@ -130,5 +131,11 @@ class Duck
     end
     Log.warn("record_event(false) #{ event.server&.name || 'nil' }##{ event.channel&.name || 'nil' } : #{ event.message.text }")
     false
+  end
+
+  def ignore_message_content?(event)
+    text = event.message.text.downcase
+
+    MESSAGE_IGNORED_PREFIXES.any? { |prefix| text.starts_with?(prefix) }
   end
 end
