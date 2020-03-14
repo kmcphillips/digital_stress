@@ -136,6 +136,6 @@ class Duck
   def ignore_message_content?(event)
     text = event.message.text.downcase
 
-    MESSAGE_IGNORED_PREFIXES.any? { |prefix| text.starts_with?(prefix) }
+    text.blank? || MESSAGE_IGNORED_PREFIXES.any? { |prefix| text.starts_with?(prefix) }
   end
 end
