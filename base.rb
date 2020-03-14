@@ -19,7 +19,6 @@ Log.level = Logger::INFO
 require_relative "subcommands"
 require_relative "games_command"
 require_relative "status_command"
-require_relative "cluster_command"
 
 require_relative "dedup"
 

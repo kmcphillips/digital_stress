@@ -84,10 +84,6 @@ class Duck
       StatusCommand.new(event: event, bot: bot, params: params, datastore: datastore).respond
     end
 
-    bot.command :cluster, description: "How long until Cluster festival?" do |event, *params|
-      ClusterCommand.new(event: event, bot: bot, params: params, datastore: datastore).respond
-    end
-
     # TODO
     # bot.command :games, description: "What should we play?" do |event, *params|
     #   GamesCommand.new(event: event, bot: bot, params: params, datastore: datastore).respond
