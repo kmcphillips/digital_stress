@@ -32,3 +32,4 @@ require_relative "gif"
 
 require_relative "duck"
 require_relative "datastore"
+require_relative "recorder"

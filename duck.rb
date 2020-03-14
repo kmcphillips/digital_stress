@@ -13,10 +13,6 @@ class Duck
     "Quack",
   ].freeze
   COMMAND_PREFIXES = ["Duck", "duck"].freeze
-  MESSAGE_IGNORED_PREFIXES = ["http", "duck ", ">", "`"].freeze
-  RECORD_CHANNELS = [
-    "mandatemandate#general",
-  ]
   RESPONDERS = [
     TMinus,
     Alchemy,
@@ -96,10 +92,7 @@ class Duck
 
     bot.message do |event|
       # duck is always watching
-      if record_event?(event)
-        datastore.append(username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp)
-        Log.info("datastore.append(#{ { username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp } }")
-      end
+      Recorder.record(event, datastore: datastore)
 
       if event.channel.pm? && !COMMAND_PREFIXES.any?{ |c| event.message.content.starts_with?(c) }
         Log.info("pm #{event.author.name}: #{event.message.content}")
@@ -112,26 +105,5 @@ class Duck
     Log.info("Starting")
 
     bot.run
-  end
-
-  private
-
-  def record_event?(event)
-    if ignore_message_content?(event)
-      Log.warn("record_event(false) ignoring : #{ event.message.text }")
-      return false
-    end
-    RECORD_CHANNELS.each do |pair|
-      server, channel = pair.split("#")
-      return true if event.server&.name == server && event.channel&.name == channel
-    end
-    Log.warn("record_event(false) #{ event.server&.name || 'nil' }##{ event.channel&.name || 'nil' } : #{ event.message.text }")
-    false
-  end
-
-  def ignore_message_content?(event)
-    text = event.message.text.downcase
-
-    text.blank? || MESSAGE_IGNORED_PREFIXES.any? { |prefix| text.starts_with?(prefix) }
   end
 end
