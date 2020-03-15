@@ -5,7 +5,7 @@ class Alchemy < BaseResponder
     earth:   ["🏔", "⛰", "🗻",].freeze,
     fire:    ["🔥", "🧨", "🎆",].freeze,
     wind:    ["🌬", "🎐", "☁", "🌩", "🌪", "💨",].freeze,
-    water:   ["🚰", "💧", "💦", "🚿", "🛀", "🛁", "⛈", "🌧", "🌦",].freeze,
+    water:   ["🌊", "🚰", "💧", "💦", "🚿", "🛀", "🛁", "⛈", "🌧", "🌦",].freeze,
     count:   ["1️⃣", "2️⃣", "3️⃣", "4️⃣",].freeze,
     weird:   "❓",
   }.freeze
@@ -13,6 +13,21 @@ class Alchemy < BaseResponder
   CHANNELS = [
     "mandatemandate#general",
     "duck-bot-test#general",
+  ].freeze
+
+  RESPONSES = [
+    "**4/4**",
+    "Full strength!",
+    "Everyone accounted for tonight.",
+    "Full strength mandate",
+    "We are 4/4",
+    "nice",
+    "Quack, full strength",
+    "4 of 4",
+    "Mandate: Full Strength Edition",
+    "Quack! 🔥🌊🌬️🏔️",
+    "4 / 4",
+    "Full strength, quack!",
   ].freeze
 
   @parties = {}
@@ -44,13 +59,12 @@ class Alchemy < BaseResponder
       if !Alchemy.parties[channel].present?(element)
         Alchemy.parties[channel].present!(element)
         count = EMOJI[:count][Alchemy.parties[channel].size - 1]
+        event.channel.start_typing if Alchemy.parties[channel].full_strength? # this works around the reaction ratelimit
         event.message.react(count)
-      end
-
-      if Alchemy.parties[channel].size == 4
-        Alchemy.parties[channel] = nil
-        event.channel.start_typing
-        event.respond("Full strength!")
+        if Alchemy.parties[channel].full_strength?
+          Alchemy.parties[channel] = nil
+          event.respond(RESPONSES.sample)
+        end
       end
     end
   end
@@ -76,6 +90,10 @@ class Alchemy < BaseResponder
 
     def size
       @elements.size
+    end
+
+    def full_strength?
+      @elements.size == 4
     end
   end
 end
