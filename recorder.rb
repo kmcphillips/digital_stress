@@ -7,7 +7,7 @@ module Recorder
     "mandatemandate#general",
   ]
 
-  def record(event, datastore: datastore)
+  def record(event, datastore:)
     if record_event?(event)
       datastore.append(username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp)
       Log.info("datastore.append(#{ { username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp } }")
