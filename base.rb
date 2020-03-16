@@ -23,6 +23,7 @@ require_relative "status_command"
 require_relative "dedup"
 
 require_relative "base_responder"
+require_relative "simple_responder"
 require_relative "t_minus"
 require_relative "alchemy"
 
