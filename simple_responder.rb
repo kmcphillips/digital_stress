@@ -10,5 +10,12 @@ class SimpleResponder < BaseResponder
     if text.downcase.match?(/hang.?in.?there/)
       event.respond("https://i.imgur.com/1FlykyH.jpg")
     end
+
+    if text.downcase.match?(/heat/i)
+      if rand < 0.08
+        event.respond("don't be hwat...")
+      end
+      event.message.react("🔥")
+    end
   end
 end
