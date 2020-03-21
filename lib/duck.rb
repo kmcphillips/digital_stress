@@ -48,14 +48,7 @@ class Duck
     end
 
     bot.command [:image, :images], description: "Search for an image and post it." do |event, *params|
-      Log.info("command.#{ event.command.name }(#{ params })")
-      search = params.join(" ")
-      if search.blank?
-        "Quacking-search for something"
-      else
-        event.channel.start_typing
-        Dedup.list(Azure.search_image_urls(search), namespace: ["Azure.image", event.server&.name, event.channel&.name, search.strip]) || "Quack-all found"
-      end
+      ImageCommand.new(event: event, bot: bot, params: params, datastore: datastore).respond
     end
 
     bot.command :gif, description: "Search for a gif and post it." do |event, *params|

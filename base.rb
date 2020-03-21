@@ -29,6 +29,7 @@ require_relative "lib/base_subcommand"
 require_relative "lib/ping_command"
 require_relative "lib/games_command"
 require_relative "lib/gif_command"
+require_relative "lib/image_command"
 require_relative "lib/status_command"
 require_relative "lib/steam_command"
 
