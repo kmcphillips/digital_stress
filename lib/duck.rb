@@ -40,8 +40,7 @@ class Duck
 
   def join
     bot.command :ping, description: "Hello, is it me you're looking for?" do |event, *params|
-      Log.info("command.#{ event.command.name }(#{ params })")
-      ":white_check_mark: #{ Duck.quack }"
+      PingCommand.new(event: event, bot: bot, params: params, datastore: datastore).respond
     end
 
     bot.command :steam, description: "Paste a link to the steam game matching the search." do |event, *params|
