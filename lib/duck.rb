@@ -45,14 +45,7 @@ class Duck
     end
 
     bot.command :steam, description: "Paste a link to the steam game matching the search." do |event, *params|
-      Log.info("command.#{ event.command.name }(#{ params })")
-      search = params.join(" ")
-      if search.blank?
-        "Quacking-search for something"
-      else
-        event.channel.start_typing
-        Steam.search_game_url(search) || "Quack-all found"
-      end
+      SteamCommand.new(event: event, bot: bot, params: params, datastore: datastore).respond
     end
 
     bot.command [:image, :images], description: "Search for an image and post it." do |event, *params|
