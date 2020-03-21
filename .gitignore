@@ -56,3 +56,4 @@ build-iPhoneSimulator/
 nohup.out
 
 /dedup.json
+/log
