@@ -16,7 +16,8 @@ logger_file.sync = true
 Log = Logger.new(logger_file)
 Log.level = Logger::INFO
 
-require_relative "lib/subcommands"
+require_relative "lib/base_command"
+require_relative "lib/base_subcommand"
 require_relative "lib/games_command"
 require_relative "lib/status_command"
 
