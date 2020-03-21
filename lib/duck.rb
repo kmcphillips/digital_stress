@@ -59,14 +59,7 @@ class Duck
     end
 
     bot.command :gif, description: "Search for a gif and post it." do |event, *params|
-      Log.info("command.#{ event.command.name }(#{ params })")
-      search = params.join(" ")
-      if search.blank?
-        "Quacking-search for something"
-      else
-        event.channel.start_typing
-        Dedup.list(Gif.search_urls(search), namespace: ["Gif", event.server&.name, event.channel&.name, search.strip]) || "Quack-all found"
-      end
+      GifCommand.new(event: event, bot: bot, params: params, datastore: datastore).respond
     end
 
     bot.command :status, description: "Check on status of the bot." do |event, *params|
