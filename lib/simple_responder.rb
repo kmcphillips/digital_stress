@@ -5,7 +5,7 @@ class SimpleResponder < BaseResponder
 
     # event.channel.start_typing
     # event.message.react(emoji)
-    # event.respond(message)
+    # event.respond(message
 
     if text.downcase.match?(/hang.?in.?there/)
       event.respond("https://i.imgur.com/1FlykyH.jpg")

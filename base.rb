@@ -16,21 +16,21 @@ logger_file.sync = true
 Log = Logger.new(logger_file)
 Log.level = Logger::INFO
 
-require_relative "subcommands"
-require_relative "games_command"
-require_relative "status_command"
+require_relative "lib/subcommands"
+require_relative "lib/games_command"
+require_relative "lib/status_command"
 
-require_relative "dedup"
+require_relative "lib/dedup"
 
-require_relative "base_responder"
-require_relative "simple_responder"
-require_relative "t_minus"
-require_relative "alchemy"
+require_relative "lib/base_responder"
+require_relative "lib/simple_responder"
+require_relative "lib/t_minus"
+require_relative "lib/alchemy"
 
-require_relative "steam"
-require_relative "azure"
-require_relative "gif"
+require_relative "lib/steam"
+require_relative "lib/azure"
+require_relative "lib/gif"
 
-require_relative "duck"
-require_relative "datastore"
-require_relative "recorder"
+require_relative "lib/duck"
+require_relative "lib/datastore"
+require_relative "lib/recorder"

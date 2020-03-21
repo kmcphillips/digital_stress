@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 class Datastore
-  FILENAME = "chat.sqlite3"
+  FILE_PATH = File.join(File.dirname(__FILE__), "..", "chat.sqlite3")
 
   attr_reader :db
 
   def initialize
-    @db = SQLite3::Database.new(File.join(File.dirname(__FILE__), FILENAME))
+    @db = SQLite3::Database.new(FILE_PATH)
   end
 
   def setup!
