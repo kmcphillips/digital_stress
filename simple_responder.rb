@@ -17,5 +17,9 @@ class SimpleResponder < BaseResponder
       end
       event.message.react("🔥")
     end
+
+    if text.downcase.match?(/noot/i)
+      event.message.react("👢")
+    end
   end
 end
