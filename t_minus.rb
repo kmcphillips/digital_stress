@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class TMinus < BaseResponder
   T_MINUS_NUMBER_REGEX = /^T-\s?([0-9]+)(?:$|\s)/i
-  T_MINUS_CANCEL_REGEX = /^T-\s?(nevermind)/i
-  T_MINUS_WHENEVER_REGEX = /^T-\s?(whenever)/i
+  T_MINUS_CANCEL_REGEX = /T-\s?(nevermind)/i
+  T_MINUS_AROUND_REGEX = /T-\s?(whenever|around|here)/i
   T_MINUS_WHATEVER_REGEX = /^T-\s?(.+)/i
 
   @waiting = {}
@@ -58,9 +58,9 @@ class TMinus < BaseResponder
       event.channel.start_typing
       TMinus.waiting[event.user.id] = nil
       event.respond("Ok fine #{ mention } see you another time then")
-    elsif match = T_MINUS_WHENEVER_REGEX.match(event.message.content)
+    elsif match = T_MINUS_AROUND_REGEX.match(event.message.content)
       event.channel.start_typing
-      event.respond("Ok well #{ mention } thanks for hanging around")
+      event.respond("Hi #{ mention }, thanks for hanging around")
     elsif match = T_MINUS_WHATEVER_REGEX.match(event.message.content)
       thing = match[1]
       event.channel.start_typing
