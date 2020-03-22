@@ -8,6 +8,7 @@ class Alchemy < BaseResponder
     water:   ["🌊", "🚰", "💧", "💦", "🚿", "🛀", "🛁", "⛈", "🌧", "🌦",].freeze,
     count:   ["1️⃣", "2️⃣", "3️⃣", "4️⃣",].freeze,
     weird:   "❓",
+    wrong:   "🚫",
   }.freeze
 
   CHANNELS = [
@@ -57,13 +58,17 @@ class Alchemy < BaseResponder
       Alchemy.parties[channel] = Party.new if !Alchemy.parties[channel] || Alchemy.parties[channel].expired?
 
       if !Alchemy.parties[channel].present?(element)
-        Alchemy.parties[channel].present!(element)
-        count = EMOJI[:count][Alchemy.parties[channel].size - 1]
-        event.channel.start_typing if Alchemy.parties[channel].full_strength? # this works around the reaction ratelimit
-        event.message.react(count)
-        if Alchemy.parties[channel].full_strength?
-          Alchemy.parties[channel] = nil
-          event.respond(RESPONSES.sample)
+        if Alchemy.parties[channel].element_for?(element, event.author)
+          Alchemy.parties[channel].present!(element)
+          count = EMOJI[:count][Alchemy.parties[channel].size - 1]
+          event.channel.start_typing if Alchemy.parties[channel].full_strength? # this works around the reaction ratelimit
+          event.message.react(count)
+          if Alchemy.parties[channel].full_strength?
+            Alchemy.parties[channel] = nil
+            event.respond(RESPONSES.sample)
+          end
+        else
+          event.message.react(EMOJI[:wrong])
         end
       end
     end
@@ -94,6 +99,19 @@ class Alchemy < BaseResponder
 
     def full_strength?
       @elements.size == 4
+    end
+
+    def element_for?(element, author)
+      user = User.from_discord(author)
+
+      case element
+      when :fire then user.kevin?
+      when :earth then user.eliot?
+      when :water then user.dave?
+      when :wind then user.patrick?
+      else
+        raise "Unknown element '#{ element }'"
+      end
     end
   end
 end

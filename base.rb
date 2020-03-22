@@ -20,6 +20,7 @@ require_relative "lib/dedup"
 require_relative "lib/steam"
 require_relative "lib/azure"
 require_relative "lib/gif"
+require_relative "lib/user"
 
 require_relative "lib/datastore"
 require_relative "lib/recorder"
