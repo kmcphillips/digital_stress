@@ -13,6 +13,7 @@ class Alchemy < BaseResponder
 
   CHANNELS = [
     "mandatemandate#general",
+    "mandatemandate#quigital",
     "duck-bot-test#general",
   ].freeze
 
