@@ -14,7 +14,6 @@ class Datastore
   end
 
   def migrate
-    @db.execute("CREATE TABLE learned ( id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER, user_id INTEGER, message TEXT, server VARCHAR(255), channel VARCHAR(255) );")
   end
 
   def append(username:, user_id:, message:, server:, channel:, time:nil)
