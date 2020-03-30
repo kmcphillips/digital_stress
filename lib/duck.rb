@@ -40,6 +40,20 @@ class Duck
   end
 
   def join
+    bot.reaction_add do |event|
+      if event.emoji&.name == "🦆"
+        user_id = event.user&.id
+        message = event.message&.content
+        server = event.server&.name
+        channel = event.channel&.name
+
+        if user_id && message.present? && server && channel
+          datastore.learn(user_id: user_id, message: message, server: server, channel: channel)
+          event.message.react("✅")
+        end
+      end
+    end
+
     bot.command :ping, description: "Hello, is it me you're looking for?" do |event, *params|
       PingCommand.new(event: event, bot: bot, params: params, datastore: datastore).respond
     end
