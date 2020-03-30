@@ -9,8 +9,8 @@ module Recorder
 
   def record(event, datastore:)
     if record_event?(event)
-      datastore.append(username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp)
-      Log.info("datastore.append(#{ { username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp } }")
+      datastore.append(username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp, server: event.server.name, channel: event.channel.name)
+      Log.info("datastore.append(#{ { username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp, server: event.server.name, channel: event.channel.name } }")
 
       true
     else

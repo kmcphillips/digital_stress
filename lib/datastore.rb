@@ -9,12 +9,18 @@ class Datastore
   end
 
   def setup!
-    @db.execute("CREATE TABLE messages ( id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER, user_id INTEGER, username VARCHAR(255), message TEXT );")
+    @db.execute("CREATE TABLE messages ( id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER, user_id INTEGER, username VARCHAR(255), message TEXT, server VARCHAR(255), channel VARCHAR(255) );")
   end
 
-  def append(username:, user_id:, message:, time:nil)
-    input = [parse_timestamp(time), user_id, username, parse_message(message)]
-    @db.execute("INSERT INTO messages ( timestamp, user_id, username, message ) VALUES ( ?, ?, ?, ? )", input)
+  def migrate
+    @db.execute("ALTER TABLE messages ADD server VARCHAR(255)")
+    @db.execute("ALTER TABLE messages ADD channel VARCHAR(255)")
+    @db.execute("UPDATE messages SET server = 'mandatemandate', channel = 'general'")
+  end
+
+  def append(username:, user_id:, message:, server:, channel:, time:nil)
+    input = [parse_timestamp(time), user_id, username, parse_message(message), server, channel]
+    @db.execute("INSERT INTO messages ( timestamp, user_id, username, message, server, channel ) VALUES ( ?, ?, ?, ?, ?, ? )", input)
   end
 
   def dump(username)
@@ -30,7 +36,7 @@ class Datastore
   end
 
   def last
-    @db.execute("SELECT username, user_id, message, timestamp FROM messages ORDER BY timestamp DESC LIMIT 1").first
+    @db.execute("SELECT username, user_id, message, timestamp, server, channel FROM messages ORDER BY timestamp DESC LIMIT 1").first
   end
 
   def peek
@@ -42,8 +48,8 @@ class Datastore
     end
     lines << ""
     lines << "Recent:"
-    @db.execute("SELECT id, username, message, timestamp FROM messages ORDER BY timestamp DESC LIMIT 10").reverse.each do |row|
-      lines << "  #{row[1]} (#{Time.at(row[3])} ##{row[0]}): #{row[2]}"
+    @db.execute("SELECT id, username, message, timestamp, server, channel FROM messages ORDER BY timestamp DESC LIMIT 10").reverse.each do |row|
+      lines << "  #{row[1]} (#{Time.at(row[3])} ##{row[0]}) #{ row[4] }##{ row[5] }: #{row[2]}"
     end
 
     lines.join("\n")

@@ -30,6 +30,7 @@ class Duck
   def initialize(token:)
     @token = token
     @datastore = Datastore.new
+    @datastore.migrate
     @bot = Discordrb::Commands::CommandBot.new(
       token: token,
       prefix: COMMAND_PREFIXES,
