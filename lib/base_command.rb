@@ -2,16 +2,17 @@
 class BaseCommand
   attr_reader :params, :event, :bot, :datastore
 
-  def initialize(event:, bot:, params:, datastore:)
+  def initialize(event:, bot:, params:, datastore:, typing: true)
     @datastore = datastore
     @bot = bot
     @params = params
     @event = event
+    @typing = typing
   end
 
   def respond
     Log.info("command.#{ @event.command.name }(#{ params })")
-    @event.channel.start_typing
+    @event.channel.start_typing if @typing
     begin
       message = response
       message = message.join("\n") if message.is_a?(Array)

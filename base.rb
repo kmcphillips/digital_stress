@@ -33,6 +33,7 @@ require_relative "lib/gif_command"
 require_relative "lib/image_command"
 require_relative "lib/status_command"
 require_relative "lib/steam_command"
+require_relative "lib/learn_command"
 
 require_relative "lib/base_responder"
 require_relative "lib/simple_responder"

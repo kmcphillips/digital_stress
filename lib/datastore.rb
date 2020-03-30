@@ -10,14 +10,21 @@ class Datastore
 
   def setup!
     @db.execute("CREATE TABLE messages ( id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER, user_id INTEGER, username VARCHAR(255), message TEXT, server VARCHAR(255), channel VARCHAR(255) );")
+    @db.execute("CREATE TABLE learned ( id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER, user_id INTEGER, message TEXT, server VARCHAR(255), channel VARCHAR(255) );")
   end
 
   def migrate
+    @db.execute("CREATE TABLE learned ( id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER, user_id INTEGER, message TEXT, server VARCHAR(255), channel VARCHAR(255) );")
   end
 
   def append(username:, user_id:, message:, server:, channel:, time:nil)
     input = [parse_timestamp(time), user_id, username, parse_message(message), server, channel]
     @db.execute("INSERT INTO messages ( timestamp, user_id, username, message, server, channel ) VALUES ( ?, ?, ?, ?, ?, ? )", input)
+  end
+
+  def learn(user_id:, message:, server:, channel:, time:nil)
+    input = [parse_timestamp(time), user_id, parse_message(message), server, channel]
+    @db.execute("INSERT INTO learned ( timestamp, user_id, message, server, channel ) VALUES ( ?, ?, ?, ?, ? )", input)
   end
 
   def dump(username)
@@ -47,6 +54,10 @@ class Datastore
     lines << "Recent:"
     @db.execute("SELECT id, username, message, timestamp, server, channel FROM messages ORDER BY timestamp DESC LIMIT 10").reverse.each do |row|
       lines << "  #{row[1]} (#{Time.at(row[3])} ##{row[0]}) #{ row[4] }##{ row[5] }: #{row[2]}"
+    end
+    lines << ""
+    @db.execute("SELECT count(*) FROM learned").each do |row|
+      lines << "Learned: #{row[0]}"
     end
 
     lines.join("\n")

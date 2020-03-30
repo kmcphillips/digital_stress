@@ -60,6 +60,10 @@ class Duck
       StatusCommand.new(event: event, bot: bot, params: params, datastore: datastore).respond
     end
 
+    bot.command :learn, description: "Learn a phrase." do |event, *params|
+      LearnCommand.new(event: event, bot: bot, params: params, datastore: datastore, typing: false).respond
+    end
+
     # TODO
     # bot.command :games, description: "What should we play?" do |event, *params|
     #   GamesCommand.new(event: event, bot: bot, params: params, datastore: datastore).respond
