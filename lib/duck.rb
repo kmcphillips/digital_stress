@@ -71,7 +71,14 @@ class Duck
 
     bot.mention do |event|
       Log.info("mention #{event.author.name}: #{event.message.content}")
-      event.respond(Duck.quack)
+
+      # Answer the learned thing
+      response = Duck.quack
+      if event.server&.name
+        learned = datastore.learned(server: event.server.name)
+        response = learned.first if learned.present?
+      end
+      event.respond(response)
     end
 
     bot.message do |event|

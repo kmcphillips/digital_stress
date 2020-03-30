@@ -26,6 +26,16 @@ class Datastore
     @db.execute("INSERT INTO learned ( timestamp, user_id, message, server, channel ) VALUES ( ?, ?, ?, ?, ? )", input)
   end
 
+  def learned(user_id: nil, server:)
+    result = if user_id
+      @db.execute("SELECT message, user_id FROM learned WHERE server = ? AND user_id = ? ORDER BY RANDOM() LIMIT 1", [server, user_id])
+    else
+      @db.execute("SELECT message, user_id FROM learned WHERE server = ? ORDER BY RANDOM() LIMIT 1", [server])
+    end
+
+    result.to_a.first
+  end
+
   def dump(username)
     @db.execute("SELECT message FROM messages WHERE username = ? ORDER BY timestamp ASC", [username]).map { |r| r.first }
   end
