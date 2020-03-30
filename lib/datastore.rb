@@ -13,9 +13,6 @@ class Datastore
   end
 
   def migrate
-    @db.execute("ALTER TABLE messages ADD server VARCHAR(255)")
-    @db.execute("ALTER TABLE messages ADD channel VARCHAR(255)")
-    @db.execute("UPDATE messages SET server = 'mandatemandate', channel = 'general'")
   end
 
   def append(username:, user_id:, message:, server:, channel:, time:nil)
