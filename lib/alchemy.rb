@@ -9,6 +9,7 @@ class Alchemy < BaseResponder
     count:   ["1️⃣", "2️⃣", "3️⃣", "4️⃣",].freeze,
     weird:   "❓",
     wrong:   "🚫",
+    repeat:  "🔁",
   }.freeze
 
   CHANNELS = [
@@ -58,19 +59,21 @@ class Alchemy < BaseResponder
 
       Alchemy.parties[channel] = Party.new if !Alchemy.parties[channel] || Alchemy.parties[channel].expired?
 
-      if !Alchemy.parties[channel].present?(element)
-        if Alchemy.parties[channel].element_for?(element, event.author)
+      if Alchemy.parties[channel].element_for?(element, event.author)
+        if Alchemy.parties[channel].present?(element)
+          event.message.react(EMOJI[:repeat])
+        else
           Alchemy.parties[channel].present!(element)
           count = EMOJI[:count][Alchemy.parties[channel].size - 1]
           event.channel.start_typing if Alchemy.parties[channel].full_strength? # this works around the reaction ratelimit
           event.message.react(count)
-          if Alchemy.parties[channel].full_strength?
-            Alchemy.parties[channel] = nil
-            event.respond(RESPONSES.sample)
-          end
-        else
-          event.message.react(EMOJI[:wrong])
         end
+        if Alchemy.parties[channel].full_strength?
+          Alchemy.parties[channel] = nil
+          event.respond(RESPONSES.sample)
+        end
+      else
+        event.message.react(EMOJI[:wrong])
       end
     end
   end
