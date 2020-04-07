@@ -29,7 +29,7 @@ class DeployCommand < BaseCommand
   private
 
   def deploy(app)
-    working_dir = "#{ BASE_WORKING_DIR }/#{app}"
+    working_dir = "#{ BASE_WORKING_DIR }/#{ app }"
 
     @event.respond(":rocket: Deploying #{ app }")
 
@@ -37,6 +37,12 @@ class DeployCommand < BaseCommand
       Bundler.with_clean_env do
         run_command("git pull", working_dir: working_dir)
         run_command("bundle install", working_dir: working_dir)
+        if File.exists?("#{ working_dir }/spec")
+          if !File.exists?("#{ working_dir }/config/credentials/test.key")
+            `ln -s #{ BASE_WORKING_DIR }/shared/#{ app }/test.key #{ working_dir }/config/credentials/test.key`
+          end
+          run_command("bundle exec rspec", working_dir: working_dir, description: "Running test suite")
+        end
         run_command("bundle exec cap production deploy", working_dir: working_dir)
       end
     rescue DeployError => e
@@ -46,14 +52,15 @@ class DeployCommand < BaseCommand
     ":tada: Quack! Deploy complete."
   end
 
-  def run_command(command, working_dir:)
-    message = @event.respond("`#{ command }`")
+  def run_command(command, working_dir:, description: nil)
+    description = description.presence || "`#{ command }`"
+    message = @event.respond(description)
     output = `cd #{ working_dir } && #{ command }`
     if $?.success?
       message.react("✅")
     else
       Log.error(output)
-      raise DeployError, ":warning: Quack! Error with `#{ command }`!"
+      raise DeployError, ":warning: Quack! Error with #{ description }!"
     end
   end
 end
