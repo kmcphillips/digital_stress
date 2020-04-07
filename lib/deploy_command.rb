@@ -31,24 +31,27 @@ class DeployCommand < BaseCommand
 
     @event.respond(":rocket: Deploying #{ app }")
 
-    `cd #{ working_dir } && git pull`
+    output = `cd #{ working_dir } && git pull`
     if $?.success?
       @event.respond(":white_check_mark: `git pull`")
     else
+      Log.error(output)
       return ":warning: Quack! Error with `git pull`!"
     end
 
-    `cd #{ working_dir } && bundle install`
+    output = `cd #{ working_dir } && bundle install`
     if $?.success?
       @event.respond(":white_check_mark: `bundle install`")
     else
+      Log.error(output)
       return ":warning: Quack! Error with `bundle install`!"
     end
 
-    `cd #{ working_dir } && bundle exec cap production deploy`
+    output = `cd #{ working_dir } && bundle exec cap production deploy`
     if $?.success?
       @event.respond(":white_check_mark: `bundle exec cap production deploy`")
     else
+      Log.error(output)
       return ":warning: Quack! Error with `bundle exec cap production deploy`!"
     end
 
