@@ -50,6 +50,8 @@ class Duck
         if user_id && message.present? && server && channel
           datastore.learn(user_id: user_id, message: message, server: server, channel: channel)
           event.message.react("✅")
+        else
+          event.message.react("🚫")
         end
       end
     end
