@@ -7,6 +7,8 @@ class DeployCommand < BaseCommand
     "duck-bot-test#general",
   ].freeze
 
+  class DeployError < StandardError ; end
+
   def response
     channel = "#{ event.server&.name }##{ event.channel&.name }"
     return "Quack! Not permitted!" unless CHANNELS.include?(channel)
@@ -31,30 +33,27 @@ class DeployCommand < BaseCommand
 
     @event.respond(":rocket: Deploying #{ app }")
 
-    output = `cd #{ working_dir } && git pull`
-    if $?.success?
-      @event.respond(":white_check_mark: `git pull`")
-    else
-      Log.error(output)
-      return ":warning: Quack! Error with `git pull`!"
+    begin
+      Bundler.with_clean_env do
+        run_command("git pull", working_dir: working_dir)
+        run_command("bundle install", working_dir: working_dir)
+        run_command("bundle exec cap production deploy", working_dir: working_dir)
+      end
+    rescue DeployError => e
+      return e.message
     end
 
-    output = `cd #{ working_dir } && bundle install`
+    ":tada: Quack! Deploy complete."
+  end
+
+  def run_command(command, working_dir:)
+    message = @event.respond("`#{ command }`")
+    output = `cd #{ working_dir } && #{ command }`
     if $?.success?
-      @event.respond(":white_check_mark: `bundle install`")
+      message.react("✅")
     else
       Log.error(output)
-      return ":warning: Quack! Error with `bundle install`!"
+      raise DeployError, ":warning: Quack! Error with `#{ command }`!"
     end
-
-    output = `cd #{ working_dir } && bundle exec cap production deploy`
-    if $?.success?
-      @event.respond(":white_check_mark: `bundle exec cap production deploy`")
-    else
-      Log.error(output)
-      return ":warning: Quack! Error with `bundle exec cap production deploy`!"
-    end
-
-    "Quack! Deploy complete."
   end
 end
