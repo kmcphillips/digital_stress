@@ -41,7 +41,7 @@ class Duck
 
   def join
     bot.reaction_add do |event|
-      if event.emoji&.name == "🦆"
+      if event.emoji&.name == "🦆" || event.emoji&.name == "duckgame"
         user_id = event.user&.id
         message = event.message&.content
         server = event.server&.name
