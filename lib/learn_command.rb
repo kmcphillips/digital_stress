@@ -2,6 +2,12 @@
 class LearnCommand < BaseCommand
   PING_REGEX = /\A<@\!([0-9]+)>\Z/
 
+  class << self
+    def persist(datastore:, event:, message:, user_id:)
+      # TODO
+    end
+  end
+
   def response
     if event.channel.pm?
       "Quack, I can't learn a direct message."
@@ -21,8 +27,16 @@ class LearnCommand < BaseCommand
         Log.info("learning for author: #{ message }")
       end
 
-      datastore.learn(user_id: user_id, message: message, server: event.server.name, channel: event.channel.name)
-      event.message.react("✅")
+      server = event.server&.name
+      channel = event.channel&.name
+
+      if user_id && message.present? && server && channel
+        datastore.learn(user_id: user_id, message: message, server: server, channel: channel)
+        event.message.react("✅")
+      else
+        event.message.react("🚫")
+      end
+
       nil
     end
   end
