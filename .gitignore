@@ -52,6 +52,8 @@ build-iPhoneSimulator/
 /bot.log
 /.env
 *.sqlite3
+*.sqlite3.backup
+*.sqlite3.bak
 *.csv
 nohup.out
 
