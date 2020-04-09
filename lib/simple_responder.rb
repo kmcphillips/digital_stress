@@ -7,22 +7,22 @@ class SimpleResponder < BaseResponder
     # event.message.react(emoji)
     # event.respond(message
 
-    if text.downcase.match?(/hang.?in.?there/)
+    if text.match?(/hang.?in.?there/i)
       event.respond("https://i.imgur.com/1FlykyH.jpg")
     end
 
-    if text.downcase.match?(/heat/i)
+    if text.match?(/heat/i)
       if rand < 0.08
         event.respond("don't be hwat...")
       end
       event.message.react("🔥")
     end
 
-    if text.downcase.match?(/tight/i)
+    if text.match?(/tight/i)
       event.message.react("🤏")
     end
 
-    if text.downcase.match?(/noot/i)
+    if text.match?(/noot/i)
       event.message.react("👢")
     end
   end
