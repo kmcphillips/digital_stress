@@ -15,7 +15,6 @@ class Datastore
   end
 
   def migrate
-    @db.execute("CREATE TABLE alchemy ( id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER, server VARCHAR(255), kevin INTEGER NOT NULL DEFAULT 0, eliot INTEGER NOT NULL DEFAULT 0, dave INTEGER NOT NULL DEFAULT 0, patrick INTEGER NOT NULL DEFAULT 0 );")
   end
 
   def append(username:, user_id:, message:, server:, channel:, time:nil)
