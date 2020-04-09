@@ -25,5 +25,9 @@ class SimpleResponder < BaseResponder
     if text.match?(/noot/i)
       event.message.react("👢")
     end
+
+    if text.match?(/(good|great|nice|best) duck/i)
+      event.message.react("❤️")
+    end
   end
 end
