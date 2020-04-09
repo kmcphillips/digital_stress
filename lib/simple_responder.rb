@@ -3,31 +3,25 @@ class SimpleResponder < BaseResponder
   def respond
     text = event.message.content || ""
 
-    # event.channel.start_typing
-    # event.message.react(emoji)
-    # event.respond(message
+    respond_match(text, /hang.?in.?there/i, "https://i.imgur.com/1FlykyH.jpg")
+    react_match(text, /heat/i, "🔥")
+    respond_match(text, /heat/i, "don't be hwat...", chance: 0.08)
+    react_match(text, /tight/i, "🤏")
+    react_match(text, /(noot|neet)/i, "👢")
+    react_match(text, /(good|great|nice|best) duck/i, "❤️")
+  end
 
-    if text.match?(/hang.?in.?there/i)
-      event.respond("https://i.imgur.com/1FlykyH.jpg")
+  private
+
+  def respond_match(text, regex, reply_message, chance: nil)
+    if text.match?(regex) && (!chance || rand < chance)
+      event.respond(reply_message)
     end
+  end
 
-    if text.match?(/heat/i)
-      if rand < 0.08
-        event.respond("don't be hwat...")
-      end
-      event.message.react("🔥")
-    end
-
-    if text.match?(/tight/i)
-      event.message.react("🤏")
-    end
-
-    if text.match?(/noot/i)
-      event.message.react("👢")
-    end
-
-    if text.match?(/(good|great|nice|best) duck/i)
-      event.message.react("❤️")
+  def react_match(text, regex, emoji, chance: nil)
+    if text.match?(regex) && (!chance || rand < chance)
+      event.message.react(emoji)
     end
   end
 end
