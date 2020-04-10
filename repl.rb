@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 require_relative "base"
 
-datastore = Datastore.new
-puts datastore.peek
+LegacyDatastore
+puts LegacyDatastore.peek
 
 
 
-db = datastore.db
+db = LegacyDatastore.db
 binding.pry

@@ -17,13 +17,14 @@ logger_file.sync = true
 Log = Logger.new(logger_file)
 Log.level = Logger::INFO
 
+require_relative "lib/datastore"
+LegacyDatastore = Datastore.new
+
 require_relative "lib/dedup"
 require_relative "lib/steam"
 require_relative "lib/azure"
 require_relative "lib/gif"
 require_relative "lib/user"
-
-require_relative "lib/datastore"
 require_relative "lib/recorder"
 
 require_relative "lib/base_command"

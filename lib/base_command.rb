@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 class BaseCommand
-  attr_reader :params, :event, :bot, :datastore
+  attr_reader :params, :event, :bot
 
-  def initialize(event:, bot:, params:, datastore:, typing: true)
-    @datastore = datastore
+  def initialize(event:, bot:, params:, typing: true)
     @bot = bot
     @params = params
     @event = event

@@ -7,10 +7,10 @@ module Recorder
     "mandatemandate#general",
   ]
 
-  def record(event, datastore:)
+  def record(event)
     if record_event?(event)
-      datastore.append(username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp, server: event.server.name, channel: event.channel.name)
-      Log.info("datastore.append(#{ { username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp, server: event.server.name, channel: event.channel.name } }")
+      LegacyDatastore.append(username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp, server: event.server.name, channel: event.channel.name)
+      Log.info("LegacyDatastore.append(#{ { username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp, server: event.server.name, channel: event.channel.name } }")
 
       true
     else
