@@ -4,8 +4,8 @@ class SimpleResponder < BaseResponder
     text = event.message.content || ""
 
     respond_match(text, /hang.?in.?there/i, "https://i.imgur.com/1FlykyH.jpg")
-    react_match(text, /heat/i, "🔥")
-    respond_match(text, /heat/i, "don't be hwat...", chance: 0.08)
+    react_match(text, /\bheat\b/i, "🔥")
+    respond_match(text, /\bheat\b/i, "don't be hwat...", chance: 0.08)
     react_match(text, /tight/i, "🤏")
     react_match(text, /(noot|neet)/i, "👢")
     react_match(text, /(good|great|nice|best) duck/i, "❤️")
