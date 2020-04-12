@@ -14,6 +14,42 @@ class User
     def from_discord(user)
       self.new(username: user.username, id: user.id, discriminator: user.discriminator)
     end
+
+    def dave
+      self.new(**MANDATE_CONFIG["dave"].symbolize_keys)
+    end
+
+    def eliot
+      self.new(**MANDATE_CONFIG["eliot"].symbolize_keys)
+    end
+
+    def kevin
+      self.new(**MANDATE_CONFIG["kevin"].symbolize_keys)
+    end
+
+    def patrick
+      self.new(**MANDATE_CONFIG["patrick"].symbolize_keys)
+    end
+  end
+
+  def <=>(other)
+    if other.is_a?(::User)
+      other.id <=> id
+    else
+      super
+    end
+  end
+
+  def ==(other)
+    if other.is_a?(::User)
+      other.id == id
+    else
+      super
+    end
+  end
+
+  def mention
+    "<@#{ id }>"
   end
 
   def dave?
