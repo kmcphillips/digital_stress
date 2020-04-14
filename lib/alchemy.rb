@@ -70,8 +70,7 @@ class Alchemy < BaseResponder
         end
         if Alchemy.parties[channel].full_strength?
           Alchemy.parties[channel] = nil
-          # event.respond(RESPONSES.sample)
-          event.respond("Quack! Finally full strength today! The suspense was killing you #{ User.patrick.mention }, wasn't it?")
+          event.respond(RESPONSES.sample)
         end
       else
         event.message.react(EMOJI[:wrong])
