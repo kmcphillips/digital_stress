@@ -4,7 +4,7 @@ class DeployCommand < BaseCommand
   CHANNELS = [
     "mandatemandate#general",
     "mandatemandate#quigital",
-    "duck-bot-test#general",
+    "duck-bot-test#testing",
   ].freeze
 
   class DeployError < StandardError ; end
