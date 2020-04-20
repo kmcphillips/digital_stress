@@ -41,7 +41,10 @@ class DeployCommand < BaseCommand
           if !File.exists?("#{ working_dir }/config/credentials/test.key")
             `ln -s #{ BASE_WORKING_DIR }/shared/#{ app }/test.key #{ working_dir }/config/credentials/test.key`
           end
-          run_command("bundle exec rspec", working_dir: working_dir, description: "Running test suite")
+          run_command("bundle exec rspec", working_dir: working_dir, description: "Running test suite", on_error: ->(event, command, output) {
+            msg = (s.split("Failures:\n").last || "").truncate(1980, omission: "")
+            event.respond("```\n#{ msg }\n```") if msg.present?
+          })
         end
         run_command("bundle exec cap production deploy", working_dir: working_dir)
       end
@@ -52,7 +55,7 @@ class DeployCommand < BaseCommand
     ":tada: Quack! Deploy complete."
   end
 
-  def run_command(command, working_dir:, description: nil)
+  def run_command(command, working_dir:, description: nil, on_error: nil)
     description = description.presence || "`#{ command }`"
     message = @event.respond(description)
     output = `cd #{ working_dir } && #{ command }`
@@ -60,6 +63,7 @@ class DeployCommand < BaseCommand
       message.react("✅")
     else
       Log.error(output)
+      on_error.call(@event, command, output) if on_error
       raise DeployError, ":warning: Quack! Error with #{ description }!"
     end
   end
