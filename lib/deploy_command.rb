@@ -42,7 +42,7 @@ class DeployCommand < BaseCommand
             `ln -s #{ BASE_WORKING_DIR }/shared/#{ app }/test.key #{ working_dir }/config/credentials/test.key`
           end
           run_command("bundle exec rspec", working_dir: working_dir, description: "Running test suite", on_error: ->(event, command, output) {
-            msg = (s.split("Failures:\n").last || "").truncate(1980, omission: "")
+            msg = (output.split("Failures:\n").last || "").truncate(1980, omission: "")
             event.respond("```\n#{ msg }\n```") if msg.present?
           })
         end
