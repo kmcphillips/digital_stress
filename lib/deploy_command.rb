@@ -46,7 +46,10 @@ class DeployCommand < BaseCommand
             event.respond("```\n#{ msg }\n```") if msg.present?
           })
         end
-        run_command("bundle exec cap production deploy", working_dir: working_dir)
+        run_command("bundle exec cap production deploy", working_dir: working_dir, on_error: ->(event, command, output) {
+            msg = (output || "").reverse.truncate(1200, omission: "").reverse
+            event.respond("```\n#{ msg }\n```") if msg.present?
+          })
       end
     rescue DeployError => e
       return e.message
