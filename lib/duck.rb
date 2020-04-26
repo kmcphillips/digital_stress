@@ -114,6 +114,9 @@ class Duck
 
     Log.info("Starting")
 
-    bot.run
+    bot.run(true)
+
+    WebDuck.bot = bot
+    WebDuck.run!
   end
 end

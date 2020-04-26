@@ -11,6 +11,7 @@ require "nokogiri"
 require "time_difference"
 require "securerandom"
 require "lightly"
+require "sinatra/base"
 
 logger_file = File.open("bot.log", File::WRONLY | File::APPEND | File::CREAT)
 logger_file.sync = true
@@ -26,6 +27,7 @@ require_relative "lib/azure"
 require_relative "lib/gif"
 require_relative "lib/user"
 require_relative "lib/recorder"
+require_relative "lib/web_duck"
 
 require_relative "lib/base_command"
 require_relative "lib/base_subcommand"
