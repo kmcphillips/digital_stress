@@ -35,7 +35,7 @@ class WebDuck < Sinatra::Application
     location = params["location"]
     url = params["url"]
 
-    message = ":telephone: A new person called Quigital `#{ phone_number }` #{ location } #{ url }"
+    message = ":telephone: New Quigital caller `#{ phone_number }` #{ location } #{ url }"
 
     notify_channels(message)
 
@@ -47,7 +47,7 @@ class WebDuck < Sinatra::Application
     location = params["location"]
     url = params["url"]
 
-    message = ":tada: Someone reached the Quigital ending `#{ phone_number }` #{ location } #{ url }"
+    message = ":tada: Quigital ending `#{ phone_number }` #{ location } #{ url }"
 
     notify_channels(message)
 
