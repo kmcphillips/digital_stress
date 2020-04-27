@@ -18,7 +18,7 @@ class WebDuck < Sinatra::Application
     server = params["server"]
     channel = params["channel"]
     message = params["message"]
-    channels = self.class.bot.find_channels(channel, server)
+    channels = self.class.bot.find_channel(channel, server)
 
     Log.warn("No channels found for #{ server }##{ channel }") if channels.empty?
 
