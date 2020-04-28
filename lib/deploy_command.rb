@@ -41,7 +41,7 @@ class DeployCommand < BaseCommand
           if !File.exists?("#{ working_dir }/config/credentials/test.key")
             `ln -s #{ BASE_WORKING_DIR }/shared/#{ app }/test.key #{ working_dir }/config/credentials/test.key`
           end
-          run_command("bundle exec rspec", working_dir: working_dir, description: "Running test suite", on_error: ->(event, command, output) {
+          run_command("RSPEC_SUPPRESS_PENDING=true bundle exec rspec", working_dir: working_dir, description: "Running test suite", on_error: ->(event, command, output) {
             msg = (output.split("Failures:\n").last || "").truncate(1980, omission: "")
             event.respond("```\n#{ msg }\n```") if msg.present?
           })
