@@ -6,6 +6,10 @@ DISCORDRB_NONACL=false
 DISCORDRB_TOKEN=<token>
 AZURE_KEY=<token>
 GIPHY_KEY=<token>
+MANDATE_PERSONS=<json>
+WEB_AUTH_USERNAME=<sinatra_username>
+WEB_AUTH_PASSWORD=<sinatra_password>
+WEB_NOTIFY_CHANNELS=<commat_list_of_channel_int_ids>
 ```
 
 Then to run:
@@ -17,8 +21,10 @@ bundle exec main.rb
 Install:
 
 ```
-https://discordapp.com/oauth2/authorize?&client_id=639271437944750082&scope=bot&permissions=8
+https://discordapp.com/oauth2/authorize?&client_id=<CLIENT_ID>&scope=bot&permissions=8
 ```
+Where `<CLIENT_ID>` is the `client_id` for the application registered in discord.
+
 
 Deploy:
 
