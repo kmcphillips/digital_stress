@@ -38,7 +38,7 @@ class Duck
     LegacyDatastore.migrate
   end
 
-  def join
+  def run
     bot.reaction_add do |event|
       if event.emoji&.name == "🦆" || event.emoji&.name == "duckgame"
         user_id = event.user&.id
