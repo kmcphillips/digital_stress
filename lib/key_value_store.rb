@@ -10,7 +10,7 @@ class KeyValueStore
       @redis = FakeRedis.new
     end
 
-    puts "[KeyValueStore Connected to #{ @redis.to_s }"
+    puts "[KeyValueStore Connected to #{ @redis.inspect }"
   end
 
   def write(key, value, ttl=nil)
@@ -40,8 +40,12 @@ class FakeRedis
     @db = {}
   end
 
-  def to_s
+  def inspect
     "<FakeRedis:#{ object_id } in memory size=#{ @db.size }>"
+  end
+
+  def to_s
+    inspect
   end
 
   def set(key, val)
