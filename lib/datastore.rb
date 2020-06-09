@@ -11,7 +11,6 @@ class Datastore
   def setup!
     @db.execute("CREATE TABLE messages ( id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER, user_id INTEGER, username VARCHAR(255), message TEXT, server VARCHAR(255), channel VARCHAR(255) );")
     @db.execute("CREATE TABLE learned ( id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER, user_id INTEGER, message TEXT, server VARCHAR(255), channel VARCHAR(255) );")
-    @db.execute("CREATE TABLE alchemy ( id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER, server VARCHAR(255), kevin INTEGER NOT NULL DEFAULT 0, eliot INTEGER NOT NULL DEFAULT 0, dave INTEGER NOT NULL DEFAULT 0, patrick INTEGER NOT NULL DEFAULT 0 );")
   end
 
   def migrate
