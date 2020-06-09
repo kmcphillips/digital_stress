@@ -4,6 +4,7 @@ require "active_support/all"
 require "dotenv/load"
 require "discordrb"
 require "logger"
+require "redis"
 require "sqlite3"
 require "sequel"
 require "httparty"
@@ -20,6 +21,9 @@ Log.level = Logger::INFO
 
 require_relative "lib/datastore"
 LegacyDatastore = Datastore.new
+
+require_relative "lib/key_value_store"
+KV = KeyValueStore.new(ENV["REDIS_URL"])
 
 require_relative "lib/dedup"
 require_relative "lib/steam"
