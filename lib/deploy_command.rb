@@ -21,6 +21,8 @@ class DeployCommand < BaseCommand
       deploy("quigital")
     elsif params.first == "infohub" || params.first == "quigital_infohub"
       deploy("quigital_infohub")
+    elsif params.first == "duck" || params.first == "digital_stress"
+      deploy("digital_stress")
     else
       "Quack! Don't know how to deploy that."
     end
