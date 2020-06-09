@@ -15,7 +15,7 @@ class Alchemy < BaseResponder
   CHANNELS = [
     "mandatemandate#general",
     "mandatemandate#quigital",
-    "duck-bot-test#general",
+    "duck-bot-test#testing",
   ].freeze
 
   RESPONSES = [
@@ -23,14 +23,13 @@ class Alchemy < BaseResponder
     "Full strength!",
     "Everyone accounted for tonight.",
     "Full strength mandate",
-    "We are 4/4",
+    "We are 4/4 for tonight",
     "nice",
     "Quack, full strength",
     "4 of 4",
     "Mandate: Full Strength Edition",
     "Quack! 🔥🌊🌬️🏔️",
     "4 / 4",
-    "Full strength, quack!",
   ].freeze
 
   @parties = {}
@@ -57,19 +56,20 @@ class Alchemy < BaseResponder
     else
       element = elements.first
 
-      Alchemy.parties[channel] = Party.new if !Alchemy.parties[channel] || Alchemy.parties[channel].expired?
+      party = Party.new(channel)
 
-      if Alchemy.parties[channel].element_for?(element, event.author)
-        if Alchemy.parties[channel].present?(element)
+      if party.element_for?(element, event.author)
+        if party.present?(element)
           event.message.react(EMOJI[:repeat])
         else
-          Alchemy.parties[channel].present!(element)
-          count = EMOJI[:count][Alchemy.parties[channel].size - 1]
-          event.channel.start_typing if Alchemy.parties[channel].full_strength? # this works around the reaction ratelimit
+          party.present!(element)
+          count = EMOJI[:count][party.size - 1]
+          event.channel.start_typing if party.full_strength? # this works around the reaction ratelimit
           event.message.react(count)
         end
-        if Alchemy.parties[channel].full_strength?
-          Alchemy.parties[channel] = nil
+
+        if party.full_strength?
+          party.clear
           event.respond(RESPONSES.sample)
         end
       else
@@ -79,30 +79,39 @@ class Alchemy < BaseResponder
   end
 
   class Party
-    def initialize
-      @stared_at = Time.now
-      @expires_at = @stared_at + 18.hours
-      @elements = []
-    end
-
-    def expired?
-      Time.now > @expires_at
+    def initialize(channel)
+      @channel = channel
+      @ttl = 18.hours.to_i
     end
 
     def present?(element)
-      @elements.include?(element.to_sym)
+      !!KV.read(key(element))
     end
 
     def present!(element)
-      @elements << element.to_sym unless present?(element)
+      KV.write(key(element), Time.now.to_i, @ttl)
     end
 
     def size
-      @elements.size
+      [
+        !!KV.read(key(:fire)),
+        !!KV.read(key(:earth)),
+        !!KV.read(key(:water)),
+        !!KV.read(key(:wind)),
+      ].count(true)
     end
 
     def full_strength?
-      @elements.size == 4
+      size == 4
+    end
+
+    def clear
+      KV.delete(key(:fire))
+      KV.delete(key(:earth))
+      KV.delete(key(:water))
+      KV.delete(key(:wind))
+
+      true
     end
 
     def element_for?(element, author)
@@ -116,6 +125,12 @@ class Alchemy < BaseResponder
       else
         raise "Unknown element '#{ element }'"
       end
+    end
+
+    private
+
+    def key(element)
+      "#{ @channel }-#{ element.to_s }"
     end
   end
 end
