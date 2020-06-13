@@ -19,8 +19,9 @@ logger_file.sync = true
 Log = Logger.new(logger_file)
 Log.level = Logger::INFO
 
+db_file = File.join(File.dirname(__FILE__), "chat.sqlite3")
 require_relative "lib/datastore"
-LegacyDatastore = Datastore.new
+LegacyDatastore = Datastore.new(db_file)
 
 require_relative "lib/key_value_store"
 KV = KeyValueStore.new(ENV["REDIS_URL"])
