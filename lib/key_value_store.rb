@@ -105,8 +105,10 @@ class SqliteRedis
   end
 
   def set(key, val)
-    del(key)
-    @dataset.insert(key: key, value: val)
+    @db.transaction do
+      @dataset.where(key: key).delete
+      @dataset.insert(key: key, value: val)
+    end
     "OK"
   end
 
@@ -121,7 +123,6 @@ class SqliteRedis
   end
 
   def expire(key, seconds)
-    c = @dataset.where(key: key).update(timestamp: Time.now.to_i + seconds)
-    c != 0
+    @dataset.where(key: key).update(timestamp: Time.now.to_i + seconds) != 0
   end
 end
