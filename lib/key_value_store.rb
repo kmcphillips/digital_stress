@@ -86,7 +86,7 @@ end
 
 class SqliteRedis
   def initialize(sqlite_file, name=nil)
-    @db = Sequel.sqlite(sqlite_file + "asdf")
+    @db = Sequel.sqlite(sqlite_file)
     @db_name = "redis_#{ name || '0' }"
     @db.create_table?(@db_name) do
       String :key
