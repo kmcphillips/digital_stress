@@ -22,9 +22,10 @@ Log.level = Logger::INFO
 db_file = File.join(File.dirname(__FILE__), "chat.sqlite3")
 require_relative "lib/datastore"
 LegacyDatastore = Datastore.new(db_file)
+DB = Sequel.sqlite(db_file)
 
 require_relative "lib/key_value_store"
-KV = KeyValueStore.new(ENV["REDIS_URL"])
+KV = KeyValueStore.new(DB.opts[:database]) # ENV["REDIS_URL"]
 
 require_relative "lib/dedup"
 require_relative "lib/steam"
