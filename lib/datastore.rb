@@ -24,7 +24,7 @@ class Datastore
     @db.execute("INSERT INTO learned ( timestamp, user_id, message, server, channel ) VALUES ( ?, ?, ?, ?, ? )", input)
   end
 
-  def learned(user_id: nil, server:)
+  def random_learned(user_id: nil, server:)
     result = if user_id
       @db.execute("SELECT message, user_id FROM learned WHERE server = ? AND user_id = ? ORDER BY RANDOM() LIMIT 1", [server, user_id])
     else
@@ -32,6 +32,28 @@ class Datastore
     end
 
     result.to_a.first
+  end
+
+  def learned(user_id: nil, server:)
+    result = if user_id
+      @db.execute("SELECT id, message, user_id FROM learned WHERE server = ? AND user_id = ?", [server, user_id])
+    else
+      @db.execute("SELECT id, message, user_id FROM learned WHERE server = ?", [server])
+    end
+
+    result.to_a
+  end
+
+  def find_learned(id)
+    @db.execute("SELECT message FROM learned WHERE id = ?", [id]).to_a.first
+  end
+
+  def update_learned(id, message)
+    @db.execute("UPDATE learned SET message = ? WHERE id = ?", [message, id])
+  end
+
+  def delete_learned(id)
+    @db.execute("DELETE FROM learned WHERE id = ?", [id])
   end
 
   def dump(username)
