@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Alchemy < BaseResponder
   EMOJI = {
-    check:   ["✅", "☑", "✔",].freeze,
+    check:   ["✅", "☑", "✔", "👻",].freeze,
     earth:   ["🏔", "⛰", "🗻", "🌋", "🌍", "🌎", "🌏",].freeze,
     fire:    ["🔥", "🧨", "🎆",].freeze,
     wind:    ["🌬", "🎐", "☁", "🌩", "🌪", "💨",].freeze,
