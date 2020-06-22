@@ -11,12 +11,12 @@ class LearnCommand < BaseCommand
       if ping
         user_id = ping[1].to_i
         params.shift
-        message = params.join(" ")
+        message = formatted_message(params)
 
         Log.info("learning for user##{ user_id }: #{ message }")
       else
         user_id = event.user.id
-        message = params.join(" ")
+        message = formatted_message(params)
 
         Log.info("learning for author: #{ message }")
       end
@@ -33,5 +33,14 @@ class LearnCommand < BaseCommand
 
       nil
     end
+  end
+
+  private
+
+  def formatted_message(params)
+    message = params.join(" ")
+    message = message.strip
+    message = message.gsub(/^\"/, "").gsub(/\"$/, "")
+    message
   end
 end
