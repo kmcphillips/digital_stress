@@ -10,4 +10,8 @@ class BaseResponder
   def respond
     raise NotImplementedError
   end
+
+  def text
+    event.message.content
+  end
 end

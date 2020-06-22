@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 class SimpleResponder < BaseResponder
   def respond
-    text = event.message.content || ""
-
     respond_match(text, /hang.?in.?there/i, "https://i.imgur.com/1FlykyH.jpg")
     react_match(text, /\bheat\b/i, "🔥")
     respond_match(text, /\bheat\b/i, "don't be hwat...", chance: 0.08)
