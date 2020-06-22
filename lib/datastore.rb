@@ -45,7 +45,7 @@ class Datastore
   end
 
   def find_learned(id)
-    @db.execute("SELECT message FROM learned WHERE id = ?", [id]).to_a.first
+    @db.execute("SELECT message FROM learned WHERE id = ?", [id]).to_a.first.first
   end
 
   def update_learned(id, message)
