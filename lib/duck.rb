@@ -17,6 +17,7 @@ class Duck
     SimpleResponder,
     TMinus,
     Alchemy,
+    GoogleImageSearchResponder,
   ].freeze
 
   class << self

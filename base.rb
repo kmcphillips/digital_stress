@@ -50,5 +50,6 @@ require_relative "lib/base_responder"
 require_relative "lib/simple_responder"
 require_relative "lib/t_minus"
 require_relative "lib/alchemy"
+require_relative "lib/google_image_search_responder"
 
 require_relative "lib/duck"
