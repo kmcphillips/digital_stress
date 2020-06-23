@@ -11,7 +11,7 @@ class GoogleImageSearchResponder < BaseResponder
           image_url = Rack::Utils.parse_nested_query(URI.parse(redirect_url).query)["imgurl"]
 
           if image_url.present?
-            event.respond("Why does everything have to be so hard?\n#{ image_url }")
+            event.respond("Why is this always so hard #{ mention }?\n#{ image_url }")
           else
             Log.warn("[GoogleImageSearchResponder] for #{ url } #{ redirect_url } did does not have an imgurl part")
             event.message.react("❔")
