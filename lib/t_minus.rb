@@ -13,7 +13,6 @@ class TMinus < BaseResponder
 
   def respond
     channel_id = event.channel.id
-    mention = event.user.mention
 
     if match = T_MINUS_NUMBER_REGEX.match(event.message.content)
       minutes = match[1].to_i

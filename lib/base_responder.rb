@@ -14,4 +14,8 @@ class BaseResponder
   def text
     event.message.content
   end
+
+  def mention
+    event.user.mention
+  end
 end
