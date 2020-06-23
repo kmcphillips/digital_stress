@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 class TMinus < BaseResponder
-  T_MINUS_NUMBER_REGEX = /^T-\s?([0-9]+)(?:$|\s)/i
-  T_MINUS_CANCEL_REGEX = /T-\s?(nevermind)/i
-  T_MINUS_AROUND_REGEX = /T-\s?(whenever|around|here)/i
-  T_MINUS_WHATEVER_REGEX = /^T-\s?(.+)/i
+  T_MINUS_NUMBER_REGEX = /(?:^|\s)T-\s?([0-9]+)(?:$|\s)/i
+  T_MINUS_CANCEL_REGEX = /(?:^|\s)T-\s?(nevermind)/i
+  T_MINUS_AROUND_REGEX = /(?:^|\s)T-\s?(whenever|around|here|now)/i
+  T_MINUS_WHATEVER_REGEX = /(?:^|\s)T-\s?(.+)/i
 
   @waiting = {}
 
