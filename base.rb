@@ -33,6 +33,7 @@ require_relative "lib/azure"
 require_relative "lib/gif"
 require_relative "lib/user"
 require_relative "lib/recorder"
+require_relative "lib/learner"
 require_relative "lib/web_duck"
 
 require_relative "lib/base_command"

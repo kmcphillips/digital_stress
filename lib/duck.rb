@@ -41,14 +41,15 @@ class Duck
 
   def run
     bot.reaction_add do |event|
-      if event.emoji&.name == "🦆" || event.emoji&.name == "duckgame"
-        user_id = event.user&.id
-        message = event.message&.content
-        server = event.server&.name
-        channel = event.channel&.name
+      if Learner.learn_emoji?(event.emoji&.name)
+        result = Learner.learn(
+          user_id: event.user&.id,
+          message: event.message&.content,
+          server: event.server&.name,
+          channel: event.channel&.name,
+        )
 
-        if user_id && message.present? && server && channel
-          LegacyDatastore.learn(user_id: user_id, message: message, server: server, channel: channel)
+        if result
           event.message.react("✅")
         else
           event.message.react("🚫")
