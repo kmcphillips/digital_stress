@@ -27,6 +27,7 @@ DB = Sequel.sqlite(db_file)
 require_relative "lib/key_value_store"
 KV = KeyValueStore.new(DB.opts[:database]) # ENV["REDIS_URL"]
 
+require_relative "lib/formatter"
 require_relative "lib/dedup"
 require_relative "lib/steam"
 require_relative "lib/azure"

@@ -7,45 +7,8 @@ class Datastore
   end
 
   def append(username:, user_id:, message:, server:, channel:, time:nil)
-    input = [parse_timestamp(time), user_id, username, parse_message(message), server, channel]
+    input = [Formatter.parse_timestamp(time), user_id, username, Formatter.compact_multiline(message), server, channel]
     @db.execute("INSERT INTO messages ( timestamp, user_id, username, message, server, channel ) VALUES ( ?, ?, ?, ?, ?, ? )", input)
-  end
-
-  def learn(user_id:, message_id:, message:, server:, channel:, time:nil)
-    input = [parse_timestamp(time), user_id, message_id, parse_message(message), server, channel]
-    @db.execute("INSERT INTO learned ( timestamp, user_id, message_id, message, server, channel ) VALUES ( ?, ?, ?, ?, ?, ? )", input)
-  end
-
-  def random_learned(user_id: nil, server:)
-    result = if user_id
-      @db.execute("SELECT message, user_id FROM learned WHERE server = ? AND user_id = ? ORDER BY RANDOM() LIMIT 1", [server, user_id])
-    else
-      @db.execute("SELECT message, user_id FROM learned WHERE server = ? ORDER BY RANDOM() LIMIT 1", [server])
-    end
-
-    result.to_a.first
-  end
-
-  def learned(user_id: nil, server:)
-    result = if user_id
-      @db.execute("SELECT id, message, user_id, message_id FROM learned WHERE server = ? AND user_id = ?", [server, user_id])
-    else
-      @db.execute("SELECT id, message, user_id, message_id FROM learned WHERE server = ?", [server])
-    end
-
-    result.to_a
-  end
-
-  def find_learned(id)
-    @db.execute("SELECT message FROM learned WHERE id = ?", [id]).to_a.first.first
-  end
-
-  def update_learned(id, message)
-    @db.execute("UPDATE learned SET message = ? WHERE id = ?", [message, id])
-  end
-
-  def delete_learned(id)
-    @db.execute("DELETE FROM learned WHERE id = ?", [id])
   end
 
   def dump(username)
@@ -78,24 +41,5 @@ class Datastore
     end
 
     lines.join("\n")
-  end
-
-  private
-
-  def parse_timestamp(input)
-    case input
-    when NilClass
-      Time.now.to_i
-    when Time
-      input.to_i
-    when Integer
-      input
-    else
-      raise "Unknown time #{input}"
-    end
-  end
-
-  def parse_message(input)
-    (input || "").gsub("\n", " ")
   end
 end
