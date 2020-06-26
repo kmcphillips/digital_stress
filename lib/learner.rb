@@ -12,7 +12,7 @@ module Learner
     LEARN_EMOJI.include?(emoji)
   end
 
-  def learn(user_id:, message_id: nil, message:, server:, channel:, time: nil)
+  def learn(user_id:, message_id:, message:, server:, channel:, time: nil)
     if user_id && message.present? && server && channel
       table.insert(
         user_id: user_id,
@@ -27,6 +27,10 @@ module Learner
     else
       false
     end
+  end
+
+  def unlearn(message_id:)
+    table.where(message_id: message_id).delete
   end
 
   def all(server:)

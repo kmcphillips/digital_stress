@@ -57,9 +57,15 @@ class Duck
       end
     end
 
-    # bot.reaction_remove do |event|
-      # TODO
-    # end
+    bot.reaction_remove do |event|
+      if Learner.learn_emoji?(event.emoji&.name) && event.message&.id
+        result = Learner.unlearn(message_id: event.message&.id)
+
+        if result
+          event.message.delete_own_reaction("✅")
+        end
+      end
+    end
 
     bot.command :ping, description: "Hello, is it me you're looking for?" do |event, *params|
       PingCommand.new(event: event, bot: bot, params: params).respond
