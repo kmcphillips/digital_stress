@@ -39,3 +39,25 @@ bundle exec cap production bot:start
 bundle exec cap production bot:stop
 bundle exec cap production bot:restart
 ```
+
+Database:
+```
+CREATE TABLE messages (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  timestamp INTEGER,
+  user_id INTEGER,
+  username VARCHAR(255),
+  message TEXT,
+  server VARCHAR(255),
+  channel VARCHAR(255)
+);
+CREATE TABLE learned (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  timestamp INTEGER,
+  user_id INTEGER,
+  message_id INTEGER,
+  message TEXT,
+  server VARCHAR(255),
+  channel VARCHAR(255)
+);
+```

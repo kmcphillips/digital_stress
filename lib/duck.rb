@@ -36,7 +36,6 @@ class Duck
       spaces_allowed: true,
       command_doesnt_exist_message: "Quack???"
     )
-    LegacyDatastore.migrate
   end
 
   def run

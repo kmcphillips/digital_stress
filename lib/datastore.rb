@@ -6,14 +6,6 @@ class Datastore
     @db = SQLite3::Database.new(path)
   end
 
-  def setup!
-    @db.execute("CREATE TABLE messages ( id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER, user_id INTEGER, username VARCHAR(255), message TEXT, server VARCHAR(255), channel VARCHAR(255) );")
-    @db.execute("CREATE TABLE learned ( id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER, user_id INTEGER, message_id INTEGER, message TEXT, server VARCHAR(255), channel VARCHAR(255) );")
-  end
-
-  def migrate
-  end
-
   def append(username:, user_id:, message:, server:, channel:, time:nil)
     input = [parse_timestamp(time), user_id, username, parse_message(message), server, channel]
     @db.execute("INSERT INTO messages ( timestamp, user_id, username, message, server, channel ) VALUES ( ?, ?, ?, ?, ?, ? )", input)
