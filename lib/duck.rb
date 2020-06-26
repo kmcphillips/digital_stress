@@ -57,6 +57,10 @@ class Duck
       end
     end
 
+    # bot.reaction_remove do |event|
+      # TODO
+    # end
+
     bot.command :ping, description: "Hello, is it me you're looking for?" do |event, *params|
       PingCommand.new(event: event, bot: bot, params: params).respond
     end
