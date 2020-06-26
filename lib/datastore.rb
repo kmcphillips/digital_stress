@@ -8,7 +8,7 @@ class Datastore
 
   def setup!
     @db.execute("CREATE TABLE messages ( id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER, user_id INTEGER, username VARCHAR(255), message TEXT, server VARCHAR(255), channel VARCHAR(255) );")
-    @db.execute("CREATE TABLE learned ( id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER, user_id INTEGER, message TEXT, server VARCHAR(255), channel VARCHAR(255) );")
+    @db.execute("CREATE TABLE learned ( id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER, user_id INTEGER, message_id INTEGER, message TEXT, server VARCHAR(255), channel VARCHAR(255) );")
   end
 
   def migrate
@@ -19,9 +19,9 @@ class Datastore
     @db.execute("INSERT INTO messages ( timestamp, user_id, username, message, server, channel ) VALUES ( ?, ?, ?, ?, ?, ? )", input)
   end
 
-  def learn(user_id:, message:, server:, channel:, time:nil)
-    input = [parse_timestamp(time), user_id, parse_message(message), server, channel]
-    @db.execute("INSERT INTO learned ( timestamp, user_id, message, server, channel ) VALUES ( ?, ?, ?, ?, ? )", input)
+  def learn(user_id:, message_id:, message:, server:, channel:, time:nil)
+    input = [parse_timestamp(time), user_id, message_id, parse_message(message), server, channel]
+    @db.execute("INSERT INTO learned ( timestamp, user_id, message_id, message, server, channel ) VALUES ( ?, ?, ?, ?, ?, ? )", input)
   end
 
   def random_learned(user_id: nil, server:)
@@ -36,9 +36,9 @@ class Datastore
 
   def learned(user_id: nil, server:)
     result = if user_id
-      @db.execute("SELECT id, message, user_id FROM learned WHERE server = ? AND user_id = ?", [server, user_id])
+      @db.execute("SELECT id, message, user_id, message_id FROM learned WHERE server = ? AND user_id = ?", [server, user_id])
     else
-      @db.execute("SELECT id, message, user_id FROM learned WHERE server = ?", [server])
+      @db.execute("SELECT id, message, user_id, message_id FROM learned WHERE server = ?", [server])
     end
 
     result.to_a

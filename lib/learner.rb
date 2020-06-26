@@ -12,13 +12,14 @@ module Learner
     LEARN_EMOJI.include?(emoji)
   end
 
-  def learn(user_id:, message:, server:, channel:) # TODO event_id
+  def learn(user_id:, message_id: nil, message:, server:, channel:)
     if user_id && message.present? && server && channel
       LegacyDatastore.learn(
         user_id: user_id,
         message: message,
         server: server,
         channel: channel,
+        message_id: message_id,
       )
 
       true

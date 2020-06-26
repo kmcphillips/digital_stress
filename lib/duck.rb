@@ -44,6 +44,7 @@ class Duck
       if Learner.learn_emoji?(event.emoji&.name)
         result = Learner.learn(
           user_id: event.user&.id,
+          message_id: event.message&.id,
           message: event.message&.content,
           server: event.server&.name,
           channel: event.channel&.name,

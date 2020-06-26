@@ -23,8 +23,9 @@ class LearnCommand < BaseCommand
 
       server = event.server&.name
       channel = event.channel&.name
+      message_id = event.message&.id
 
-      if Learner.learn(user_id: user_id, message: message, server: server, channel: channel)
+      if Learner.learn(user_id: user_id, message_id: message_id, message: message, server: server, channel: channel)
         event.message.react("✅")
       else
         event.message.react("🚫")
