@@ -63,6 +63,8 @@ class Duck
 
         if result
           event.message.delete_own_reaction("✅")
+        else
+          event.message.react("❓")
         end
       end
     end
