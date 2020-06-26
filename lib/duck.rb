@@ -96,7 +96,7 @@ class Duck
       # Answer the learned thing
       response = Duck.quack
       if event.server&.name
-        learned = LegacyDatastore.random_learned(server: event.server.name)
+        learned = Learner.get_random(server: event.server.name)
         response = learned.first if learned.present?
       end
       event.respond(response)

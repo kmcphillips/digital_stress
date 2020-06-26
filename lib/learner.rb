@@ -26,4 +26,8 @@ module Learner
       false
     end
   end
+
+  def get_random(server:)
+    LegacyDatastore.random_learned(server: server)
+  end
 end
