@@ -96,7 +96,7 @@ class Duck
 
     bot.mention do |event|
       Log.info("mention #{event.author.name}: #{event.message.content}")
-      response = Learner.get_random(server: event.server&.name) || Duck.quack
+      response = Learner.random(server: event.server&.name) || Duck.quack
       event.respond(response)
     end
 

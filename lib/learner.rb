@@ -29,7 +29,7 @@ module Learner
     end
   end
 
-  def get_random(server:)
+  def random(server:)
     result = table
       .where(server: server)
       .order(Sequel.lit('RANDOM()'))
@@ -38,7 +38,7 @@ module Learner
     result[:message] if result
   end
 
-  def get_all(server:)
+  def all(server:)
     table
       .where(server: server)
       .all
