@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 require_relative "base"
 
-LegacyDatastore
-puts LegacyDatastore.peek
+# Constants of note:  DB, KV
 
-
-
-db = LegacyDatastore.db
 binding.pry

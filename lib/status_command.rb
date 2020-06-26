@@ -9,10 +9,10 @@ class StatusCommand < BaseCommand
     ]
 
     if Recorder.record_server?(@event) || (@event.channel.pm? && @event.channel.name == "kmcphillips")
-      counts = LegacyDatastore.counts
-      last = LegacyDatastore.last
-      lines << "Last message by **#{ last[0] }** #{ TimeDifference.between(Time.at(last[3]), Time.now).humanize || 'a second' } ago"
-      counts.each{ |r| lines << "  **#{ r[0] }**: #{ r[2] } messages" }
+      counts = Recorder.counts
+      last = Recorder.last
+      lines << "Last message by **#{ last[:username] }** #{ TimeDifference.between(Time.at(last[:timestamp]), Time.now).humanize || 'a second' } ago"
+      counts.each{ |r| lines << "  **#{ r[:username] }**: #{ r[:count] } messages" }
     end
 
     lines.reject(&:blank?)

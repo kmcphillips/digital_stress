@@ -5,12 +5,22 @@ module Recorder
   MESSAGE_IGNORED_PREFIXES = ["http", "duck ", ">", "`"].freeze
   RECORD_CHANNELS = [
     "mandatemandate#general",
+    # "duck-bot-test#testing",
   ]
 
   def record(event)
     if record_event?(event)
-      LegacyDatastore.append(username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp, server: event.server.name, channel: event.channel.name)
-      Log.info("LegacyDatastore.append(#{ { username: event.author.name, user_id: event.author.id, message: event.message.content, time: event.timestamp, server: event.server.name, channel: event.channel.name } }")
+      args = {
+        username: event.author.name,
+        user_id: event.author.id,
+        message: event.message.content,
+        timestamp: Formatter.parse_timestamp(event.timestamp),
+        server: event.server.name,
+        channel: event.channel.name,
+      }
+
+      Log.info("record(#{ args }")
+      table.insert(args)
 
       true
     else
@@ -39,7 +49,19 @@ module Recorder
     false
   end
 
+  def counts
+    DB["SELECT DISTINCT username, user_id, COUNT(*) AS count FROM messages GROUP BY username ORDER BY username ASC"].all
+  end
+
+  def last
+    DB["SELECT username, user_id, message, timestamp, server, channel FROM messages ORDER BY timestamp DESC LIMIT 1"].first
+  end
+
   private
+
+  def table
+    DB[:messages]
+  end
 
   def ignore_message_content?(event)
     text = event.message.text.downcase
