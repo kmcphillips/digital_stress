@@ -29,19 +29,36 @@ module Learner
     end
   end
 
-  def random(server:)
-    result = table
-      .where(server: server)
-      .order(Sequel.lit('RANDOM()'))
-      .first
-
-    result[:message] if result
-  end
-
   def all(server:)
     table
       .where(server: server)
+      .order(:id)
       .all
+  end
+
+  def count(server:)
+    table
+      .where(server: server)
+      .count
+  end
+
+  def last(server:)
+    table
+      .where(server: server)
+      .order(:id)
+      .last
+  end
+
+  def random(server:)
+    table
+      .where(server: server)
+      .order(Sequel.lit('RANDOM()'))
+      .first
+  end
+
+  def random_message(server:)
+    result = random(server: server)
+    result[:message] if result
   end
 
   def find(id)
