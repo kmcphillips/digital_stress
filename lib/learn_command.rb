@@ -24,8 +24,7 @@ class LearnCommand < BaseCommand
       server = event.server&.name
       channel = event.channel&.name
 
-      if user_id && message.present? && server && channel
-        LegacyDatastore.learn(user_id: user_id, message: message, server: server, channel: channel)
+      if Learner.learn(user_id: user_id, message: message, server: server, channel: channel)
         event.message.react("✅")
       else
         event.message.react("🚫")
