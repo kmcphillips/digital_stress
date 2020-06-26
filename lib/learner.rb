@@ -31,10 +31,32 @@ module Learner
 
   def get_random(server:)
     result = table
+      .where(server: server)
       .order(Sequel.lit('RANDOM()'))
-      .first(server: server)
+      .first
 
     result[:message] if result
+  end
+
+  def get_all(server:)
+    table
+      .where(server: server)
+      .all
+  end
+
+  def find(id)
+    raise "id cannot be blank" unless id.present?
+    table.where(id: id).first
+  end
+
+  def update(id, message:)
+    raise "id cannot be blank" unless id.present?
+    table.where(id: id).update(message: message)
+  end
+
+  def delete(id)
+    raise "id cannot be blank" unless id.present?
+    table.where(id: id).delete
   end
 
   private
@@ -42,26 +64,4 @@ module Learner
   def table
     DB[:learned]
   end
-
-  # def learned(user_id: nil, server:)
-  #   result = if user_id
-  #     @db.execute("SELECT id, message, user_id, message_id FROM learned WHERE server = ? AND user_id = ?", [server, user_id])
-  #   else
-  #     @db.execute("SELECT id, message, user_id, message_id FROM learned WHERE server = ?", [server])
-  #   end
-
-  #   result.to_a
-  # end
-
-  # def find_learned(id)
-  #   @db.execute("SELECT message FROM learned WHERE id = ?", [id]).to_a.first.first
-  # end
-
-  # def update_learned(id, message)
-  #   @db.execute("UPDATE learned SET message = ? WHERE id = ?", [message, id])
-  # end
-
-  # def delete_learned(id)
-  #   @db.execute("DELETE FROM learned WHERE id = ?", [id])
-  # end
 end
