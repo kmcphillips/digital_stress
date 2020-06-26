@@ -52,10 +52,6 @@ class Datastore
     @db.execute("SELECT message FROM messages WHERE username = ? ORDER BY timestamp ASC", [username]).map { |r| r.first }
   end
 
-  def dump_all
-    USERNAMES.keys.each_with_object({}) { |username, result| result[username] = dump(username) }
-  end
-
   def counts
     @db.execute("SELECT DISTINCT username, user_id, COUNT(*) FROM messages GROUP BY username ORDER BY username ASC")
   end
