@@ -41,7 +41,7 @@ module Recorder
     false
   end
 
-  def record_server?(event)
+  def record_channel?(event)
     RECORD_CHANNELS.each do |pair|
       server, channel = pair.split("#")
       return true if event.server&.name == server

@@ -13,7 +13,7 @@ class StatusCommand < BaseCommand
       lines << "Learned **#{ Learner.count(server: server) }** things. Last learn was #{ TimeDifference.between(Time.at(last_learned[:timestamp]), Time.now).humanize.downcase || 'a second' } ago."
     end
 
-    if Recorder.record_server?(@event) || (@event.channel.pm? && @event.channel.name == "kmcphillips")
+    if Recorder.record_channel?(@event) || (@event.channel.pm? && @event.channel.name == "kmcphillips")
       counts = Recorder.counts
       last = Recorder.last
       lines << "Last message by **#{ last[:username] }** #{ TimeDifference.between(Time.at(last[:timestamp]), Time.now).humanize.downcase || 'a second' } ago."
