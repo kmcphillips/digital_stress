@@ -97,6 +97,14 @@ class Duck
       DeployCommand.new(event: event, bot: bot, params: params).respond
     end
 
+    bot.command :off, description: "Go off the record." do |event, *params|
+      OffTheRecordCommand.new(event: event, bot: bot, params: { record: false }).respond
+    end
+
+    bot.command :on, description: "Go back on the record." do |event, *params|
+      OffTheRecordCommand.new(event: event, bot: bot, params: { record: true }).respond
+    end
+
     # TODO
     # bot.command :games, description: "What should we play?" do |event, *params|
     #   GamesCommand.new(event: event, bot: bot, params: params).respond

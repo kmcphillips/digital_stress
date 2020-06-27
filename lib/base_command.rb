@@ -24,6 +24,14 @@ class BaseCommand
     message
   end
 
+  def server
+    event.server&.name
+  end
+
+  def channel
+    event.channel&.name
+  end
+
   private
 
   def response

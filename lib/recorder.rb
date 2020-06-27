@@ -6,7 +6,8 @@ module Recorder
   RECORD_CHANNELS = [
     "mandatemandate#general",
     # "duck-bot-test#testing",
-  ]
+  ].freeze
+  OFF_THE_RECORD_SECONDS = 2.hours
 
   def record(event)
     if record_event?(event)
@@ -33,18 +34,31 @@ module Recorder
       Log.warn("record_event(false) ignoring : #{ event.message.text }")
       return false
     end
-    RECORD_CHANNELS.each do |pair|
-      server, channel = pair.split("#")
-      return true if event.server&.name == server && event.channel&.name == channel
+    if record_channel?(server: event.server&.name, channel: event.channel&.name)
+      if off_the_record?(server: event.server&.name, channel: event.channel&.name)
+        Log.warn("record_event(false) because it is off the record #{ event.server&.name || 'nil' }##{ event.channel&.name || 'nil' } : #{ event.message.text }")
+        false
+      else
+        true
+      end
+    else
+      Log.warn("record_event(false) #{ event.server&.name || 'nil' }##{ event.channel&.name || 'nil' } : #{ event.message.text }")
+      false
     end
-    Log.warn("record_event(false) #{ event.server&.name || 'nil' }##{ event.channel&.name || 'nil' } : #{ event.message.text }")
+  end
+
+  def record_channel?(server:, channel:)
+    RECORD_CHANNELS.each do |pair|
+      record_server, record_channel = pair.split("#")
+      return true if server == record_server && channel == record_channel
+    end
     false
   end
 
-  def record_channel?(event)
+  def record_server?(server:)
     RECORD_CHANNELS.each do |pair|
-      server, channel = pair.split("#")
-      return true if event.server&.name == server
+      record_server, record_channel = pair.split("#")
+      return true if server == record_server
     end
     false
   end
@@ -57,6 +71,20 @@ module Recorder
     DB["SELECT username, user_id, message, timestamp, server, channel FROM messages ORDER BY timestamp DESC LIMIT 1"].first
   end
 
+  def off_the_record?(server:, channel:)
+    !!KV.read(otr_key(server: server, channel: channel))
+  end
+
+  def off_the_record(server:, channel:)
+    KV.write(otr_key(server: server, channel: channel), "1", OFF_THE_RECORD_SECONDS.to_i)
+    OFF_THE_RECORD_SECONDS.to_i
+  end
+
+  def on_the_record(server:, channel:)
+    KV.delete(otr_key(server: server, channel: channel))
+    true
+  end
+
   private
 
   def table
@@ -67,5 +95,9 @@ module Recorder
     text = event.message.text.downcase
 
     text.blank? || MESSAGE_IGNORED_PREFIXES.any? { |prefix| text.starts_with?(prefix) }
+  end
+
+  def otr_key(server:, channel:)
+    "off_the_record:#{ server }:#{ channel }"
   end
 end
