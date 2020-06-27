@@ -89,7 +89,7 @@ class Alchemy < BaseResponder
     end
 
     def present!(element)
-      KV.write(key(element), Time.now.to_i, @ttl)
+      KV.write(key(element), Time.now.to_i, ttl: @ttl)
     end
 
     def size

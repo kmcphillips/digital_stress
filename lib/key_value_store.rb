@@ -20,7 +20,7 @@ class KeyValueStore
     puts "[KeyValueStore Connected to #{ @redis.inspect }"
   end
 
-  def write(key, value, ttl=nil)
+  def write(key, value, ttl:nil)
     result = @redis.set(format_key(key), value)
     @redis.expire(format_key(key), ttl) if ttl
     result == "OK"

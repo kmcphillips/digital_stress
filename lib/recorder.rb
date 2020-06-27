@@ -76,7 +76,7 @@ module Recorder
   end
 
   def off_the_record(server:, channel:)
-    KV.write(otr_key(server: server, channel: channel), "1", OFF_THE_RECORD_SECONDS.to_i)
+    KV.write(otr_key(server: server, channel: channel), "1", ttl: OFF_THE_RECORD_SECONDS.to_i)
     OFF_THE_RECORD_SECONDS.to_i
   end
 
