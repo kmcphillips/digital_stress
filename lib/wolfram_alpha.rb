@@ -35,7 +35,7 @@ module WolframAlpha
   def extract_success_reply(response)
     response["queryresult"]["pod"].map do |pod|
       if pod["id"] == "Input"
-        "**#{ pod["subpod"]["plaintext"] }**\n"
+        "#{ pod["subpod"]["plaintext"] }\n"
       else
         subpods = pod["subpod"]
         subpods = [ subpods ] if subpods.is_a?(Hash)
@@ -47,7 +47,7 @@ module WolframAlpha
   end
 
   def extract_didyoumean_reply(response)
-    result = ["**Did you mean?**"]
+    result = [":thinking: Did you mean?"]
 
     response["queryresult"]["didyoumeans"]["didyoumean"].map do |dym|
       result << "    #{ dym["__content__"] } (#{ dym["score"].to_f.round(1) * 100 }%)"
