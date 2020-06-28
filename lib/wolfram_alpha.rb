@@ -49,7 +49,10 @@ module WolframAlpha
   def extract_didyoumean_reply(response)
     result = [":thinking: Did you mean?"]
 
-    response["queryresult"]["didyoumeans"]["didyoumean"].map do |dym|
+    dyms = response["queryresult"]["didyoumeans"]["didyoumean"]
+    dyms = [ dyms ] if dyms.is_a?(Hash)
+
+    dyms.each do |dym|
       result << "    #{ dym["__content__"] } (#{ dym["score"].to_f.round(1) * 100 }%)"
     end
 
