@@ -34,11 +34,15 @@ module WolframAlpha
 
   def extract_success_reply(response)
     response["queryresult"]["pod"].map do |pod|
-      subpods = pod["subpod"]
-      subpods = [ subpods ] if subpods.is_a?(Hash)
-      values = subpods.map { |subpod| subpod["plaintext"] }.compact
+      if pod["id"] == "Input"
+        "**#{ pod["subpod"]["plaintext"] }**\n"
+      else
+        subpods = pod["subpod"]
+        subpods = [ subpods ] if subpods.is_a?(Hash)
+        values = subpods.map { |subpod| subpod["plaintext"] }.compact
 
-      "**#{ pod["title"]}** : #{ values.join(', ') }" unless values.blank?
+        "**#{ pod["title"]}** : #{ values.join(', ') }" unless values.blank?
+      end
     end.compact
   end
 
