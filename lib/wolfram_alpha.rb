@@ -3,8 +3,8 @@ module WolframAlpha
   extend self
 
   def query(search, location: nil)
-    url = "http://api.wolframalpha.com/v2/query?input=#{ URI.encode(search.strip) }&appid=#{ ENV["WOLFRAM_APPID"] }"
-    url = "#{ url }&location=#{ URI.encode(location.strip) }" if location.present?
+    url = "http://api.wolframalpha.com/v2/query?input=#{ CGI.escape(search.strip) }&appid=#{ ENV["WOLFRAM_APPID"] }"
+    url = "#{ url }&location=#{ CGI.escape(location.strip) }" if location.present?
     url = "#{ url }&format=plaintext" #,image
 
     response = HTTParty.get(url)
