@@ -15,10 +15,12 @@ module WolframAlpha
 
       ":bangbang: Quack failure HTTP#{ response.code }"
     elsif response.dig("queryresult", "error") != "false"
+      Log.error(response)
       ":bangbang: queryresult.error was not false"
     elsif response.dig("queryresult", "success") == "true"
       extract_reply(response)
     else
+      Log.error(response)
       ":bangbang: queryresult.success was false"
     end
   end
