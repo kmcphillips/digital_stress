@@ -1,34 +1,43 @@
 # frozen_string_literal: true
 class User
   MANDATE_CONFIG = JSON.parse(ENV["MANDATE_PERSONS"])
+  MANDATE_CONFIG_BY_ID = MANDATE_CONFIG.to_h { |name,cfg| [cfg["id"], cfg] }
 
-  attr_reader :username, :id, :discriminator
+  attr_reader :username, :id, :discriminator, :location
 
   def initialize(username:, id:, discriminator:)
     @username = username
     @id = id
     @discriminator = discriminator
+    @mandate_config = MANDATE_CONFIG_BY_ID[id]
+
+    if @mandate_config
+      @location = @mandate_config["location"]
+    else
+      @location = nil
+    end
   end
 
   class << self
     def from_discord(user)
+      return nil unless user
       self.new(username: user.username, id: user.id, discriminator: user.discriminator)
     end
 
     def dave
-      self.new(**MANDATE_CONFIG["dave"].symbolize_keys)
+      self.new(**MANDATE_CONFIG["dave"].slice("username", "id", "discriminator").symbolize_keys)
     end
 
     def eliot
-      self.new(**MANDATE_CONFIG["eliot"].symbolize_keys)
+      self.new(**MANDATE_CONFIG["eliot"].slice("username", "id", "discriminator").symbolize_keys)
     end
 
     def kevin
-      self.new(**MANDATE_CONFIG["kevin"].symbolize_keys)
+      self.new(**MANDATE_CONFIG["kevin"].slice("username", "id", "discriminator").symbolize_keys)
     end
 
     def patrick
-      self.new(**MANDATE_CONFIG["patrick"].symbolize_keys)
+      self.new(**MANDATE_CONFIG["patrick"].slice("username", "id", "discriminator").symbolize_keys)
     end
   end
 

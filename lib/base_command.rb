@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 class BaseCommand
-  attr_reader :params, :event, :bot
+  attr_reader :params, :event, :bot, :user
 
   def initialize(event:, bot:, params:, typing: true)
     @bot = bot
     @params = params
     @event = event
     @typing = typing
+    @user = User.from_discord(event.author)
   end
 
   def respond
