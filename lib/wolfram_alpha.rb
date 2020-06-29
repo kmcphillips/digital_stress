@@ -109,23 +109,30 @@ module WolframAlpha
 
     def parse_pod
       array = []
+      images = []
 
       if pod = data["queryresult"]["pod"].find {|p| p["id"] == "Input" }
         array << "#{ pod["subpod"]["plaintext"] }"
       end
 
       data["queryresult"]["pod"].each do |pod|
-        if !pod["id"] == "Input"
+        if pod["id"] != "Input"
           subpods = pod["subpod"]
           subpods = [ subpods ] if subpods.is_a?(Hash)
-          values = subpods.map { |subpod| subpod["plaintext"] }.compact
+          values = subpods.map do |subpod|
+            if subpod["imagesource"]
+              images << subpod["imagesource"]
+            elsif subpod["plaintext"].present?
+              subpod["plaintext"]
+            end
+          end.compact
           if !values.blank?
             array << "**#{ pod["title"]}** : #{ values.join(', ') }"
           end
         end
       end
 
-      array
+      array + images
     end
   end
 end
