@@ -2,6 +2,8 @@
 module WolframAlpha
   extend self
 
+  MAX_VALUE_LENGTH = 500
+
   def query(search, location: nil)
     url = "http://api.wolframalpha.com/v2/query?input=#{ CGI.escape(search.strip) }&appid=#{ ENV["WOLFRAM_APPID"] }"
     url = "#{ url }&location=#{ CGI.escape(location.strip) }" if location.present?
@@ -108,11 +110,12 @@ module WolframAlpha
     end
 
     def parse_pod
-      array = []
+      prefix = []
+      lines = []
       images = []
 
       if pod = data["queryresult"]["pod"].find {|p| p["id"] == "Input" }
-        array << "#{ pod["subpod"]["plaintext"] }"
+        prefix << "#{ pod["subpod"]["plaintext"] }"
       end
 
       data["queryresult"]["pod"].each do |pod|
@@ -128,12 +131,14 @@ module WolframAlpha
             end
           end.compact
           if !values.blank?
-            array << "**#{ pod["title"]}** : #{ values.join(', ') }"
+            str = values.join("\n")
+            str = "#{ str.slice(0..MAX_VALUE_LENGTH) } [snip]" if str.length >= MAX_VALUE_LENGTH
+            lines << "**#{ pod["title"]}** : #{ str }"
           end
         end
       end
 
-      array + images
+      (prefix + images + lines).compact
     end
   end
 end
