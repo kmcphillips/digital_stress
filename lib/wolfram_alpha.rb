@@ -99,7 +99,11 @@ module WolframAlpha
       end
 
       if pod = data["queryresult"]["pod"].find {|p| p["primary"] }
-        str = "#{str}\n**#{ pod["subpod"]["plaintext"] }**"
+        if pod["subpod"].is_a?(Array)
+          str = "#{ str }\n#{ pod["subpod"].map {|s| s["plaintext"] }.join("\n") }"
+        else
+          str = "#{ str }\n**#{ pod["subpod"]["plaintext"] }**"
+        end
       end
 
       [ str ]
