@@ -92,21 +92,32 @@ module WolframAlpha
     end
 
     def parse_primary_pod
-      str = ""
+      lines = []
+      images = []
 
       if pod = data["queryresult"]["pod"].find {|p| p["id"] == "Input" }
-        str = "#{str}#{ pod["subpod"]["plaintext"] }"
+        lines << "#{ pod["subpod"]["plaintext"] }"
       end
 
       if pod = data["queryresult"]["pod"].find {|p| p["primary"] }
         if pod["subpod"].is_a?(Array)
-          str = "#{ str }\n#{ pod["subpod"].map {|s| s["plaintext"] }.join("\n") }"
+          lines << "#{ pod["subpod"].map {|s| s["plaintext"] }.join("\n") }"
         else
-          str = "#{ str }\n**#{ pod["subpod"]["plaintext"] }**"
+          lines << "**#{ pod["subpod"]["plaintext"] }**"
         end
       end
 
-      [ str ]
+      data["queryresult"]["pod"].each do |pod|
+        if pod["id"] != "Input"
+          subpods = pod["subpod"]
+          subpods = [ subpods ] if subpods.is_a?(Hash)
+          subpods.each do |subpod|
+            images << subpod["imagesource"] if subpod["imagesource"]
+          end
+        end
+      end
+
+      (lines + images).compact
     end
 
     def pod?
