@@ -36,7 +36,7 @@ module WolframAlpha
         parse_didyoumean
       elsif tips?
         parse_tips
-      elsif primary_pod?
+      elsif primary_pod? # TODO This seems to most always be true
         parse_primary_pod
       elsif pod?
         parse_pod
@@ -97,7 +97,7 @@ module WolframAlpha
       end
 
       if pod = data["queryresult"]["pod"].find {|p| p["primary"] }
-        str = "#{str} : **#{ pod["subpod"]["plaintext"] }**"
+        str = "#{str}\n**#{ pod["subpod"]["plaintext"] }**"
       end
 
       [ str ]
