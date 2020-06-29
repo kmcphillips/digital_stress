@@ -122,6 +122,7 @@ module WolframAlpha
           values = subpods.map do |subpod|
             if subpod["imagesource"]
               images << subpod["imagesource"]
+              nil
             elsif subpod["plaintext"].present?
               subpod["plaintext"]
             end
