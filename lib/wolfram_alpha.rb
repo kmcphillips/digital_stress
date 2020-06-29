@@ -10,52 +10,122 @@ module WolframAlpha
     response = HTTParty.get(url)
 
     if !response.success?
-      Log.error("WolframAlpha#search returned HTTP #{ response.code }")
+      Log.error("WolframAlpha#query returned HTTP #{ response.code }")
       Log.error(response.body)
 
       ":bangbang: Quack failure HTTP#{ response.code }"
-    elsif response.dig("queryresult", "error") != "false"
-      Log.error(response)
-      ":bangbang: queryresult.error was not false"
-    elsif response.dig("queryresult", "success") == "true"
-      extract_success_reply(response)
     else
-      Log.error(response)
+      Log.info("WolframAlpha#query success")
+      Log.info(response.body)
 
-      if response["queryresult"]["didyoumeans"]
-        extract_didyoumean_reply(response)
-      else
-        ":bangbang: queryresult.success was false and had no guesses"
-      end
+      Response.new(response.to_h).to_a
     end
   end
 
-  private
+  class Response
+    attr_reader :data
 
-  def extract_success_reply(response)
-    response["queryresult"]["pod"].map do |pod|
-      if pod["id"] == "Input"
-        "#{ pod["subpod"]["plaintext"] }\n"
-      else
-        subpods = pod["subpod"]
-        subpods = [ subpods ] if subpods.is_a?(Hash)
-        values = subpods.map { |subpod| subpod["plaintext"] }.compact
-
-        "**#{ pod["title"]}** : #{ values.join(', ') }" unless values.blank?
-      end
-    end.compact
-  end
-
-  def extract_didyoumean_reply(response)
-    result = [":thinking: Did you mean?"]
-
-    dyms = response["queryresult"]["didyoumeans"]["didyoumean"]
-    dyms = [ dyms ] if dyms.is_a?(Hash)
-
-    dyms.each do |dym|
-      result << "    #{ dym["__content__"] } (#{ dym["score"].to_f.round(1) * 100 }%)"
+    def initialize(data)
+      @data = data
     end
 
-    result
+    def to_a
+      if error?
+        parse_error
+      elsif didyoumean?
+        parse_didyoumean
+      elsif tips?
+        parse_tips
+      elsif primary_pod?
+        parse_primary_pod
+      elsif pod?
+        parse_pod
+      else
+        [ ":interrobang: Don't know what to make of this response." ]
+      end
+    end
+
+    def to_s
+      to_a.join("\n")
+    end
+
+    private
+
+    def error?
+      data["queryresult"]["error"] != "false"
+    end
+
+    def parse_error
+      ":bangbang: #{ data["queryresult"]["error"] }"
+    end
+
+    def didyoumean?
+      !!data["queryresult"]["didyoumeans"]
+    end
+
+    def parse_didyoumean
+      array = [":thinking: Did you mean?"]
+      dyms = data["queryresult"]["didyoumeans"]["didyoumean"]
+      dyms = [ dyms ] unless dyms.is_a?(Array)
+      dyms.each do |dym|
+        array << "    #{ dym["__content__"] } (#{ dym["score"].to_f.round(1) * 100 }%)"
+      end
+      array
+    end
+
+    def tips?
+      !!data["queryresult"]["tips"]
+    end
+
+    def parse_tips
+      tips = data["queryresult"]["tips"]["tip"]
+      tips = [ tips ] unless tips.is_a?(Array)
+      tips.map do |tip|
+        ":information_source: #{ tip["text"] }"
+      end
+    end
+
+    def primary_pod?
+      data["queryresult"]["pod"] && data["queryresult"]["pod"].any? {|p| p["primary"] }
+    end
+
+    def parse_primary_pod
+      str = ""
+
+      if pod = data["queryresult"]["pod"].find {|p| p["id"] == "Input" }
+        str = "#{str}#{ pod["subpod"]["plaintext"] }"
+      end
+
+      if pod = data["queryresult"]["pod"].find {|p| p["primary"] }
+        str = "#{str} : **#{ pod["subpod"]["plaintext"] }**"
+      end
+
+      [ str ]
+    end
+
+    def pod?
+      !!data["queryresult"]["pod"]
+    end
+
+    def parse_pod
+      array = []
+
+      if pod = data["queryresult"]["pod"].find {|p| p["id"] == "Input" }
+        array << "#{ pod["subpod"]["plaintext"] }"
+      end
+
+      data["queryresult"]["pod"].each do |pod|
+        if !pod["id"] == "Input"
+          subpods = pod["subpod"]
+          subpods = [ subpods ] if subpods.is_a?(Hash)
+          values = subpods.map { |subpod| subpod["plaintext"] }.compact
+          if !values.blank?
+            array << "**#{ pod["title"]}** : #{ values.join(', ') }"
+          end
+        end
+      end
+
+      array
+    end
   end
 end
