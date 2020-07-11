@@ -121,19 +121,20 @@ class Duck
     end
 
     bot.message do |event|
-      # duck is always watching
       Recorder.record(event)
+    end
 
+    bot.message_edit do |event|
+      Recorder.edit(event)
+    end
+
+    bot.message do |event|
       if event.channel.pm? && !COMMAND_PREFIXES.any?{ |c| event.message.content.starts_with?(c) }
         Log.info("pm #{event.author.name}: #{event.message.content}")
         event.respond(Duck.quack)
       else # in a channel
         RESPONDERS.each { |responder| responder.new(event, bot: bot).respond }
       end
-    end
-
-    bot.message_edit do |event|
-      Recorder.edit(event)
     end
 
     Log.info("Starting")
