@@ -15,6 +15,7 @@ module Recorder
         username: event.author.name,
         user_id: event.author.id,
         message: event.message.content,
+        message_id: event.message.id,
         timestamp: Formatter.parse_timestamp(event.timestamp),
         server: event.server.name,
         channel: event.channel.name,
@@ -27,6 +28,10 @@ module Recorder
     else
       false
     end
+  end
+
+  def edit(event)
+    table.where(message_id: event.message.id).update(message: event.message.content)
   end
 
   def record_event?(event)

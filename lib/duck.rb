@@ -132,6 +132,10 @@ class Duck
       end
     end
 
+    bot.message_edit do |event|
+      Recorder.edit(event)
+    end
+
     Log.info("Starting")
 
     bot.run(true)
