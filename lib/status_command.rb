@@ -23,7 +23,9 @@ class StatusCommand < BaseCommand
       counts.each{ |r| lines << "  **#{ User.from_id(r[:user_id])&.username || r[:user_id] }**: #{ r[:count] } messages" }
     end
 
-    lines << "This channel is **#{ Recorder.off_the_record?(server: server, channel: channel) ? "OFF" : "ON" }** the record."
+    if !event.channel.pm?
+      lines << "This channel is **#{ Recorder.off_the_record?(server: server, channel: channel) ? "OFF" : "ON" }** the record."
+    end
 
     lines.reject(&:blank?)
   end
