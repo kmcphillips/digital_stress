@@ -69,7 +69,7 @@ module Recorder
   end
 
   def counts
-    DB["SELECT DISTINCT user_id, COUNT(*) AS count FROM messages GROUP BY user_id ORDER BY user_id ASC"].all
+    DB["SELECT DISTINCT user_id, COUNT(*) AS count FROM messages GROUP BY user_id ORDER BY count DESC"].all
   end
 
   def last
