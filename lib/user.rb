@@ -24,6 +24,12 @@ class User
       self.new(username: user.username, id: user.id, discriminator: user.discriminator)
     end
 
+    def from_id(user_id)
+      cfg = MANDATE_CONFIG_BY_ID[user_id.to_i]
+      return nil unless cfg
+      self.new(cfg.slice("username", "id", "discriminator").symbolize_keys)
+    end
+
     def dave
       self.new(**MANDATE_CONFIG["dave"].slice("username", "id", "discriminator").symbolize_keys)
     end

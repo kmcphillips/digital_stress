@@ -19,8 +19,8 @@ class StatusCommand < BaseCommand
     if Recorder.record_server?(server: server) || (event.channel.pm? && PM_STATUS.include?(event.channel.name))
       counts = Recorder.counts
       last = Recorder.last
-      lines << "Last message by **#{ last[:username] }** #{ TimeDifference.between(Time.at(last[:timestamp]), Time.now).humanize.downcase || 'a second' } ago."
-      counts.each{ |r| lines << "  **#{ r[:username] }**: #{ r[:count] } messages" }
+      lines << "Last message by **#{ User.from_id(last[:user_id])&.username || last[:user_id] }** #{ TimeDifference.between(Time.at(last[:timestamp]), Time.now).humanize.downcase || 'a second' } ago."
+      counts.each{ |r| lines << "  **#{ User.from_id(r[:user_id])&.username || r[:user_id] }**: #{ r[:count] } messages" }
     end
 
     lines << "This channel is **#{ Recorder.off_the_record?(server: server, channel: channel) ? "OFF" : "ON" }** the record."
