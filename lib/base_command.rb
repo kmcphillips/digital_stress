@@ -19,7 +19,7 @@ class BaseCommand
       message = response
       message = message.join("\n") if message.is_a?(Array)
 
-      if message.length >= MAX_MESSAGE_LENGTH
+      if message && message.length >= MAX_MESSAGE_LENGTH
         Log.warn("response of length #{ message.length } is too long #{ message }")
         message = "#{ message.slice(0..(MAX_MESSAGE_LENGTH - 5))} ..."
       end
