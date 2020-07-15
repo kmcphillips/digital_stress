@@ -42,6 +42,8 @@ module WolframAlpha
         parse_primary_pod
       elsif pod?
         parse_pod
+      elsif futuretopic?
+        parse_futuretopic
       else
         [ ":interrobang: Don't know what to make of this response." ]
       end
@@ -154,6 +156,16 @@ module WolframAlpha
       end
 
       (prefix + images + lines).compact
+    end
+    
+    def futuretopic?
+      !!data["queryresult"]["futuretopic"]
+    end
+    
+    def parse_futuretopic
+      lines = []
+      lines << "**#{ data["queryresult"]["futuretopic"] }**" # topic / msg
+      lines
     end
   end
 end
