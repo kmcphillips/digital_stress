@@ -157,14 +157,14 @@ module WolframAlpha
 
       (prefix + images + lines).compact
     end
-    
+
     def futuretopic?
       !!data["queryresult"]["futuretopic"]
     end
-    
+
     def parse_futuretopic
       lines = []
-      lines << "**#{ data["queryresult"]["futuretopic"] }**" # topic / msg
+      lines << ":woman_scientist: **#{ data["queryresult"]["futuretopic"]["topic"] }** : #{ data["queryresult"]["futuretopic"]["msg"] }"
       lines
     end
   end
