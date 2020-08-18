@@ -8,6 +8,11 @@ module Recorder
     # "duck-bot-test#testing",
   ].freeze
   OFF_THE_RECORD_SECONDS = 2.hours
+  OFF_THE_RECORD_EMOJI = [
+    "⏸️",
+    "🚫",
+    "❎",
+  ].freeze
 
   def record(event)
     if record_event?(event)
@@ -32,6 +37,11 @@ module Recorder
 
   def edit(event)
     table.where(message_id: event.message.id).update(message: event.message.content)
+  end
+
+  def delete(event)
+    return nil unless event.message&.id
+    table.where(message_id: event.message.id).delete
   end
 
   def delete_last(n)
@@ -95,6 +105,10 @@ module Recorder
   def on_the_record(server:, channel:)
     KV.delete(otr_key(server: server, channel: channel))
     true
+  end
+
+  def off_the_record_emoji?(emoji)
+    OFF_THE_RECORD_EMOJI.include?(emoji)
   end
 
   private

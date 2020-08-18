@@ -54,6 +54,14 @@ class Duck
         else
           event.message.react("🚫")
         end
+      elsif Recorder.off_the_record_emoji?(event.emoji&.name)
+        result = Recorder.delete(event)
+
+        if result
+          event.message.react("✅")
+        else
+          event.message.react("❓")
+        end
       end
     end
 
