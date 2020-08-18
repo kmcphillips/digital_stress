@@ -34,6 +34,13 @@ module Recorder
     table.where(message_id: event.message.id).update(message: event.message.content)
   end
 
+  def delete_last(n)
+    DB[:messages].order(Sequel.desc(:timestamp)).limit(n).map { |r|
+      DB[:messages].where(id: r[:id]).delete
+      r
+    }
+  end
+
   def record_event?(event)
     if ignore_message_content?(event)
       Log.warn("record_event(false) ignoring : #{ event.message.text }")
