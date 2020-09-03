@@ -86,7 +86,7 @@ module Recorder
   end
 
   def counts
-    DB["SELECT DISTINCT user_id, COUNT(*) AS count FROM messages GROUP BY user_id ORDER BY count DESC"].all
+    DB["SELECT DISTINCT user_id, COUNT(*) AS count, sum(length(message) - length(replace(message, ' ', ''))+1) AS words FROM messages GROUP BY user_id ORDER BY count DESC"].all
   end
 
   def last
