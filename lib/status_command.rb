@@ -20,7 +20,7 @@ class StatusCommand < BaseCommand
       counts = Recorder.counts
       last = Recorder.last
       lines << "Last message by **#{ User.from_id(last[:user_id])&.username || last[:user_id] }** #{ TimeDifference.between(Time.at(last[:timestamp]), Time.now).humanize.downcase || 'a second' } ago."
-      counts.each{ |r| lines << "  **#{ User.from_id(r[:user_id])&.username || r[:user_id] }**: #{ r[:count] } messages (#{ r[:words] } words)" }
+      counts.each{ |r| lines << "  **#{ User.from_id(r[:user_id])&.username || r[:user_id] }**: #{ Formatter.number(r[:count]) } messages (#{ Formatter.number(r[:words]) } words)" }
     end
 
     if !event.channel.pm?
