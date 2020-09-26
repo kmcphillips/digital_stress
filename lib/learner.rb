@@ -53,15 +53,21 @@ module Learner
       .last
   end
 
-  def random(server:)
-    table
+  def random(server:, prevent_recent: false)
+    scope = table
       .where(server: server)
       .order(Sequel.lit('RANDOM()'))
-      .first
+
+    scope = scope.exclude(id: recent_ids(server: server)) if prevent_recent
+
+    record = scope.first
+    record_recent(record, server: server) if record
+
+    record
   end
 
-  def random_message(server:)
-    result = random(server: server)
+  def random_message(server:, prevent_recent: false)
+    result = random(server: server, prevent_recent: prevent_recent)
     result[:message] if result
   end
 
@@ -84,5 +90,31 @@ module Learner
 
   def table
     DB[:learned]
+  end
+
+  def recent_ids(server:)
+    x = JSON.parse(KV.read(recent_key(server: server))) rescue []
+    puts "[Learner] recent_ids=#{ x }"
+    x
+  end
+
+  def record_recent(record, server:)
+    ids = recent_ids(server: server)
+    ids = ids.unshift(record[:id])
+    ids = ids[0...recent_max_length(server: server)]
+
+    puts "[Learner] writing new recent_ids=#{ ids }"
+
+    KV.write(recent_key(server: server), ids.to_json)
+
+    true
+  end
+
+  def recent_max_length(server:)
+    [ (count(server: server) / 3), 1 ].max
+  end
+
+  def recent_key(server:)
+    "learner-recent-ids-#{ server }"
   end
 end
