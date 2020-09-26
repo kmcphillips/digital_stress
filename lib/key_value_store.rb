@@ -107,7 +107,7 @@ class SqliteRedis
   def set(key, val)
     @db.transaction do
       @dataset.where(key: key).delete
-      @dataset.insert(key: key, value: val)
+      @dataset.insert(key: key, value: val.to_s)
     end
     "OK"
   end
