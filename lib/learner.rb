@@ -93,17 +93,14 @@ module Learner
   end
 
   def recent_ids(server:)
-    x = JSON.parse(KV.read(recent_key(server: server))) rescue []
-    puts "[Learner] recent_ids=#{ x }"
-    x
+    ids = JSON.parse(KV.read(recent_key(server: server))) rescue []
+    ids
   end
 
   def record_recent(record, server:)
     ids = recent_ids(server: server)
     ids = ids.unshift(record[:id])
     ids = ids[0...recent_max_length(server: server)]
-
-    puts "[Learner] writing new recent_ids=#{ ids }"
 
     KV.write(recent_key(server: server), ids.to_json)
 
