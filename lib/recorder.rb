@@ -45,14 +45,27 @@ module Recorder
   end
 
   def delete_last(n)
-    DB[:messages].order(Sequel.desc(:timestamp)).limit(n).map { |r|
-      DB[:messages].where(id: r[:id]).delete
+    table.order(Sequel.desc(:timestamp)).limit(n).map do |r|
+      table.where(id: r[:id]).delete
       r
-    }
+    end
+  end
+
+  def delete_matching(&block)
+    table.map do |r|
+      if yield(r)
+        table.where(id: r[:id]).delete
+        r
+      end
+    end.compact
+  end
+
+  def delete_sweep
+    delete_matching { |r| ignore_message_content?(r[:message]) }
   end
 
   def record_event?(event)
-    if ignore_message_content?(event)
+    if ignore_message_content?(event.message.text)
       Log.warn("record_event(false) ignoring : #{ event.message.text }")
       return false
     end
@@ -117,8 +130,8 @@ module Recorder
     DB[:messages]
   end
 
-  def ignore_message_content?(event)
-    text = event.message.text.downcase
+  def ignore_message_content?(text)
+    text = text.downcase
 
     text.blank? || MESSAGE_IGNORED_PREFIXES.any? { |prefix| text.starts_with?(prefix) } || Alchemy.element_from_message(text).present?
   end
