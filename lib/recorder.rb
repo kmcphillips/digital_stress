@@ -124,6 +124,14 @@ module Recorder
     OFF_THE_RECORD_EMOJI.include?(emoji)
   end
 
+  def dump
+    table.each_with_object({}) do |r, accu|
+      accu[r[:user_id]] ||= { username: r[:username], messages: [] }
+      accu[r[:user_id]][:messages] << r[:message]
+      accu[r[:user_id]][:username] = r[:username]
+    end
+  end
+
   private
 
   def table
