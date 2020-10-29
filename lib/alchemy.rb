@@ -7,7 +7,6 @@ class Alchemy < BaseResponder
     wind:    ["🌬", "🎐", "☁", "🌩", "🌪", "💨",].freeze,
     water:   ["🌊", "🚰", "💧", "💦", "🚿", "🛀", "🛁", "⛈", "🌧", "🌦",].freeze,
     count:   ["1️⃣", "2️⃣", "3️⃣", "4️⃣",].freeze,
-    weird:   "❓",
     wrong:   "🚫",
     repeat:  "🔁",
   }.freeze
@@ -19,8 +18,6 @@ class Alchemy < BaseResponder
   ].freeze
 
   RESPONSES = [
-    "**4/4**",
-    "Full strength!",
     "Everyone accounted for tonight.",
     "Full strength mandate",
     "We are 4/4 for tonight",
@@ -29,33 +26,35 @@ class Alchemy < BaseResponder
     "4 of 4",
     "Mandate: Full Strength Edition",
     "Quack! 🔥🌊🌬️🏔️",
-    "4 / 4",
+    "Full strength. Keep it light, keep it tight.",
+    "That's ✅✅✅✅ / 4",
+    "Full strength.",
   ].freeze
 
   @parties = {}
 
   class << self
     attr_reader :parties
+
+    def element_from_message(message)
+      message = message || ""
+      message = message.gsub(/\s+/, "")
+
+      chars = message[0, 6].chars
+      return nil unless chars.find { |c| EMOJI[:check].include?(c) }
+
+      elements = [:earth, :fire, :wind, :water].select { |e| (chars & EMOJI[e]).any? }
+      elements.first
+    end
   end
 
   def respond
     channel = "#{ event.server&.name }##{ event.channel&.name }"
     return unless CHANNELS.include?(channel)
 
-    text = event.message.content || ""
-    text = text.gsub(/\s+/, "")
+    element = self.class.element_from_message(event.message.content)
 
-    chars = text[0, 6].chars
-    return unless chars.find { |c| EMOJI[:check].include?(c) }
-
-    elements = [:earth, :fire, :wind, :water].select { |e| (chars & EMOJI[e]).any? }
-    return if elements.none?
-
-    if elements.many?
-      event.message.react(EMOJI[:weird])
-    else
-      element = elements.first
-
+    if element
       party = Party.new(channel)
 
       if party.element_for?(element, event.author)
