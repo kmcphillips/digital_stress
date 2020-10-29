@@ -61,3 +61,9 @@ CREATE TABLE learned (
   channel VARCHAR(255)
 );
 ```
+
+Dump:
+
+```
+File.open("dump_all.txt", "w"){|f|f.write(DB[:messages].map{|r|r[:message]}.reject{|m|m.blank?||(m.include?("✅")&&m.length<5)}.join("\n")) }
+```
