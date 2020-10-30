@@ -113,6 +113,10 @@ class Duck
       OffTheRecordCommand.new(event: event, bot: bot, params: { record: true }).respond
     end
 
+    bot.command :chat, description: "Toggle duck chatting with absurdity." do |event, *params|
+      ChatCommand.new(event: event, bot: bot, params: params).respond
+    end
+
     bot.command [:wa, :wolfram, :wolframalpha], description: "Query Wolfram|Alpha." do |event, *params|
       WolframAlphaCommand.new(event: event, bot: bot, params: params).respond
     end

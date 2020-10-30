@@ -48,6 +48,7 @@ require_relative "lib/learn_command"
 require_relative "lib/deploy_command"
 require_relative "lib/off_the_record_command"
 require_relative "lib/wolfram_alpha_command"
+require_relative "lib/chat_command"
 
 require_relative "lib/base_responder"
 require_relative "lib/simple_responder"
