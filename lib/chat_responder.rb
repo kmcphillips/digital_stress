@@ -2,6 +2,7 @@
 class ChatResponder < BaseResponder
   def respond
     return unless ChatAbsurdityRemberer::CHANNELS.include?("#{ event.server&.name }##{ event.channel&.name }")
+    return if Duck::COMMAND_PREFIXES.any?{ |c| text.starts_with?(c) }
     return unless remberer.enabled?
 
     remberer.note_conversation(user_id: event.user.id)
