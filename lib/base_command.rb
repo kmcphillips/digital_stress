@@ -15,6 +15,9 @@ class BaseCommand
   def respond
     Log.info("command.#{ @event.command.name }(#{ params })")
     @event.channel.start_typing if @typing
+
+    return ":closed_lock_with_key: Quack! Not permitted!" if channels.present? && !channels.include?("#{ server }##{ channel }")
+
     begin
       message = response
       message = message.join("\n") if message.is_a?(Array)
@@ -39,6 +42,10 @@ class BaseCommand
 
   def channel
     event.channel&.name
+  end
+
+  def channels
+    nil
   end
 
   private

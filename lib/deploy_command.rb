@@ -1,18 +1,10 @@
 # frozen_string_literal: true
 class DeployCommand < BaseCommand
   BASE_WORKING_DIR = "/home/deploy/apps/digital_stress/shared/deploy_from"
-  CHANNELS = [
-    "mandatemandate#general",
-    "mandatemandate#quigital",
-    "duck-bot-test#testing",
-  ].freeze
 
   class DeployError < StandardError ; end
 
   def response
-    channel = "#{ event.server&.name }##{ event.channel&.name }"
-    return "Quack! Not permitted!" unless CHANNELS.include?(channel)
-
     if params.count == 0
       "Quack! What should I deploy?"
     elsif params.count > 1
@@ -24,6 +16,14 @@ class DeployCommand < BaseCommand
     else
       "Quack! Don't know how to deploy that."
     end
+  end
+
+  def channels
+    [
+      "mandatemandate#general",
+      "mandatemandate#quigital",
+      "duck-bot-test#testing",
+    ].freeze
   end
 
   private

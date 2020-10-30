@@ -8,6 +8,13 @@ class ChatCommand < BaseSubcommand
     }.freeze
   end
 
+  def channels
+    [
+      "mandatemandate#general",
+      "duck-bot-test#testing",
+    ].freeze
+  end
+
   private
 
   def on
