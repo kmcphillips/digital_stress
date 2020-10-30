@@ -9,8 +9,10 @@ class ChatResponder < BaseResponder
     if remberer.active_conversation?
       if !remberer.in_backoff?
         remberer.backoff
-        event.respond "Quaaaack!!! :robot:"
-        # event.respond(remberer.consume_message(user_id: event.user.id)) # TODO
+
+        absurdity = remberer.consume_message
+
+        event.respond("> <@#{ absurdity[:user_id] }> : #{ absurdity[:message] }")
       end
     else
       remberer.backoff unless remberer.in_backoff?

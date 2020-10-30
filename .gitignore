@@ -60,3 +60,4 @@ nohup.out
 /dedup.json
 /log
 /output/*.txt
+/absurdity_chats/*.txt

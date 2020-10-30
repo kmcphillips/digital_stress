@@ -27,7 +27,7 @@ set :rbenv_ruby, "2.6.0"
 append :linked_files, ".env", "bot.log", "chat.sqlite3"
 
 # Default value for linked_dirs is []
-append :linked_dirs, "tmp", "deploy_from"
+append :linked_dirs, "tmp", "deploy_from", "absurdity_chats"
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }

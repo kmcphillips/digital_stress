@@ -6,6 +6,7 @@ class ChatAbsurdityRemberer
   ].freeze
   BACKOFF_SECONDS = 5..45
   ACTIVE_CONVERSATION_WINDOW_SECONDS = 120
+  ACTIVE_CONVERSATION_PEOPLE = 2
 
   attr_reader :server, :channel
 
@@ -47,7 +48,7 @@ class ChatAbsurdityRemberer
   end
 
   def active_conversation?
-    JSON.parse(KV.read(conversation_key).presence || "[]").count >= 2
+    JSON.parse(KV.read(conversation_key).presence || "[]").count >= ACTIVE_CONVERSATION_PEOPLE
   end
 
   def in_backoff?
@@ -60,6 +61,21 @@ class ChatAbsurdityRemberer
     Log.info("[#{ self.class }] Backing off for #{ backoff_time } seconds in #{ backoff_key }")
     KV.write(backoff_key, "true", ttl: backoff_time)
     true
+  end
+
+  def consume_message(user_id: nil)
+    user_id ||= User::MANDATE_CONFIG_BY_ID.keys.sample
+    user = User::MANDATE_CONFIG_BY_ID[user_id]
+    username = user["username"]
+    filename = File.join(File.dirname(__FILE__), "..", "absurdity_chats", "#{ user_id }.txt")
+
+    lines = File.readlines(filename)
+    lines = lines.shuffle
+    message = lines.pop.strip
+
+    File.open(filename, "w") { |f| f.write(lines.join("")) }
+
+    { user_id: user_id, message: message }
   end
 
   private
