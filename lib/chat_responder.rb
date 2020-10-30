@@ -13,6 +13,8 @@ class ChatResponder < BaseResponder
 
         absurdity = remberer.consume_message
 
+        event.channel.start_typing
+        sleep(1)
         event.respond("> <@#{ absurdity[:user_id] }> : #{ absurdity[:message] }")
       end
     else
