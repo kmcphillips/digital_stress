@@ -4,7 +4,7 @@ class ChatAbsurdityRemberer
     "mandatemandate#general",
     "duck-bot-test#testing",
   ].freeze
-  BACKOFF_SECONDS = 5..45
+  BACKOFF_SECONDS = 15..45
   ACTIVE_CONVERSATION_WINDOW_SECONDS = 120
   ACTIVE_CONVERSATION_PEOPLE = 2
 
