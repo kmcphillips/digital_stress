@@ -9,10 +9,7 @@ class ChatCommand < BaseSubcommand
   end
 
   def channels
-    [
-      "mandatemandate#general",
-      "duck-bot-test#testing",
-    ].freeze
+    ChatAbsurdityRemberer::CHANNELS
   end
 
   private

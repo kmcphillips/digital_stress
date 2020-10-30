@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 class ChatAbsurdityRemberer
+  CHANNELS = [
+    "mandatemandate#general",
+    "duck-bot-test#testing",
+  ].freeze
+
   attr_reader :server, :channel
 
   def initialize(server:, channel:)

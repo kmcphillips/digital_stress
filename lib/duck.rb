@@ -18,6 +18,7 @@ class Duck
     TMinus,
     Alchemy,
     GoogleImageSearchResponder,
+    ChatResponder,
   ].freeze
 
   class << self
