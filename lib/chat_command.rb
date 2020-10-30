@@ -11,14 +11,28 @@ class ChatCommand < BaseSubcommand
   private
 
   def on
-    # TODO
+    if remberer.enabled?
+      "Chat is already enabled."
+    else
+      remberer.enable
+      "Chat enabled."
+    end
   end
 
   def off
-    # TODO
+    if remberer.enabled?
+      remberer.disable
+      "Chat disabled."
+    else
+      "Chat is already disabled."
+    end
   end
 
   def status
-    # TODO
+    remberer.enabled_message
+  end
+
+  def remberer
+    @remberer ||= ChatAbsurdityRemberer.new(server: server, channel: channel)
   end
 end
