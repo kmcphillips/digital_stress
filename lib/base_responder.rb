@@ -18,4 +18,12 @@ class BaseResponder
   def mention
     event.user.mention
   end
+
+  def server
+    event.server&.name
+  end
+
+  def channel
+    event.channel&.name
+  end
 end
