@@ -19,6 +19,7 @@ class Duck
     Alchemy,
     GoogleImageSearchResponder,
     ChatResponder,
+    TemperatureResponder,
   ].freeze
 
   class << self

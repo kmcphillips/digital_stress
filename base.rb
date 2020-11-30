@@ -57,5 +57,6 @@ require_relative "lib/t_minus"
 require_relative "lib/alchemy"
 require_relative "lib/google_image_search_responder"
 require_relative "lib/chat_responder"
+require_relative "lib/temperature_responder"
 
 require_relative "lib/duck"
