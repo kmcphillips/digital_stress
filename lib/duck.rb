@@ -130,7 +130,9 @@ class Duck
 
     bot.mention do |event|
       Log.info("mention #{event.author.name}: #{event.message.content}")
+      event.channel.start_typing
       response = Learner.random_message(server: event.server&.name, prevent_recent: true) || Duck.quack
+      sleep(0.6)
       event.respond(response)
     end
 
