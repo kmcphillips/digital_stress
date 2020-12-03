@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class SimpleResponder < BaseResponder
   def respond
-    respond_match(text, /hang.?in.?there/i, "https://i.imgur.com/1FlykyH.jpg")
+    respond_match(text, /hang(ing)?.?in.?there/i, "https://i.imgur.com/1FlykyH.jpg")
     react_match(text, /\bheat\b/i, "🔥")
     react_match(text, /\bhwat\b/i, "🔥")
     respond_match(text, /\bheat\b/i, "don't be hwat...", chance: 0.08)
