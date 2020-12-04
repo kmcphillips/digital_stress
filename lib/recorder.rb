@@ -141,7 +141,7 @@ module Recorder
   def ignore_message_content?(text)
     text = text.downcase
 
-    text.blank? || MESSAGE_IGNORED_PREFIXES.any? { |prefix| text.starts_with?(prefix) } || Alchemy.element_from_message(text).present?
+    text.blank? || MESSAGE_IGNORED_PREFIXES.any? { |prefix| text.starts_with?(prefix) } || AlchemyResponder.element_from_message(text).present?
   end
 
   def otr_key(server:, channel:)

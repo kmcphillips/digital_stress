@@ -15,8 +15,8 @@ class Duck
   COMMAND_PREFIXES = ["Duck", "duck"].freeze
   RESPONDERS = [
     SimpleResponder,
-    TMinus,
-    Alchemy,
+    TMinusResponder,
+    AlchemyResponder,
     GoogleImageSearchResponder,
     ChatResponder,
     TemperatureResponder,
