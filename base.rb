@@ -25,17 +25,19 @@ DB = Sequel.sqlite(db_file)
 require_relative "lib/key_value_store"
 KV = KeyValueStore.new(DB.opts[:database]) # ENV["REDIS_URL"]
 
-require_relative "lib/formatter"
-require_relative "lib/dedup"
-require_relative "lib/steam"
-require_relative "lib/azure"
-require_relative "lib/gif"
-require_relative "lib/wolfram_alpha"
+require_relative "lib/util/formatter"
+require_relative "lib/util/dedup"
+
 require_relative "lib/user"
 require_relative "lib/recorder"
 require_relative "lib/learner"
 require_relative "lib/chat_absurdity_rememberer"
 require_relative "lib/web_duck"
+
+require_relative "lib/clients/steam"
+require_relative "lib/clients/azure"
+require_relative "lib/clients/gif"
+require_relative "lib/clients/wolfram_alpha"
 
 require_relative "lib/base_command"
 require_relative "lib/base_subcommand"
