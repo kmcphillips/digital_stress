@@ -70,6 +70,10 @@ class TMinusResponder < BaseResponder
   private
 
   def user_online?
-    event.server.voice_channels.map{ |c| c.users.map(&:id) }.flatten.include?(event.user.id)
+    online_user_ids = event.server.voice_channels.map{ |c| c.users.map(&:id) }.flatten
+    online_user_id = event.user.id
+
+    Log.info("[TMinusResponder] user_online?(#{ online_user_id }) and found #{ online_user_ids }")
+    online_user_ids.include?(online_user_id)
   end
 end
