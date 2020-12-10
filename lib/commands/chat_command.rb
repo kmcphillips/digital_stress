@@ -27,7 +27,7 @@ class ChatCommand < BaseCommand
     user_id ||= User::MANDATE_CONFIG_BY_ID.keys.sample
     user = User::MANDATE_CONFIG_BY_ID[user_id]
     username = user["username"]
-    filename = File.join(File.dirname(__FILE__), "..", "absurdity_chats", "#{ user_id }.txt")
+    filename = File.join(File.dirname(__FILE__), "..", "..", "absurdity_chats", "#{ user_id }.txt")
 
     lines = File.readlines(filename)
     lines = lines.shuffle
