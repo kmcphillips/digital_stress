@@ -18,7 +18,7 @@ class ChatCommand < BaseCommand
 
     message = consume_message(user_id: desired_user_id)
 
-    "> **#{ message[:username] }: #{ message[:message] }"
+    "> **#{ message[:username] }**: #{ message[:message] }"
   end
 
   private
