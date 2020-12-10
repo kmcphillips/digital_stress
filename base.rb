@@ -25,13 +25,13 @@ DB = Sequel.sqlite(db_file)
 require_relative "lib/key_value_store"
 KV = KeyValueStore.new(DB.opts[:database]) # ENV["REDIS_URL"]
 
+require_relative "lib/util/pinger"
 require_relative "lib/util/formatter"
 require_relative "lib/util/dedup"
 
 require_relative "lib/user"
 require_relative "lib/recorder"
 require_relative "lib/learner"
-require_relative "lib/chat_absurdity_rememberer"
 require_relative "lib/web_duck"
 
 require_relative "lib/clients/steam"
@@ -59,7 +59,6 @@ require_relative "lib/responders/simple_responder"
 require_relative "lib/responders/t_minus_responder"
 require_relative "lib/responders/alchemy_responder"
 require_relative "lib/responders/google_image_search_responder"
-require_relative "lib/responders/chat_responder"
 require_relative "lib/responders/temperature_responder"
 
 require_relative "lib/duck"

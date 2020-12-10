@@ -25,8 +25,6 @@ class StatusCommand < BaseCommand
 
     if !event.channel.pm?
       lines << "This channel is **#{ Recorder.off_the_record?(server: server, channel: channel) ? "OFF" : "ON" }** the record."
-
-      lines << ChatAbsurdityRemberer.new(server: server, channel: channel).enabled_message
     end
 
     lines.reject(&:blank?)

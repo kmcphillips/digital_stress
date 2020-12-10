@@ -1,15 +1,12 @@
 # frozen_string_literal: true
 class LearnCommand < BaseCommand
-  PING_REGEX = /\A<@\!([0-9]+)>\Z/
-
   def response
     if event.channel.pm?
       "Quack, I can't learn a direct message."
     else
-      ping = PING_REGEX.match(params[0])
+      user_id = Pinger.extract_user_id(params[0])
 
-      if ping
-        user_id = ping[1].to_i
+      if user_id
         params.shift
         message = formatted_message(params)
 

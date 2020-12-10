@@ -18,7 +18,6 @@ class Duck
     TMinusResponder,
     AlchemyResponder,
     GoogleImageSearchResponder,
-    ChatResponder,
     TemperatureResponder,
   ].freeze
 
@@ -115,7 +114,7 @@ class Duck
       OffTheRecordCommand.new(event: event, bot: bot, params: { record: true }).respond
     end
 
-    bot.command :chat, description: "Toggle duck chatting with absurdity." do |event, *params|
+    bot.command :chat, description: "Chat like us. Can accept a username as an argument." do |event, *params|
       ChatCommand.new(event: event, bot: bot, params: params).respond
     end
 

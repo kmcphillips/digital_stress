@@ -25,7 +25,18 @@ class User
     end
 
     def from_id(user_id)
+      return nil unless user_id.present?
       cfg = MANDATE_CONFIG_BY_ID[user_id.to_i]
+      return nil unless cfg
+      self.new(cfg.slice("username", "id", "discriminator").symbolize_keys)
+    end
+
+    def from_fuzzy_match(string)
+      return nil unless string.present?
+      fuzzy_match = string.strip.downcase
+      found_name, cfg = MANDATE_CONFIG.find do |name, value|
+        name == fuzzy_match || value["username"] == fuzzy_match
+      end
       return nil unless cfg
       self.new(cfg.slice("username", "id", "discriminator").symbolize_keys)
     end
