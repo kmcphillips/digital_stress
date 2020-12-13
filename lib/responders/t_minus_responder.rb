@@ -21,28 +21,28 @@ class TMinusResponder < BaseResponder
 
       if minutes > 300
         event.channel.start_typing
-        TMinus.waiting[event.user.id] = nil
+        self.class.waiting[event.user.id] = nil
         sleep(1)
         event.respond("T-#{ minutes } minutes is too long to wait #{ mention }")
       elsif minutes == 0
         event.channel.start_typing
-        TMinus.waiting[event.user.id] = nil
+        self.class.waiting[event.user.id] = nil
         if user_online?
           event.respond("Oh #{ mention } I didn't see you there")
         else
           event.respond("You say zero minutes #{ mention } but yet you are not here")
         end
       else
-        if TMinus.waiting[event.user.id]
+        if self.class.waiting[event.user.id]
           event.respond("T-#{ minutes } minutes reset and counting #{ mention }")
         else
           event.respond("T-#{ minutes } minutes and counting #{ mention }")
         end
-        TMinus.waiting[event.user.id] = nonce
+        self.class.waiting[event.user.id] = nonce
         Thread.new do
           sleep(minutes * 60)
-          if TMinus.waiting[event.user.id] == nonce
-            TMinus.waiting[event.user.id] = nil
+          if self.class.waiting[event.user.id] == nonce
+            self.class.waiting[event.user.id] = nil
             event.channel.start_typing
             sleep(2)
             if user_online?
@@ -55,7 +55,7 @@ class TMinusResponder < BaseResponder
       end
     elsif match = T_MINUS_CANCEL_REGEX.match(event.message.content)
       event.channel.start_typing
-      TMinus.waiting[event.user.id] = nil
+      self.class.waiting[event.user.id] = nil
       event.respond("Ok fine #{ mention } see you another time then")
     elsif match = T_MINUS_AROUND_REGEX.match(event.message.content)
       event.channel.start_typing
