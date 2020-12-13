@@ -148,7 +148,16 @@ class Duck
         Log.info("pm #{event.author.name}: #{event.message.content}")
         event.respond(Duck.quack)
       else # in a channel
-        RESPONDERS.each { |responder| responder.new(event, bot: bot).respond }
+        RESPONDERS.each do |responder|
+          begin
+            responder.new(event, bot: bot).respond
+          rescue => e
+            Log.error("#{ responder } returned error #{ e.message }")
+            Log.error(e)
+            message = ":bangbang: Quack error in #{ responder }: #{ e.message }"
+            event.respond(message)
+          end
+        end
       end
     end
 
