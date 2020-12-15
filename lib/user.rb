@@ -33,12 +33,17 @@ class User
 
     def from_fuzzy_match(string)
       return nil unless string.present?
-      fuzzy_match = string.strip.downcase
+      fuzzy_match = string.to_s.strip.downcase
       found_name, cfg = MANDATE_CONFIG.find do |name, value|
         name == fuzzy_match || value["username"] == fuzzy_match
       end
       return nil unless cfg
       self.new(cfg.slice("username", "id", "discriminator").symbolize_keys)
+    end
+
+    def from_input(string)
+      return nil unless string.present?
+      User.from_fuzzy_match(string) || User.from_id(string) || User.from_id(Pinger.extract_user_id(string))
     end
 
     def dave

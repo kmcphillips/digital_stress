@@ -12,7 +12,7 @@ class ChatCommand < BaseCommand
 
     if params.any?
       name = params.first
-      user = User.from_fuzzy_match(name) || User.from_id(Pinger.extract_user_id(name))
+      user = User.from_input(name)
       desired_user_id = user.id if user
     end
 
