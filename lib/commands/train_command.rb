@@ -85,7 +85,8 @@ class TrainCommand < BaseCommand
       raise "Cannot find file '#{  }'" unless File.exists?(SIGN_TEMPLATE_PATH)
 
       Tempfile.create(["train_duck", ".png"]) do |temp|
-        response = SystemCall.call("convert \"#{ SIGN_TEMPLATE_PATH }\" -font helvetica -pointsize 100 -draw \"text 100,100 '#{ days }'\" \"#{ temp.path }\"")
+        left_padding = days < 10 ? "106" : "82"
+        response = SystemCall.call("convert \"#{ SIGN_TEMPLATE_PATH }\" -font helvetica -pointsize 100 -draw \"text #{ left_padding },146 '#{ days }'\" \"#{ temp.path }\"")
         if response.success?
           yield(temp)
         else
