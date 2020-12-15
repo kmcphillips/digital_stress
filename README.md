@@ -60,6 +60,13 @@ CREATE TABLE learned (
   server VARCHAR(255),
   channel VARCHAR(255)
 );
+CREATE TABLE train_accidents (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  timestamp INTEGER,
+  user_id INTEGER,
+  server VARCHAR(255),
+  channel VARCHAR(255)
+);
 ```
 
 Clean up:

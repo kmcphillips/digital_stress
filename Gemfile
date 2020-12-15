@@ -16,6 +16,7 @@ gem "time_difference"
 gem "lightly"
 gem "sinatra"
 gem "redis"
+gem "systemcall"
 
 gem "capistrano", "3.6.1"
 gem "capistrano-bundler"

@@ -13,6 +13,8 @@ require "time_difference"
 require "securerandom"
 require "lightly"
 require "sinatra/base"
+require "systemcall"
+require "tempfile"
 
 logger_file = File.open("bot.log", File::WRONLY | File::APPEND | File::CREAT)
 logger_file.sync = true
@@ -53,6 +55,7 @@ require_relative "lib/commands/deploy_command"
 require_relative "lib/commands/off_the_record_command"
 require_relative "lib/commands/wolfram_alpha_command"
 require_relative "lib/commands/chat_command"
+require_relative "lib/commands/train_command"
 
 require_relative "lib/responders/base_responder"
 require_relative "lib/responders/simple_responder"

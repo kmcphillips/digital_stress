@@ -122,6 +122,10 @@ class Duck
       WolframAlphaCommand.new(event: event, bot: bot, params: params).respond
     end
 
+    bot.command [:train], description: "Train accidents." do |event, *params|
+      TrainCommand.new(event: event, bot: bot, params: params).respond
+    end
+
     # TODO
     # bot.command :games, description: "What should we play?" do |event, *params|
     #   GamesCommand.new(event: event, bot: bot, params: params).respond
