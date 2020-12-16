@@ -26,4 +26,17 @@ class WebDuck < Sinatra::Application
 
     "Quack, ok."
   end
+
+  post '/train_accident/:server/:channel/:username' do
+    server = params["server"]
+    channel = params["channel"]
+    username = params["username"]
+
+    channels = self.class.bot.find_channel(channel, server)
+    Log.warn("No channels found for #{ server }##{ channel }") if channels.empty?
+
+    channels.each { |channel| channel.send_message("Quack! :locomotive: :boom: (#{ username })") }
+
+    "Quack, train."
+  end
 end
