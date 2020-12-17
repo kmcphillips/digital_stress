@@ -9,7 +9,6 @@ GIPHY_KEY=<token>
 MANDATE_PERSONS=<json>
 WEB_AUTH_USERNAME=<sinatra_username>
 WEB_AUTH_PASSWORD=<sinatra_password>
-WEB_NOTIFY_CHANNELS=<commat_list_of_channel_int_ids>
 ```
 
 Then to run:

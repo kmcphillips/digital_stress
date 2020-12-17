@@ -9,4 +9,3 @@
   "dependencies": ["base >= 1.0"],
   "description": "Integrate the Duck into Factorio"
 }
-
