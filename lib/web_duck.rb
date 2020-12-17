@@ -6,9 +6,9 @@ class WebDuck < Sinatra::Application
 
   set :port, ENV["WEB_PORT"]
 
-  # use Rack::Auth::Basic do |username, password|
-  #   username == ENV["WEB_AUTH_USERNAME"] && password == ENV["WEB_AUTH_PASSWORD"]
-  # end
+  use Rack::Auth::Basic do |username, password|
+    username == ENV["WEB_AUTH_USERNAME"] && password == ENV["WEB_AUTH_PASSWORD"]
+  end
 
   get '/' do
     'Quack!'
@@ -27,8 +27,7 @@ class WebDuck < Sinatra::Application
     "Quack, ok."
   end
 
-  # post '/train_accident/:server/:channel/:username' do
-  get '/train_accident/:server/:channel/:username' do
+  post '/train_accident/:server/:channel/:username' do
     server = params["server"]
     channel_name = params["channel"]
     username = params["username"]
