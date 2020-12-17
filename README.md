@@ -1,7 +1,7 @@
 # Digital Stress - Discord bot
 
 Add a `.env` with:
-```
+```bash
 DISCORDRB_NONACL=false
 DISCORDRB_TOKEN=<token>
 AZURE_KEY=<token>
@@ -14,7 +14,7 @@ WEB_NOTIFY_CHANNELS=<commat_list_of_channel_int_ids>
 
 Then to run:
 
-```
+```bash
 bundle exec main.rb
 ```
 
@@ -28,20 +28,21 @@ Where `<CLIENT_ID>` is the `client_id` for the application registered in discord
 
 Deploy:
 
-```
+```bash
 bundle exec cap production deploy
 ```
 
 Manage:
 
-```
+```bash
 bundle exec cap production bot:start
 bundle exec cap production bot:stop
 bundle exec cap production bot:restart
 ```
 
 Database:
-```
+
+```sql
 CREATE TABLE messages (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   timestamp INTEGER,
@@ -71,12 +72,19 @@ CREATE TABLE train_accidents (
 
 Clean up:
 
-```
-> Recorder.delete_sweep
+```ruby
+Recorder.delete_sweep
 ```
 
 Dump:
 
-```
+```ruby
 File.open("dump_all.txt", "w"){|f|f.write(DB[:messages].map{|r|r[:message]}.reject{|m|m.blank?||(m.include?("✅")&&m.length<5)}.join("\n"))}
+```
+
+Release Factorio mod:
+
+```bash
+cd factorio_mod
+zip -r duck_x.y.z.zip duck
 ```
