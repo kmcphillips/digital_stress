@@ -1,12 +1,12 @@
 {
   "name": "duck",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "title": "Duck mod, quack",
   "author": "kmcphillips",
   "contact": "github@kevinmcphillips.ca",
   "www": "https://github.com/kmcphillips/digital_stress",
   "factorio_version": "1.0",
   "dependencies": ["base >= 1.0"],
-  "description": "Mod to integrate the Duck into factorio"
+  "description": "Integrate the Duck into Factorio"
 }
 
