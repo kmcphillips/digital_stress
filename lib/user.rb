@@ -3,19 +3,18 @@ class User
   MANDATE_CONFIG = JSON.parse(ENV["MANDATE_PERSONS"])
   MANDATE_CONFIG_BY_ID = MANDATE_CONFIG.to_h { |name,cfg| [cfg["id"], cfg] }
 
-  attr_reader :username, :id, :discriminator, :location
+  attr_reader :username, :id, :discriminator, :location, :phone_number
 
   def initialize(username:, id:, discriminator:)
     @username = username
     @id = id
     @discriminator = discriminator
     @mandate_config = MANDATE_CONFIG_BY_ID[id]
+    @location = nil
+    @phone_number = nil
 
-    if @mandate_config
-      @location = @mandate_config["location"]
-    else
-      @location = nil
-    end
+    @location = @mandate_config["location"] if @mandate_config
+    @phone_number = @mandate_config["phone_number"] if @mandate_config
   end
 
   class << self

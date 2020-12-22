@@ -36,6 +36,8 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.7.5)
     event_emitter (0.2.6)
+    faraday (1.0.0)
+      multipart-post (>= 1.2, < 3)
     ffi (1.13.1)
     http-accept (1.7.0)
     http-cookie (1.0.3)
@@ -45,6 +47,7 @@ GEM
       multi_xml (>= 0.5.2)
     i18n (1.8.3)
       concurrent-ruby (~> 1.0)
+    jwt (2.2.1)
     lightly (0.3.3)
     method_source (1.0.0)
     mime-types (3.3.1)
@@ -53,6 +56,7 @@ GEM
     mini_portile2 (2.4.0)
     minitest (5.14.1)
     multi_xml (0.6.0)
+    multipart-post (2.1.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     net-scp (3.0.0)
@@ -94,6 +98,10 @@ GEM
     tilt (2.0.10)
     time_difference (0.5.0)
       activesupport
+    twilio-ruby (5.31.4)
+      faraday (~> 1.0.0)
+      jwt (>= 1.5, <= 2.5)
+      nokogiri (>= 1.6, < 2.0)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
     unf (0.1.4)
@@ -125,6 +133,7 @@ DEPENDENCIES
   sqlite3
   systemcall
   time_difference
+  twilio-ruby
 
 BUNDLED WITH
    2.1.4

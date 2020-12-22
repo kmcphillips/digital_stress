@@ -15,6 +15,7 @@ require "lightly"
 require "sinatra/base"
 require "systemcall"
 require "tempfile"
+require "twilio-ruby"
 
 logger_file = File.open("bot.log", File::WRONLY | File::APPEND | File::CREAT)
 logger_file.sync = true
@@ -35,6 +36,7 @@ require_relative "lib/user"
 require_relative "lib/recorder"
 require_relative "lib/learner"
 require_relative "lib/web_duck"
+require_relative "lib/texter"
 
 require_relative "lib/clients/steam"
 require_relative "lib/clients/azure"
@@ -56,6 +58,7 @@ require_relative "lib/commands/off_the_record_command"
 require_relative "lib/commands/wolfram_alpha_command"
 require_relative "lib/commands/chat_command"
 require_relative "lib/commands/train_command"
+require_relative "lib/commands/text_command"
 
 require_relative "lib/responders/base_responder"
 require_relative "lib/responders/simple_responder"

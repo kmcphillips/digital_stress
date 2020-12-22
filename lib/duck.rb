@@ -126,6 +126,10 @@ class Duck
       TrainCommand.new(event: event, bot: bot, params: params).respond
     end
 
+    bot.command [:text], description: "Send a text message. Name a person then the message to text them." do |event, *params|
+      TextCommand.new(event: event, bot: bot, params: params).respond
+    end
+
     # TODO
     # bot.command :games, description: "What should we play?" do |event, *params|
     #   GamesCommand.new(event: event, bot: bot, params: params).respond

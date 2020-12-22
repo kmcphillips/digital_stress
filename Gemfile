@@ -17,6 +17,7 @@ gem "lightly"
 gem "sinatra"
 gem "redis"
 gem "systemcall"
+gem "twilio-ruby"
 
 gem "capistrano", "3.6.1"
 gem "capistrano-bundler"
