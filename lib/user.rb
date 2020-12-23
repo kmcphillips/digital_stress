@@ -45,6 +45,17 @@ class User
       User.from_fuzzy_match(string) || User.from_id(string) || User.from_id(Pinger.extract_user_id(string))
     end
 
+    def for_server(server)
+      # TODO
+      if server == "mandatemandate"
+        [dave, eliot, kevin, patrick]
+      elsif server == "duck-bot-test"
+        [kevin]
+      else
+        []
+      end
+    end
+
     def dave
       self.new(**MANDATE_CONFIG["dave"].slice("username", "id", "discriminator").symbolize_keys)
     end

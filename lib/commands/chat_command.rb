@@ -8,26 +8,17 @@ class ChatCommand < BaseCommand
   end
 
   def response
-    desired_user_id = nil
-
-    if params.any?
-      name = params.first
-      user = User.from_input(name)
-      desired_user_id = user.id if user
-    end
-
-    message = consume_message(user_id: desired_user_id)
+    user = User.from_input(params.first)
+    message = consume_message(user: user)
 
     "> **#{ message[:username] }**: #{ message[:message] }"
   end
 
   private
 
-  def consume_message(user_id: nil)
-    user_id ||= User::MANDATE_CONFIG_BY_ID.keys.sample
-    user = User::MANDATE_CONFIG_BY_ID[user_id]
-    username = user["username"]
-    filename = File.join(File.dirname(__FILE__), "..", "..", "absurdity_chats", "#{ user_id }.txt")
+  def consume_message(user: nil)
+    user ||= User.for_server(server).sample
+    filename = File.join(File.dirname(__FILE__), "..", "..", "absurdity_chats", "#{ user.id }.txt")
 
     lines = File.readlines(filename)
     lines = lines.shuffle
@@ -35,7 +26,7 @@ class ChatCommand < BaseCommand
 
     File.open(filename, "w") { |f| f.write(lines.join("")) }
 
-    { user_id: user_id, message: message, username: username }
+    { user_id: user.id, message: message, username: user.username }
   end
 
 end
