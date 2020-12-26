@@ -49,13 +49,14 @@ class AlchemyResponder < BaseResponder
   end
 
   def respond
-    channel = "#{ event.server&.name }##{ event.channel&.name }"
-    return unless CHANNELS.include?(channel)
+    server = event.server&.name || ""
+    channel = event.channel&.name || ""
+    return unless CHANNELS.include?("#{ server }##{ channel }")
 
     element = self.class.element_from_message(event.message.content)
 
     if element
-      party = Party.new(channel)
+      party = Party.new(server: server, channel: channel)
 
       if party.element_for?(element, event.author)
         if party.present?(element)
@@ -78,7 +79,8 @@ class AlchemyResponder < BaseResponder
   end
 
   class Party
-    def initialize(channel)
+    def initialize(server:, channel:)
+      @server = server
       @channel = channel
       @ttl = 18.hours.to_i
     end
@@ -129,7 +131,7 @@ class AlchemyResponder < BaseResponder
     private
 
     def key(element)
-      "#{ @channel }-#{ element.to_s }"
+      "#{ @server }##{ @channel }-#{ element.to_s }"
     end
   end
 end
