@@ -5,7 +5,7 @@ module WolframAlpha
   MAX_VALUE_LENGTH = 500
 
   def query(search, location: nil)
-    url = "http://api.wolframalpha.com/v2/query?input=#{ CGI.escape(search.strip) }&appid=#{ ENV["WOLFRAM_APPID"] }"
+    url = "http://api.wolframalpha.com/v2/query?input=#{ CGI.escape(search.strip) }&appid=#{ appid }"
     url = "#{ url }&location=#{ CGI.escape(location.strip) }" if location.present?
     url = "#{ url }&format=plaintext" #,image
 
@@ -22,6 +22,12 @@ module WolframAlpha
 
       Response.new(response.to_h).to_a
     end
+  end
+
+  private
+
+  def appid
+    Configuration.wolfram_alpha.appid
   end
 
   class Response

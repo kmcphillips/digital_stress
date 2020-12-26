@@ -4,10 +4,10 @@ class WebDuck < Sinatra::Application
     attr_accessor :bot
   end
 
-  set :port, ENV["WEB_PORT"]
+  set :port, Configuration.web_auth.port
 
   use Rack::Auth::Basic do |username, password|
-    username == ENV["WEB_AUTH_USERNAME"] && password == ENV["WEB_AUTH_PASSWORD"]
+    username == Configuration.web_auth.username && password == Configuration.web_auth.password
   end
 
   get '/' do
@@ -55,3 +55,6 @@ class WebDuck < Sinatra::Application
     "Quack, train."
   end
 end
+
+# I wonder where this could go that would be better?
+raise "web_auth credentials missing" if Configuration.web_auth.username.blank? || Configuration.web_auth.password.blank?

@@ -1,14 +1,9 @@
 # Digital Stress - Discord bot
 
-Add a `.env` with:
+Add a `config.yml` with:
+
 ```bash
-DISCORDRB_NONACL=false
-DISCORDRB_TOKEN=<token>
-AZURE_KEY=<token>
-GIPHY_KEY=<token>
-MANDATE_PERSONS=<json>
-WEB_AUTH_USERNAME=<sinatra_username>
-WEB_AUTH_PASSWORD=<sinatra_password>
+cp config.example.yml config.yml
 ```
 
 Then to run:

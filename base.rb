@@ -2,6 +2,7 @@
 require "pry"
 require "active_support/all"
 require "dotenv/load"
+require "config"
 require "discordrb"
 require "logger"
 require "redis"
@@ -17,6 +18,9 @@ require "systemcall"
 require "tempfile"
 require "twilio-ruby"
 
+Config.setup { |config| config.const_name = 'Configuration' }
+Config.load_and_set_settings("config.yml")
+
 logger_file = File.open("bot.log", File::WRONLY | File::APPEND | File::CREAT)
 logger_file.sync = true
 Log = Logger.new(logger_file)
@@ -26,7 +30,7 @@ db_file = File.join(File.dirname(__FILE__), "chat.sqlite3")
 DB = Sequel.sqlite(db_file)
 
 require_relative "lib/key_value_store"
-KV = KeyValueStore.new(DB.opts[:database]) # ENV["REDIS_URL"]
+KV = KeyValueStore.new(DB.opts[:database]) # Configuration.redis.url
 
 require_relative "lib/util/pinger"
 require_relative "lib/util/formatter"

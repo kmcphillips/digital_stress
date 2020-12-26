@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class User
+  # TODO this refactored to use Config
   MANDATE_CONFIG = JSON.parse(ENV["MANDATE_PERSONS"])
   MANDATE_CONFIG_BY_ID = MANDATE_CONFIG.to_h { |name,cfg| [cfg["id"], cfg] }
 

@@ -1,0 +1,35 @@
+discord:
+  token: XXXX
+
+redis:
+  url: redis://127.0.0.1:6379/0
+
+web_auth:
+  port: 9999
+  username: XXX
+  password: XXX
+
+azure:
+  key: XXX
+
+giphy:
+  key: XXX
+
+wolfram_alpha:
+  appid: XXX
+
+twilio:
+  outgoing_phone_number: "+12223334444"
+  account_sid: XXX
+  auth_token: XXX
+
+servers:
+  server-name:
+    users:
+      -
+        name: XXX
+        username: XXX
+        id: 123456767
+        discriminator: 1234
+        location: "Place, Province"
+        phone_number: "+19998887777"
