@@ -24,7 +24,7 @@ set :rbenv_ruby, "2.6.0"
 # set :pty, true
 
 # Default value for :linked_files is []
-append :linked_files, ".env", "bot.log", "chat.sqlite3", "config.yml"
+append :linked_files, "bot.log", "chat.sqlite3", "config.yml"
 
 # Default value for linked_dirs is []
 append :linked_dirs, "tmp", "deploy_from", "absurdity_chats"

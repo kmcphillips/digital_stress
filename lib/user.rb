@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 class User
-  # TODO this refactored to use Config
-  MANDATE_CONFIG = JSON.parse(ENV["MANDATE_PERSONS"])
-  MANDATE_CONFIG_BY_ID = MANDATE_CONFIG.to_h { |name,cfg| [cfg["id"], cfg] }
-
   USERS = Configuration.servers.each_with_object({}) do |(server_name, cfg), obj|
     obj[server_name.to_s] = cfg.users.map(&:to_h).map{ |u| [u[:id], u] }.to_h
   end
@@ -15,12 +11,13 @@ class User
     @id = id
     @server = server
     @discriminator = discriminator
-    @mandate_config = MANDATE_CONFIG_BY_ID[id]
     @location = nil
     @phone_number = nil
 
-    @location = @mandate_config["location"] if @mandate_config
-    @phone_number = @mandate_config["phone_number"] if @mandate_config
+    # Load extras from the config.yml Configuration object
+    @config = USERS[server][id]
+    @location = @config[:location] if @config
+    @phone_number = @config[:phone_number] if @config
   end
 
   class << self

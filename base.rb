@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 require "pry"
 require "active_support/all"
-require "dotenv/load"
 require "config"
 require "discordrb"
 require "logger"
