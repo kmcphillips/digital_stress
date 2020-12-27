@@ -9,7 +9,12 @@ cp config.example.yml config.yml
 Then to run:
 
 ```bash
-bundle exec main.rb
+bundle exec bot.rb
+```
+
+Work with:
+```bash
+bundle exec repl.rb
 ```
 
 Install:
@@ -73,7 +78,7 @@ Recorder.delete_sweep
 Dump:
 
 ```ruby
-File.open("dump_all.txt", "w"){|f|f.write(DB[:messages].map{|r|r[:message]}.reject{|m|m.blank?||(m.include?("✅")&&m.length<5)}.join("\n"))}
+File.open("dump_all.txt", "w"){|f|f.write(DB[:messages].map{|r|r[:message]}.reject(&:blank?).join("\n"))}
 ```
 
 Release Factorio mod:

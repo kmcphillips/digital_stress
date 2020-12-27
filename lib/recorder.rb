@@ -141,6 +141,7 @@ module Recorder
   def ignore_message_content?(text)
     text = text.downcase
 
+    # TODO technically this isn't correct as the AlchemyResponder should also filter on server and channel to know
     text.blank? || MESSAGE_IGNORED_PREFIXES.any? { |prefix| text.starts_with?(prefix) } || AlchemyResponder.element_from_message(text).present?
   end
 
