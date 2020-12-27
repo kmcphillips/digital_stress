@@ -9,7 +9,7 @@ class BaseCommand
     @params = params
     @event = event
     @typing = typing
-    @user = User.from_discord(event.author)
+    @user = User.from_discord(event.author, server: server)
   end
 
   def respond

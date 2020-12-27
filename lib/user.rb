@@ -4,11 +4,16 @@ class User
   MANDATE_CONFIG = JSON.parse(ENV["MANDATE_PERSONS"])
   MANDATE_CONFIG_BY_ID = MANDATE_CONFIG.to_h { |name,cfg| [cfg["id"], cfg] }
 
-  attr_reader :username, :id, :discriminator, :location, :phone_number
+  USERS = Configuration.servers.each_with_object({}) do |(server_name, cfg), obj|
+    obj[server_name.to_s] = cfg.users.map(&:to_h).map{ |u| [u[:id], u] }.to_h
+  end
 
-  def initialize(username:, id:, discriminator:)
+  attr_reader :username, :id, :server, :discriminator, :location, :phone_number
+
+  def initialize(username:, id:, server:, discriminator:)
     @username = username
     @id = id
+    @server = server
     @discriminator = discriminator
     @mandate_config = MANDATE_CONFIG_BY_ID[id]
     @location = nil
@@ -19,64 +24,71 @@ class User
   end
 
   class << self
-    def from_discord(user)
+    def from_discord(user, server:)
       return nil unless user
-      self.new(username: user.username, id: user.id, discriminator: user.discriminator)
+      self.new(username: user.username, id: user.id, discriminator: user.discriminator, server: server)
     end
 
-    def from_id(user_id)
+    def from_id(user_id, server:)
       return nil unless user_id.present?
-      cfg = MANDATE_CONFIG_BY_ID[user_id.to_i]
-      return nil unless cfg
-      self.new(cfg.slice("username", "id", "discriminator").symbolize_keys)
+      return nil unless server.present? && USERS.keys.include?(server.to_s)
+      from_config(USERS[server.to_s][user_id.to_i], server: server)
     end
 
-    def from_fuzzy_match(string)
+    def from_fuzzy_match(string, server:)
       return nil unless string.present?
+      return nil unless server.present? && USERS.keys.include?(server.to_s)
       fuzzy_match = string.to_s.strip.downcase
-      found_name, cfg = MANDATE_CONFIG.find do |name, value|
-        name == fuzzy_match || value["username"] == fuzzy_match
+      cfg = USERS[server.to_s].values.find do |value|
+        value[:name].downcase == fuzzy_match || value[:username].downcase == fuzzy_match
       end
-      return nil unless cfg
-      self.new(cfg.slice("username", "id", "discriminator").symbolize_keys)
+      from_config(cfg, server: server)
     end
 
-    def from_input(string)
+    def from_input(string, server:)
       return nil unless string.present?
-      User.from_fuzzy_match(string) || User.from_id(string) || User.from_id(Pinger.extract_user_id(string))
+      User.from_fuzzy_match(string, server: server) || User.from_id(string, server: server) || User.from_id(Pinger.extract_user_id(string), server: server)
     end
 
-    def for_server(server)
-      # TODO
-      if server == "mandatemandate"
-        [dave, eliot, kevin, patrick]
-      elsif server == "duck-bot-test"
-        [kevin]
-      else
-        []
-      end
+    def from_config(config, server:)
+      return nil unless config
+      self.new(config.slice(:username, :id, :discriminator).merge(server: server))
+    end
+
+    def all(server:)
+      (USERS[server.to_s] || {}).values.map { |cfg| from_config(cfg, server: server) }
     end
 
     def dave
+      # TODO
       self.new(**MANDATE_CONFIG["dave"].slice("username", "id", "discriminator").symbolize_keys)
     end
 
     def eliot
+      # TODO
       self.new(**MANDATE_CONFIG["eliot"].slice("username", "id", "discriminator").symbolize_keys)
     end
 
     def kevin
+      # TODO
       self.new(**MANDATE_CONFIG["kevin"].slice("username", "id", "discriminator").symbolize_keys)
     end
 
     def patrick
+      # TODO
       self.new(**MANDATE_CONFIG["patrick"].slice("username", "id", "discriminator").symbolize_keys)
     end
   end
 
   def <=>(other)
     if other.is_a?(::User)
-      other.id <=> id
+      res = other.server <=> server
+
+      if res == 0
+        other.id <=> id
+      else
+        res
+      end
     else
       super
     end
@@ -84,7 +96,7 @@ class User
 
   def ==(other)
     if other.is_a?(::User)
-      other.id == id
+      other.id == id && other.server == server
     else
       super
     end
@@ -95,18 +107,22 @@ class User
   end
 
   def dave?
+    # TODO
     MANDATE_CONFIG["dave"]["id"] == id
   end
 
   def eliot?
+    # TODO
     MANDATE_CONFIG["eliot"]["id"] == id
   end
 
   def kevin?
+    # TODO
     MANDATE_CONFIG["kevin"]["id"] == id
   end
 
   def patrick?
+    # TODO
     MANDATE_CONFIG["patrick"]["id"] == id
   end
 end

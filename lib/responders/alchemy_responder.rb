@@ -79,6 +79,8 @@ class AlchemyResponder < BaseResponder
   end
 
   class Party
+    attr_reader :server, :channel, :ttl
+
     def initialize(server:, channel:)
       @server = server
       @channel = channel
@@ -90,7 +92,7 @@ class AlchemyResponder < BaseResponder
     end
 
     def present!(element)
-      KV.write(key(element), Time.now.to_i, ttl: @ttl)
+      KV.write(key(element), Time.now.to_i, ttl: ttl)
     end
 
     def size
@@ -116,7 +118,7 @@ class AlchemyResponder < BaseResponder
     end
 
     def element_for?(element, author)
-      user = User.from_discord(author)
+      user = User.from_discord(author, server: server)
 
       case element
       when :fire then user.kevin?
@@ -131,7 +133,7 @@ class AlchemyResponder < BaseResponder
     private
 
     def key(element)
-      "#{ @server }##{ @channel }-#{ element.to_s }"
+      "#{ server }##{ channel }-#{ element.to_s }"
     end
   end
 end

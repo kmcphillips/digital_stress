@@ -8,7 +8,7 @@ class ChatCommand < BaseCommand
   end
 
   def response
-    user = User.from_input(params.first)
+    user = User.from_input(params.first, server: server)
     message = consume_message(user: user)
 
     "> **#{ message[:username] }**: #{ message[:message] }"
@@ -17,7 +17,7 @@ class ChatCommand < BaseCommand
   private
 
   def consume_message(user: nil)
-    user ||= User.for_server(server).sample
+    user ||= User.all(server: server).sample
     filename = File.join(File.dirname(__FILE__), "..", "..", "absurdity_chats", "#{ user.id }.txt")
 
     lines = File.readlines(filename)

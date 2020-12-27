@@ -37,7 +37,7 @@ class WebDuck < Sinatra::Application
 
     channels.each do |channel|
       db = TrainCommand::Datastore.new(server: server, channel: channel_name)
-      user = User.from_input(username)
+      user = User.from_input(username, server: server)
       db.create_accident(user_id: user&.id)
 
       begin

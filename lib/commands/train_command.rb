@@ -13,7 +13,7 @@ class TrainCommand < BaseCommand
     if params[0].blank?
       respond_with_accident(db.days_since_last_accident)
     elsif params[0]&.downcase == "accident"
-      user = User.from_input(params[1])
+      user = User.from_input(params[1], server: server)
       event.message.react("💥")
       db.create_accident(user_id: user&.id)
       respond_with_accident(0)

@@ -10,7 +10,7 @@ class TextCommand < BaseCommand
   def response
     if params.any?
       name = params.shift
-      user = User.from_input(name)
+      user = User.from_input(name, server: server)
 
       if user
         if user.phone_number
