@@ -58,26 +58,6 @@ class User
     def all(server:)
       (USERS[server.to_s] || {}).values.map { |cfg| from_config(cfg, server: server) }
     end
-
-    def dave
-      # TODO
-      self.new(**MANDATE_CONFIG["dave"].slice("username", "id", "discriminator").symbolize_keys)
-    end
-
-    def eliot
-      # TODO
-      self.new(**MANDATE_CONFIG["eliot"].slice("username", "id", "discriminator").symbolize_keys)
-    end
-
-    def kevin
-      # TODO
-      self.new(**MANDATE_CONFIG["kevin"].slice("username", "id", "discriminator").symbolize_keys)
-    end
-
-    def patrick
-      # TODO
-      self.new(**MANDATE_CONFIG["patrick"].slice("username", "id", "discriminator").symbolize_keys)
-    end
   end
 
   def <=>(other)
@@ -104,25 +84,5 @@ class User
 
   def mention
     "<@#{ id }>"
-  end
-
-  def dave?
-    # TODO
-    MANDATE_CONFIG["dave"]["id"] == id
-  end
-
-  def eliot?
-    # TODO
-    MANDATE_CONFIG["eliot"]["id"] == id
-  end
-
-  def kevin?
-    # TODO
-    MANDATE_CONFIG["kevin"]["id"] == id
-  end
-
-  def patrick?
-    # TODO
-    MANDATE_CONFIG["patrick"]["id"] == id
   end
 end
