@@ -92,7 +92,7 @@ GEM
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2020.0512)
-    mini_portile2 (2.4.0)
+    mini_portile2 (2.5.0)
     minitest (5.14.1)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
@@ -102,13 +102,15 @@ GEM
       net-ssh (>= 2.6.5, < 7.0.0)
     net-ssh (6.1.0)
     netrc (0.11.0)
-    nokogiri (1.10.9)
-      mini_portile2 (~> 2.4.0)
+    nokogiri (1.11.0.rc4)
+      mini_portile2 (~> 2.5.0)
+      racc (~> 1.4)
     opus-ruby (1.0.1)
       ffi
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
+    racc (1.5.2)
     rack (2.2.3)
     rack-protection (2.0.8.1)
       rack
@@ -164,7 +166,7 @@ DEPENDENCIES
   discordrb
   httparty
   lightly
-  nokogiri
+  nokogiri (= 1.11.0.rc4)
   pry
   redis
   sequel
