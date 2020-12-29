@@ -130,6 +130,10 @@ class Duck
       TextCommand.new(event: event, bot: bot, params: params).respond
     end
 
+    bot.command [:tonight], description: "We playing games tonight? Who's coming?" do |event, *params|
+      AlchemyCommand.new(event: event, bot: bot, params: params).respond
+    end
+
     # TODO
     # bot.command :games, description: "What should we play?" do |event, *params|
     #   GamesCommand.new(event: event, bot: bot, params: params).respond
