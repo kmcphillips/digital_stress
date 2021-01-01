@@ -107,11 +107,11 @@ class Duck
     end
 
     bot.command :off, description: "Go off the record." do |event, *params|
-      OffTheRecordCommand.new(event: event, bot: bot, params: { record: false }).respond
+      OffTheRecordCommand.new(event: event, bot: bot, params: params).respond
     end
 
     bot.command :on, description: "Go back on the record." do |event, *params|
-      OffTheRecordCommand.new(event: event, bot: bot, params: { record: true }).respond
+      OnTheRecordCommand.new(event: event, bot: bot, params: params).respond
     end
 
     bot.command :chat, description: "Chat like us. Can accept a username as an argument." do |event, *params|
