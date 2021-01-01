@@ -99,7 +99,7 @@ class Duck
     end
 
     bot.command :learn, description: "Learn a phrase." do |event, *params|
-      LearnCommand.new(event: event, bot: bot, params: params, typing: false).respond
+      LearnCommand.new(event: event, bot: bot, params: params).respond
     end
 
     bot.command :deploy, description: "Deploy an application." do |event, *params|

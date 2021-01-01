@@ -4,17 +4,16 @@ class BaseCommand
 
   MAX_MESSAGE_LENGTH = 1999
 
-  def initialize(event:, bot:, params:, typing: true)
+  def initialize(event:, bot:, params:)
     @bot = bot
     @params = params
     @event = event
-    @typing = typing
     @user = User.from_discord(event.author, server: server)
   end
 
   def respond
     Log.info("command.#{ @event.command.name }(#{ params })")
-    @event.channel.start_typing if @typing
+    @event.channel.start_typing if typing?
 
     return ":closed_lock_with_key: Quack! Not permitted!" if channels.present? && !channels.include?("#{ server }##{ channel }")
 
@@ -46,6 +45,10 @@ class BaseCommand
 
   def channels
     nil
+  end
+
+  def typing?
+    true
   end
 
   private

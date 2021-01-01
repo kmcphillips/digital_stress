@@ -32,6 +32,10 @@ class LearnCommand < BaseCommand
     end
   end
 
+  def typing?
+    false
+  end
+
   private
 
   def formatted_message(params)
