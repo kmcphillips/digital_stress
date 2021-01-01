@@ -20,6 +20,23 @@ class Duck
     GoogleImageSearchResponder,
     TemperatureResponder,
   ].freeze
+  COMMANDS = [
+    { class_name: PingCommand, command: :ping, description: "Hello, is it me you're looking for?" },
+    { class_name: SteamCommand, command: :steam, description: "Paste a link to the steam game matching the search." },
+    { class_name: ImageCommand, command: [:image, :images], description: "Search for an image and post it." },
+    { class_name: GifCommand, command: :gif, description: "Search for a gif and post it." },
+    { class_name: StatusCommand, command: :status, description: "Check on status of the bot." },
+    { class_name: LearnCommand, command: :learn, description: "Learn a phrase." },
+    { class_name: DeployCommand, command: :deploy, description: "Deploy an application." },
+    { class_name: OffTheRecordCommand, command: :off, description: "Go off the record." },
+    { class_name: OnTheRecordCommand, command: :on, description: "Go back on the record." },
+    { class_name: ChatCommand, command: :chat, description: "Chat like us. Can accept a username as an argument." },
+    { class_name: WolframAlphaCommand, command: [:wa, :wolfram, :wolframalpha], description: "Query Wolfram|Alpha." },
+    { class_name: TrainCommand, command: [:train], description: "Train accidents." },
+    { class_name: TextCommand, command: [:text], description: "Send a text message. Name a person then the message to text them." },
+    { class_name: AlchemyCommand, command: [:tonight], description: "We playing games tonight? Who's coming?" },
+    # { class_name: GamesCommand, command: [:games], description: "What should we play?" }, # TODO
+  ].freeze
 
   class << self
     def quack
@@ -78,66 +95,11 @@ class Duck
       end
     end
 
-    bot.command :ping, description: "Hello, is it me you're looking for?" do |event, *params|
-      PingCommand.new(event: event, bot: bot, params: params).respond
+    COMMANDS.each do |command|
+      bot.command command[:command], description: command[:description] do |event, *params|
+        command[:class_name].new(event: event, bot: bot, params: params).respond
+      end
     end
-
-    bot.command :steam, description: "Paste a link to the steam game matching the search." do |event, *params|
-      SteamCommand.new(event: event, bot: bot, params: params).respond
-    end
-
-    bot.command [:image, :images], description: "Search for an image and post it." do |event, *params|
-      ImageCommand.new(event: event, bot: bot, params: params).respond
-    end
-
-    bot.command :gif, description: "Search for a gif and post it." do |event, *params|
-      GifCommand.new(event: event, bot: bot, params: params).respond
-    end
-
-    bot.command :status, description: "Check on status of the bot." do |event, *params|
-      StatusCommand.new(event: event, bot: bot, params: params).respond
-    end
-
-    bot.command :learn, description: "Learn a phrase." do |event, *params|
-      LearnCommand.new(event: event, bot: bot, params: params).respond
-    end
-
-    bot.command :deploy, description: "Deploy an application." do |event, *params|
-      DeployCommand.new(event: event, bot: bot, params: params).respond
-    end
-
-    bot.command :off, description: "Go off the record." do |event, *params|
-      OffTheRecordCommand.new(event: event, bot: bot, params: params).respond
-    end
-
-    bot.command :on, description: "Go back on the record." do |event, *params|
-      OnTheRecordCommand.new(event: event, bot: bot, params: params).respond
-    end
-
-    bot.command :chat, description: "Chat like us. Can accept a username as an argument." do |event, *params|
-      ChatCommand.new(event: event, bot: bot, params: params).respond
-    end
-
-    bot.command [:wa, :wolfram, :wolframalpha], description: "Query Wolfram|Alpha." do |event, *params|
-      WolframAlphaCommand.new(event: event, bot: bot, params: params).respond
-    end
-
-    bot.command [:train], description: "Train accidents." do |event, *params|
-      TrainCommand.new(event: event, bot: bot, params: params).respond
-    end
-
-    bot.command [:text], description: "Send a text message. Name a person then the message to text them." do |event, *params|
-      TextCommand.new(event: event, bot: bot, params: params).respond
-    end
-
-    bot.command [:tonight], description: "We playing games tonight? Who's coming?" do |event, *params|
-      AlchemyCommand.new(event: event, bot: bot, params: params).respond
-    end
-
-    # TODO
-    # bot.command :games, description: "What should we play?" do |event, *params|
-    #   GamesCommand.new(event: event, bot: bot, params: params).respond
-    # end
 
     bot.mention do |event|
       Log.info("mention #{event.author.name}: #{event.message.content}")
