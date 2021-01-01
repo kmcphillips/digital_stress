@@ -41,12 +41,12 @@ require_relative "lib/mandate_user_refinements"
 require_relative "lib/recorder"
 require_relative "lib/learner"
 require_relative "lib/web_duck"
-require_relative "lib/texter"
 
 require_relative "lib/clients/steam"
 require_relative "lib/clients/azure"
 require_relative "lib/clients/gif"
 require_relative "lib/clients/wolfram_alpha"
+require_relative "lib/clients/texter"
 
 require_relative "lib/base_command"
 require_relative "lib/base_subcommand"
