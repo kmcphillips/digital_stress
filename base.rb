@@ -28,8 +28,11 @@ Log.level = Logger::INFO
 db_file = File.join(File.dirname(__FILE__), "chat.sqlite3")
 DB = Sequel.sqlite(db_file)
 
-require_relative "lib/key_value_store"
+require_relative "lib/persistence/key_value_store"
 KV = KeyValueStore.new(DB.opts[:database]) # Configuration.redis.url
+
+require_relative "lib/persistence/recorder"
+require_relative "lib/persistence/learner"
 
 require_relative "lib/util/pinger"
 require_relative "lib/util/formatter"
@@ -37,10 +40,6 @@ require_relative "lib/util/dedup"
 
 require_relative "lib/models/user"
 require_relative "lib/mandate_user_refinements"
-
-require_relative "lib/recorder"
-require_relative "lib/learner"
-require_relative "lib/web_duck"
 
 require_relative "lib/clients/steam"
 require_relative "lib/clients/azure"
@@ -73,4 +72,5 @@ require_relative "lib/responders/alchemy_responder"
 require_relative "lib/responders/google_image_search_responder"
 require_relative "lib/responders/temperature_responder"
 
+require_relative "lib/web_duck"
 require_relative "lib/duck"
