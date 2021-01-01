@@ -61,6 +61,7 @@ nohup.out
 /config/config.yml
 /dedup.json
 /log
-/output/*.txt
-/absurdity_chats/*.txt
 /factorio_mod/duck_*.zip
+
+/data/absurdity_chats/*.txt
+/data/output/*.txt
