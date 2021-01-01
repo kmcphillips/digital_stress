@@ -1,17 +1,6 @@
 # frozen_string_literal: true
 class Duck
-  QUACKS = [
-    "Quack",
-    "Quack.",
-    "Hwain",
-    "Quack quack",
-    "Quack!",
-    "Quack?",
-    "quack",
-    "quack quack quack",
-    "Quack, Quack",
-    "Quack",
-  ].freeze
+  QUACKS = [ "Quack", "Quack.", "Hwain", "Quack quack", "Quack!", "Quack?", "quack", "quack quack quack", "Quack, Quack", "Quack", ].freeze
   COMMAND_PREFIXES = ["Duck", "duck"].freeze
   RESPONDERS = [
     SimpleResponder,
