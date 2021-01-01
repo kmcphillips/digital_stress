@@ -3,7 +3,7 @@
 Add a `config.yml` with:
 
 ```bash
-cp config.example.yml config.yml
+cp config/config.example.yml config/config.yml
 ```
 
 Then to run:

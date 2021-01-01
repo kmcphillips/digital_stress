@@ -18,7 +18,7 @@ require "tempfile"
 require "twilio-ruby"
 
 Config.setup { |config| config.const_name = 'Configuration' }
-Config.load_and_set_settings("config.yml")
+Config.load_and_set_settings("config/config.yml")
 
 logger_file = File.open("bot.log", File::WRONLY | File::APPEND | File::CREAT)
 logger_file.sync = true

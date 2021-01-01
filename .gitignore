@@ -58,7 +58,7 @@ build-iPhoneSimulator/
 *.sqlite3.bak
 *.csv
 nohup.out
-/config.yml
+/config/config.yml
 /dedup.json
 /log
 /output/*.txt
