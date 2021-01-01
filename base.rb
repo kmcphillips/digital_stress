@@ -35,8 +35,9 @@ require_relative "lib/util/pinger"
 require_relative "lib/util/formatter"
 require_relative "lib/util/dedup"
 
-require_relative "lib/user"
+require_relative "lib/models/user"
 require_relative "lib/mandate_user_refinements"
+
 require_relative "lib/recorder"
 require_relative "lib/learner"
 require_relative "lib/web_duck"
