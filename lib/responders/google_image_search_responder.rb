@@ -13,15 +13,15 @@ class GoogleImageSearchResponder < BaseResponder
           if image_url.present?
             event.respond([sass, image_url].reject(&:blank?).join("\n"))
           else
-            Log.warn("[GoogleImageSearchResponder] for #{ url } #{ redirect_url } did does not have an imgurl part")
+            Global.logger.warn("[GoogleImageSearchResponder] for #{ url } #{ redirect_url } did does not have an imgurl part")
             event.message.react("❔")
           end
         else
-          Log.warn("[GoogleImageSearchResponder] for #{ url } does not have a location header")
+          Global.logger.warn("[GoogleImageSearchResponder] for #{ url } does not have a location header")
           event.message.react("❔")
         end
       else
-        Log.warn("[GoogleImageSearchResponder] for #{ url } did not return a 302")
+        Global.logger.warn("[GoogleImageSearchResponder] for #{ url } did not return a 302")
         event.message.react("❔")
       end
     end

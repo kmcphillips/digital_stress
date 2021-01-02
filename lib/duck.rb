@@ -43,6 +43,7 @@ class Duck
       spaces_allowed: true,
       command_doesnt_exist_message: "Quack???"
     )
+    Global.bot = @bot
   end
 
   def run
@@ -91,7 +92,7 @@ class Duck
     end
 
     bot.mention do |event|
-      Log.info("mention #{event.author.name}: #{event.message.content}")
+      Global.logger.info("mention #{event.author.name}: #{event.message.content}")
       event.channel.start_typing
       response = Learner.random_message(server: event.server&.name, prevent_recent: true) || Duck.quack
       sleep(0.6)
@@ -108,15 +109,15 @@ class Duck
 
     bot.message do |event|
       if event.channel.pm? && !COMMAND_PREFIXES.any?{ |c| event.message.content.starts_with?(c) }
-        Log.info("pm #{event.author.name}: #{event.message.content}")
+        Global.logger.info("pm #{event.author.name}: #{event.message.content}")
         event.respond(Duck.quack)
       else # in a channel
         RESPONDERS.each do |responder|
           begin
             responder.new(event, bot: bot).respond
           rescue => e
-            Log.error("#{ responder } returned error #{ e.message }")
-            Log.error(e)
+            Global.logger.error("#{ responder } returned error #{ e.message }")
+            Global.logger.error(e)
             message = ":bangbang: Quack error in #{ responder }: #{ e.message }"
             event.respond(message)
           end
@@ -124,11 +125,10 @@ class Duck
       end
     end
 
-    Log.info("Starting")
+    Global.logger.info("Starting")
 
     bot.run(true)
 
-    WebDuck.bot = bot
     WebDuck.run!
   end
 end

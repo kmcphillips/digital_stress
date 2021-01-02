@@ -1,13 +1,9 @@
 # frozen_string_literal: true
 class WebDuck < Sinatra::Application
-  class << self
-    attr_accessor :bot
-  end
-
-  set :port, Configuration.web_auth.port
+  set :port, Global.config.web_auth.port
 
   use Rack::Auth::Basic do |username, password|
-    username == Configuration.web_auth.username && password == Configuration.web_auth.password
+    username == Global.config.web_auth.username && password == Global.config.web_auth.password
   end
 
   get '/' do
@@ -18,9 +14,9 @@ class WebDuck < Sinatra::Application
     server = params["server"]
     channel_name = params["channel"]
     message = params["message"]
-    channels = self.class.bot.find_channel(channel_name, server)
+    channels = Global.bot.find_channel(channel_name, server)
 
-    Log.warn("No channels found for #{ server }##{ channel_name }") if channels.empty?
+    Global.logger.warn("No channels found for #{ server }##{ channel_name }") if channels.empty?
 
     channels.each { |channel| channel.send_message(message) }
 
@@ -32,8 +28,8 @@ class WebDuck < Sinatra::Application
     channel_name = params["channel"]
     username = params["username"]
 
-    channels = self.class.bot.find_channel(channel_name, server)
-    Log.warn("No channels found for #{ server }##{ channel_name }") if channels.empty?
+    channels = Global.bot.find_channel(channel_name, server)
+    Global.logger.warn("No channels found for #{ server }##{ channel_name }") if channels.empty?
 
     channels.each do |channel|
       db = TrainCommand::Datastore.new(server: server, channel: channel_name)
@@ -46,8 +42,8 @@ class WebDuck < Sinatra::Application
           nil
         end
       rescue => exception
-        Log.error(exception.message)
-        Log.error(exception)
+        Global.logger.error(exception.message)
+        Global.logger.error(exception)
         channel.send_message(":bangbang: Quack error with file: #{ exception.message }")
       end
     end
@@ -57,4 +53,4 @@ class WebDuck < Sinatra::Application
 end
 
 # I wonder where this could go that would be better?
-raise "web_auth credentials missing" if Configuration.web_auth.username.blank? || Configuration.web_auth.password.blank?
+raise "web_auth credentials missing" if Global.config.web_auth.username.blank? || Global.config.web_auth.password.blank?

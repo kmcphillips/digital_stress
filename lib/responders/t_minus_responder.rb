@@ -17,7 +17,7 @@ class TMinusResponder < BaseResponder
     if match = T_MINUS_NUMBER_REGEX.match(event.message.content)
       minutes = match[1].to_i
       nonce = SecureRandom.hex
-      Log.info("handle T-#{ minutes } from: #{ event.message.content }")
+      Global.logger.info("handle T-#{ minutes } from: #{ event.message.content }")
 
       if minutes > 300
         event.channel.start_typing
@@ -73,7 +73,7 @@ class TMinusResponder < BaseResponder
     online_user_ids = event.server.voice_channels.map{ |c| c.users.map(&:id) }.flatten
     online_user_id = event.user.id
 
-    Log.info("[TMinusResponder] user_online?(#{ online_user_id }) and found #{ online_user_ids }")
+    Global.logger.info("[TMinusResponder] user_online?(#{ online_user_id }) and found #{ online_user_ids }")
     online_user_ids.include?(online_user_id)
   end
 end

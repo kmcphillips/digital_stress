@@ -89,11 +89,15 @@ module Learner
   private
 
   def table
-    DB[:learned]
+    Global.db[:learned]
+  end
+
+  def kv_store
+    Global.kv
   end
 
   def recent_ids(server:)
-    ids = JSON.parse(KV.read(recent_key(server: server))) rescue []
+    ids = JSON.parse(kv_store.read(recent_key(server: server))) rescue []
     ids
   end
 
@@ -102,7 +106,7 @@ module Learner
     ids = ids.unshift(record[:id])
     ids = ids[0...recent_max_length(server: server)]
 
-    KV.write(recent_key(server: server), ids.to_json)
+    kv_store.write(recent_key(server: server), ids.to_json)
 
     true
   end

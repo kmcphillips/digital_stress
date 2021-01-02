@@ -12,13 +12,13 @@ module WolframAlpha
     response = HTTParty.get(url)
 
     if !response.success?
-      Log.error("WolframAlpha#query returned HTTP #{ response.code }")
-      Log.error(response.body)
+      Global.logger.error("WolframAlpha#query returned HTTP #{ response.code }")
+      Global.logger.error(response.body)
 
       ":bangbang: Quack failure HTTP#{ response.code }"
     else
-      Log.info("WolframAlpha#query success")
-      Log.info(response.body)
+      Global.logger.info("WolframAlpha#query success")
+      Global.logger.info(response.body)
 
       Response.new(response.to_h).to_a
     end
@@ -27,7 +27,7 @@ module WolframAlpha
   private
 
   def appid
-    Configuration.wolfram_alpha.appid
+    Global.config.wolfram_alpha.appid
   end
 
   class Response

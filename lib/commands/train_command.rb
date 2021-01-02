@@ -33,8 +33,8 @@ class TrainCommand < BaseCommand
         nil
       end
     rescue => exception
-      Log.error(exception.message)
-      Log.error(exception)
+      Global.logger.error(exception.message)
+      Global.logger.error(exception)
       ":bangbang: Quack error with file: #{ exception.message }"
     end
   end
@@ -65,21 +65,21 @@ class TrainCommand < BaseCommand
         channel:channel,
       }
 
-      Log.info("create_accident(#{ args }")
+      Global.logger.info("create_accident(#{ args }")
       table.insert(args)
     end
 
     private
 
     def table
-      DB[:train_accidents]
+      Global.db[:train_accidents]
     end
   end
 
   module ImageGenerator
     extend self
 
-    SIGN_TEMPLATE_PATH = Duck.root.join("data", "train_accident_template.png")
+    SIGN_TEMPLATE_PATH = Global.root.join("data", "train_accident_template.png")
 
     def it_has_been_days_file(days)
       raise "Cannot find file '#{  }'" unless File.exists?(SIGN_TEMPLATE_PATH)

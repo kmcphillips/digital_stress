@@ -13,7 +13,7 @@ class BaseCommand
   end
 
   def respond
-    Log.info("command.#{ @event.command.name }(#{ params })")
+    Global.logger.info("command.#{ @event.command.name }(#{ params })")
     @event.channel.start_typing if typing?
 
     return ":closed_lock_with_key: Quack! Not permitted!" if channels.present? && !channels.include?("#{ server }##{ channel }")
@@ -23,14 +23,14 @@ class BaseCommand
       message = message.join("\n") if message.is_a?(Array)
 
       if message && message.length >= MAX_MESSAGE_LENGTH
-        Log.warn("response of length #{ message.length } is too long #{ message }")
+        Global.logger.warn("response of length #{ message.length } is too long #{ message }")
         message = "#{ message.slice(0..(MAX_MESSAGE_LENGTH - 5))} ..."
       end
 
-      Log.info("response: #{ message }")
+      Global.logger.info("response: #{ message }")
     rescue => e
-      Log.error("#{ self.class.name }#response returned error #{ e.message }")
-      Log.error(e)
+      Global.logger.error("#{ self.class.name }#response returned error #{ e.message }")
+      Global.logger.error(e)
       message = ":bangbang: Quack error: #{ e.message }"
     end
     message

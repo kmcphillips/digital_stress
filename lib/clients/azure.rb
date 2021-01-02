@@ -7,8 +7,8 @@ module Azure
     response = HTTParty.get(url, { headers: { "Ocp-Apim-Subscription-Key" => key } })
 
     if !response.success?
-      Log.error("Azure#search_image_urls returned HTTP #{ response.code }")
-      Log.error(response.body)
+      Global.logger.error("Azure#search_image_urls returned HTTP #{ response.code }")
+      Global.logger.error(response.body)
       return ":bangbang: Quack failure HTTP#{ response.code }"
     end
 
@@ -18,6 +18,6 @@ module Azure
   private
 
   def key
-    Configuration.azure.key
+    Global.config.azure.key
   end
 end

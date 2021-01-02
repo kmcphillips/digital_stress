@@ -18,7 +18,7 @@ class ChatCommand < BaseCommand
 
   def consume_message(user: nil)
     user ||= User.all(server: server).sample
-    filename = Duck.root.join("data", "absurdity_chats", "#{ user.id }.txt")
+    filename = Global.root.join("data", "absurdity_chats", "#{ user.id }.txt")
 
     lines = File.readlines(filename)
     lines = lines.shuffle

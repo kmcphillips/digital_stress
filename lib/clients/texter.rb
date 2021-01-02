@@ -3,7 +3,7 @@ module Texter
   extend self
 
   def send_text(phone_number:, message:)
-    Log.info("[Texter][send_text] phone_number: #{ phone_number } message: #{ message }")
+    Global.logger.info("[Texter][send_text] phone_number: #{ phone_number } message: #{ message }")
 
     response = twilio_client.messages.create(
       from: outgoing_phone_number,
@@ -11,7 +11,7 @@ module Texter
       body: message,
     )
 
-    Log.info("[Texter][send_text] sid: #{ response.sid }")
+    Global.logger.info("[Texter][send_text] sid: #{ response.sid }")
 
     response.sid
   end
@@ -23,14 +23,14 @@ module Texter
   end
 
   def account_sid
-    Configuration.twilio.account_sid
+    Global.config.twilio.account_sid
   end
 
   def auth_token
-    Configuration.twilio.auth_token
+    Global.config.twilio.auth_token
   end
 
   def outgoing_phone_number
-    Configuration.twilio.outgoing_phone_number
+    Global.config.twilio.outgoing_phone_number
   end
 end

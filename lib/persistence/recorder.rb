@@ -26,7 +26,7 @@ module Recorder
         channel: event.channel.name,
       }
 
-      Log.info("record(#{ args }")
+      Global.logger.info("record(#{ args }")
       table.insert(args)
 
       true
@@ -66,18 +66,18 @@ module Recorder
 
   def record_event?(event)
     if ignore_message_content?(event.message.text)
-      Log.warn("record_event(false) ignoring : #{ event.message.text }")
+      Global.logger.warn("record_event(false) ignoring : #{ event.message.text }")
       return false
     end
     if record_channel?(server: event.server&.name, channel: event.channel&.name)
       if off_the_record?(server: event.server&.name, channel: event.channel&.name)
-        Log.warn("record_event(false) because it is off the record #{ event.server&.name || 'nil' }##{ event.channel&.name || 'nil' } : #{ event.message.text }")
+        Global.logger.warn("record_event(false) because it is off the record #{ event.server&.name || 'nil' }##{ event.channel&.name || 'nil' } : #{ event.message.text }")
         false
       else
         true
       end
     else
-      Log.warn("record_event(false) #{ event.server&.name || 'nil' }##{ event.channel&.name || 'nil' } : #{ event.message.text }")
+      Global.logger.warn("record_event(false) #{ event.server&.name || 'nil' }##{ event.channel&.name || 'nil' } : #{ event.message.text }")
       false
     end
   end
@@ -99,24 +99,24 @@ module Recorder
   end
 
   def counts
-    DB["SELECT DISTINCT user_id, COUNT(*) AS count, sum(length(message) - length(replace(message, ' ', ''))+1) AS words FROM messages GROUP BY user_id ORDER BY count DESC"].all
+    Global.db["SELECT DISTINCT user_id, COUNT(*) AS count, sum(length(message) - length(replace(message, ' ', ''))+1) AS words FROM messages GROUP BY user_id ORDER BY count DESC"].all
   end
 
   def last
-    DB["SELECT username, user_id, message, timestamp, server, channel FROM messages ORDER BY timestamp DESC LIMIT 1"].first
+    Global.db["SELECT username, user_id, message, timestamp, server, channel FROM messages ORDER BY timestamp DESC LIMIT 1"].first
   end
 
   def off_the_record?(server:, channel:)
-    !!KV.read(otr_key(server: server, channel: channel))
+    !!kv_store.read(otr_key(server: server, channel: channel))
   end
 
   def off_the_record(server:, channel:)
-    KV.write(otr_key(server: server, channel: channel), "1", ttl: OFF_THE_RECORD_SECONDS.to_i)
+    kv_store.write(otr_key(server: server, channel: channel), "1", ttl: OFF_THE_RECORD_SECONDS.to_i)
     OFF_THE_RECORD_SECONDS.to_i
   end
 
   def on_the_record(server:, channel:)
-    KV.delete(otr_key(server: server, channel: channel))
+    kv_store.delete(otr_key(server: server, channel: channel))
     true
   end
 
@@ -135,7 +135,11 @@ module Recorder
   private
 
   def table
-    DB[:messages]
+    Global.db[:messages]
+  end
+
+  def kv_store
+    Global.kv
   end
 
   def ignore_message_content?(text)

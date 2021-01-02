@@ -63,14 +63,14 @@ class DeployCommand < BaseCommand
     if $?.success?
       message.react("✅")
     else
-      Log.error(output)
+      Global.logger.error(output)
       on_error.call(@event, command, output) if on_error
       raise DeployError, ":warning: Quack! Error with #{ description }!"
     end
   end
 
   def base_working_dir
-    @base_working_dir ||= Configuration.deploy_command.base_working_dir
+    @base_working_dir ||= Global.config.deploy_command.base_working_dir
     raise "`deploy_command.base_working_dir` is blank" unless @base_working_dir.present?
     @base_working_dir
   end

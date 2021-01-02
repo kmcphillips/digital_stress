@@ -7,8 +7,8 @@ module Gif
     response = HTTParty.get(url)
 
     if !response.success?
-      Log.error("Gif#search_url returned HTTP #{ response.code }")
-      Log.error(response.body)
+      Global.logger.error("Gif#search_url returned HTTP #{ response.code }")
+      Global.logger.error(response.body)
       return ":bangbang: Quack failure HTTP#{ response.code }"
     end
 
@@ -18,6 +18,6 @@ module Gif
   private
 
   def key
-    Configuration.giphy.key
+    Global.config.giphy.key
   end
 end

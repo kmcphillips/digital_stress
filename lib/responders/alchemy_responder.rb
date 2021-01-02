@@ -87,19 +87,19 @@ class AlchemyResponder < BaseResponder
     end
 
     def present?(element)
-      !!KV.read(key(element))
+      !!kv_store.read(key(element))
     end
 
     def present!(element)
-      KV.write(key(element), Time.now.to_i, ttl: ttl)
+      kv_store.write(key(element), Time.now.to_i, ttl: ttl)
     end
 
     def size
       [
-        !!KV.read(key(:fire)),
-        !!KV.read(key(:earth)),
-        !!KV.read(key(:water)),
-        !!KV.read(key(:wind)),
+        !!kv_store.read(key(:fire)),
+        !!kv_store.read(key(:earth)),
+        !!kv_store.read(key(:water)),
+        !!kv_store.read(key(:wind)),
       ].count(true)
     end
 
@@ -108,10 +108,10 @@ class AlchemyResponder < BaseResponder
     end
 
     def clear
-      KV.delete(key(:fire))
-      KV.delete(key(:earth))
-      KV.delete(key(:water))
-      KV.delete(key(:wind))
+      kv_store.delete(key(:fire))
+      kv_store.delete(key(:earth))
+      kv_store.delete(key(:water))
+      kv_store.delete(key(:wind))
 
       true
     end
@@ -133,6 +133,10 @@ class AlchemyResponder < BaseResponder
 
     def key(element)
       "#{ server }##{ channel }-#{ element.to_s }"
+    end
+
+    def kv_store
+      Global.kv_store
     end
   end
 end

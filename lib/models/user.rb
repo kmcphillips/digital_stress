@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class User
-  USERS = Configuration.servers.each_with_object({}) do |(server_name, cfg), obj|
+  USERS = Global.config.servers.each_with_object({}) do |(server_name, cfg), obj|
     obj[server_name.to_s] = cfg.users.map(&:to_h).map{ |u| [u[:id], u] }.to_h
   end
 
@@ -14,7 +14,7 @@ class User
     @location = nil
     @phone_number = nil
 
-    # Load extras from the config.yml Configuration object
+    # Load extras from the config.yml Global.config object
     @config = USERS[server][id]
     @location = @config[:location] if @config
     @phone_number = @config[:phone_number] if @config

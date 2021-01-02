@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require "pry"
 require "active_support/all"
+require "ostruct"
 require "config"
 require "discordrb"
 require "logger"
@@ -17,27 +18,24 @@ require "systemcall"
 require "tempfile"
 require "twilio-ruby"
 
-class Duck
-  class << self
-    def root
-      @root ||= Pathname.new(File.dirname(__FILE__))
-    end
-  end
-end
+# Inject all dependencies as exported globals
+Global = OpenStruct.new
 
-Config.setup { |config| config.const_name = 'Configuration' }
-Config.load_and_set_settings(Duck.root.join("config/config.yml"))
+Global.root = Pathname.new(File.dirname(__FILE__))
 
-logger_file = File.open(Duck.root.join("bot.log"), File::WRONLY | File::APPEND | File::CREAT)
+Config.setup { |config| config.const_name = 'IgnoreMeGlobalConfiguration' }
+Config.load_and_set_settings(Global.root.join("config/config.yml"))
+Global.config = IgnoreMeGlobalConfiguration # Can't tell rubyconfig to not export a `const_name` so we just ignore it and pass it through
+
+logger_file = File.open(Global.root.join("bot.log"), File::WRONLY | File::APPEND | File::CREAT)
 logger_file.sync = true
-Log = Logger.new(logger_file)
-Log.level = Logger::INFO
+Global.logger = Logger.new(logger_file, level: Logger::INFO)
 
-db_file = Duck.root.join("chat.sqlite3").to_s
-DB = Sequel.sqlite(db_file)
+db_file = Global.root.join("chat.sqlite3").to_s
+Global.db = Sequel.sqlite(db_file)
 
 require_relative "lib/persistence/key_value_store"
-KV = KeyValueStore.new(DB.opts[:database]) # Configuration.redis.url
+Global.kv = KeyValueStore.new(Global.db.opts[:database]) # Global.config.redis.url
 
 require_relative "lib/persistence/recorder"
 require_relative "lib/persistence/learner"
