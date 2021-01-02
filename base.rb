@@ -17,15 +17,23 @@ require "systemcall"
 require "tempfile"
 require "twilio-ruby"
 
-Config.setup { |config| config.const_name = 'Configuration' }
-Config.load_and_set_settings("config/config.yml")
+class Duck
+  class << self
+    def root
+      @root ||= Pathname.new(File.dirname(__FILE__))
+    end
+  end
+end
 
-logger_file = File.open("bot.log", File::WRONLY | File::APPEND | File::CREAT)
+Config.setup { |config| config.const_name = 'Configuration' }
+Config.load_and_set_settings(Duck.root.join("config/config.yml"))
+
+logger_file = File.open(Duck.root.join("bot.log"), File::WRONLY | File::APPEND | File::CREAT)
 logger_file.sync = true
 Log = Logger.new(logger_file)
 Log.level = Logger::INFO
 
-db_file = File.join(File.dirname(__FILE__), "chat.sqlite3")
+db_file = Duck.root.join("chat.sqlite3").to_s
 DB = Sequel.sqlite(db_file)
 
 require_relative "lib/persistence/key_value_store"

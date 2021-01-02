@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class DeployCommand < BaseCommand
-  BASE_WORKING_DIR = "/home/deploy/apps/digital_stress/shared/deploy_from"
-
   class DeployError < StandardError ; end
 
   def response
@@ -29,7 +27,7 @@ class DeployCommand < BaseCommand
   private
 
   def deploy(app)
-    working_dir = "#{ BASE_WORKING_DIR }/#{ app }"
+    working_dir = "#{ base_working_dir }/#{ app }"
 
     @event.respond(":rocket: Deploying #{ app }")
 
@@ -39,7 +37,7 @@ class DeployCommand < BaseCommand
         run_command("bundle install", working_dir: working_dir)
         if File.exists?("#{ working_dir }/spec")
           if !File.exists?("#{ working_dir }/config/credentials/test.key")
-            `ln -s #{ BASE_WORKING_DIR }/shared/#{ app }/test.key #{ working_dir }/config/credentials/test.key`
+            `ln -s #{ base_working_dir }/shared/#{ app }/test.key #{ working_dir }/config/credentials/test.key`
           end
           run_command("RSPEC_SUPPRESS_PENDING=true bundle exec rspec", working_dir: working_dir, description: "Running test suite", on_error: ->(event, command, output) {
             msg = (output.split("Failures:\n").last || "").truncate(1980, omission: "")
@@ -69,5 +67,11 @@ class DeployCommand < BaseCommand
       on_error.call(@event, command, output) if on_error
       raise DeployError, ":warning: Quack! Error with #{ description }!"
     end
+  end
+
+  def base_working_dir
+    @base_working_dir ||= Configuration.deploy_command.base_working_dir
+    raise "`deploy_command.base_working_dir` is blank" unless @base_working_dir.present?
+    @base_working_dir
   end
 end

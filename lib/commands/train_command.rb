@@ -79,7 +79,7 @@ class TrainCommand < BaseCommand
   module ImageGenerator
     extend self
 
-    SIGN_TEMPLATE_PATH = File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "data", "train_accident_template.png"))
+    SIGN_TEMPLATE_PATH = Duck.root.join("data", "train_accident_template.png")
 
     def it_has_been_days_file(days)
       raise "Cannot find file '#{  }'" unless File.exists?(SIGN_TEMPLATE_PATH)
