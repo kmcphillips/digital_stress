@@ -39,8 +39,7 @@ class LearnCommand < BaseCommand
   private
 
   def formatted_message(params)
-    message = params.join(" ")
-    message = message.strip
+    message = query.strip
     message = message.gsub(/^\"/, "").gsub(/\"$/, "")
     message
   end

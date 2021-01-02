@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 class BaseCommand
-  attr_reader :params, :event, :bot, :user
+  attr_reader :params, :event, :bot, :user, :query
 
   MAX_MESSAGE_LENGTH = 1999
 
   def initialize(event:, bot:, params:)
     @bot = bot
     @params = params
+    @query = params.join(" ")
     @event = event
     @user = User.from_discord(event.author, server: server)
   end

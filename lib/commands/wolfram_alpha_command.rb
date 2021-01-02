@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 class WolframAlphaCommand < BaseCommand
   def response
-    search = params.join(" ")
-
-    if search.blank?
+    if query.blank?
       "Quacking-search for something"
     else
-      WolframAlpha.query(search, location: user.location)
+      WolframAlpha.query(query, location: user.location)
     end
   end
 end
