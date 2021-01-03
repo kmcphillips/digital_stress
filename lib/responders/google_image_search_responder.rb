@@ -31,6 +31,6 @@ class GoogleImageSearchResponder < BaseResponder
 
   def sass
     # "Why is this always so hard #{ mention }?
-    Duck.quack
+    Quacker.quack
   end
 end

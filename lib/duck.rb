@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class Duck
-  QUACKS = [ "Quack", "Quack.", "Hwain", "Quack quack", "Quack!", "Quack?", "quack", "quack quack quack", "Quack, Quack", "Quack", ].freeze
   COMMAND_PREFIXES = ["Duck", "duck"].freeze
   RESPONDERS = [
     SimpleResponder,
@@ -26,12 +25,6 @@ class Duck
     { class_name: AlchemyCommand, command: [:tonight], description: "We playing games tonight? Who's coming?" },
     # { class_name: GamesCommand, command: [:games], description: "What should we play?" }, # TODO
   ].freeze
-
-  class << self
-    def quack
-      QUACKS.sample
-    end
-  end
 
   attr_reader :bot
 
@@ -94,7 +87,7 @@ class Duck
     bot.mention do |event|
       Global.logger.info("mention #{event.author.name}: #{event.message.content}")
       event.channel.start_typing
-      response = Learner.random_message(server: event.server&.name, prevent_recent: true) || Duck.quack
+      response = Learner.random_message(server: event.server&.name, prevent_recent: true) || Quacker.quack
       sleep(0.6)
       event.respond(response)
     end
@@ -110,7 +103,7 @@ class Duck
     bot.message do |event|
       if event.channel.pm? && !COMMAND_PREFIXES.any?{ |c| event.message.content.starts_with?(c) }
         Global.logger.info("pm #{event.author.name}: #{event.message.content}")
-        event.respond(Duck.quack)
+        event.respond(Quacker.quack)
       else # in a channel
         RESPONDERS.each do |responder|
           begin

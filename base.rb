@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 require "pry"
 require "active_support/all"
-require "ostruct"
 require "config"
 require "discordrb"
 require "logger"
@@ -19,7 +18,9 @@ require "tempfile"
 require "twilio-ruby"
 
 # Inject all dependencies as exported globals
-Global = OpenStruct.new
+Global = Class.new do
+  attr_accessor :root, :config, :db, :logger, :kv, :bot
+end.new
 
 Global.root = Pathname.new(File.dirname(__FILE__))
 
@@ -43,6 +44,7 @@ require_relative "lib/persistence/learner"
 require_relative "lib/util/pinger"
 require_relative "lib/util/formatter"
 require_relative "lib/util/dedup"
+require_relative "lib/util/quacker"
 
 require_relative "lib/models/user"
 require_relative "lib/mandate_user_refinements"
