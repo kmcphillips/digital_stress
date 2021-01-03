@@ -18,6 +18,7 @@ gem "sinatra"
 gem "redis"
 gem "systemcall"
 gem "twilio-ruby"
+gem "tabulo"
 
 gem "capistrano", "3.6.1"
 gem "capistrano-bundler"

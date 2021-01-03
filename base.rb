@@ -16,6 +16,7 @@ require "sinatra/base"
 require "systemcall"
 require "tempfile"
 require "twilio-ruby"
+require "tabulo"
 
 # Inject all dependencies as exported globals
 Global = Class.new do

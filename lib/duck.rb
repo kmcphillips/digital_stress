@@ -23,7 +23,7 @@ class Duck
     { class_name: TrainCommand, command: [:train], description: "Train accidents." },
     { class_name: TextCommand, command: [:text], description: "Send a text message. Name a person then the message to text them." },
     { class_name: AlchemyCommand, command: [:tonight], description: "We playing games tonight? Who's coming?" },
-    # { class_name: GamesCommand, command: [:games], description: "What should we play?" }, # TODO
+    { class_name: GamesCommand, command: [:games, :game], description: "What should we play?" },
   ].freeze
 
   attr_reader :bot
