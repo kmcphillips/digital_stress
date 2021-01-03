@@ -37,14 +37,12 @@ class WebDuck < Sinatra::Application
       db.create_accident(user_id: user&.id)
 
       begin
-        TrainCommand::ImageGenerator.it_has_been_days_file(0) do |file|
-          channel.send_file(file)
-          nil
-        end
+        channel.send_message(":steam_locomotive: :boom: #{ user.mention }") if user
+        TrainCommand::ImageGenerator.it_has_been_days_file(0) { |file| channel.send_file(file) }
       rescue => exception
         Global.logger.error(exception.message)
         Global.logger.error(exception)
-        channel.send_message(":bangbang: Quack error with file: #{ exception.message }")
+        channel.send_message(":bangbang: Quack there was a train accident in the duck bot too: #{ exception.message }")
       end
     end
 
