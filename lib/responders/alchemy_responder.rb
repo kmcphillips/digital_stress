@@ -136,7 +136,7 @@ class AlchemyResponder < BaseResponder
     end
 
     def kv_store
-      Global.kv_store
+      Global.kv
     end
   end
 end
