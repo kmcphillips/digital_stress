@@ -1,21 +1,30 @@
 # frozen_string_literal: true
-module Dedup
-  extend self
-
+class Dedup
   CACHE = Lightly.new(dir: "tmp/dedup", life: "1d", hash: true)
 
-  def found?(value, namespace:)
-    CACHE.cached?(key(value, namespace: namespace))
+  attr_reader :namespace
+
+  def initialize(*namespace_tokens)
+    @namespace = namespace_tokens
   end
 
-  def register(value, namespace:)
-    CACHE.save(key(value, namespace: namespace), value)
+  def found?(value)
+    k = key(value)
+    v = CACHE.cached?(k)
+    Global.logger.info("[Dedup] found?=#{ v } '#{ k }'")
+    v
   end
 
-  def list(values, namespace:)
+  def register(value)
+    k = key(value)
+    Global.logger.info("[Dedup] register '#{ k }'")
+    CACHE.save(key(value), value)
+  end
+
+  def list(values)
     values.each do |value|
-      if !found?(value, namespace: namespace)
-        register(value, namespace: namespace)
+      if !found?(value)
+        register(value)
 
         return value
       end
@@ -26,7 +35,7 @@ module Dedup
 
   private
 
-  def key(value, namespace:)
+  def key(value)
     Array(namespace).map { |v| (v.presence || "").downcase.strip }.join("__").concat("__").concat(value)
   end
 end

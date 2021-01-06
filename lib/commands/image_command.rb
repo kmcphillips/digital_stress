@@ -4,7 +4,7 @@ class ImageCommand < BaseCommand
     if query.blank?
       "Quacking-search for something"
     else
-      Dedup.list(Azure.search_image_urls(query), namespace: ["Azure.image", event.server&.name, event.channel&.name, query.strip]) || "Quack-all found"
+      Dedup.new("Azure.image", event.server&.name, event.channel&.name, query.strip).list(Azure.search_image_urls(query)) || "Quack-all found"
     end
   end
 end
