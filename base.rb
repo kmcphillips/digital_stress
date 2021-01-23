@@ -16,6 +16,7 @@ require "systemcall"
 require "tempfile"
 require "twilio-ruby"
 require "tabulo"
+require "wikipedia"
 
 # Inject all dependencies as exported globals
 Global = Class.new do
@@ -54,6 +55,7 @@ require_relative "lib/clients/azure"
 require_relative "lib/clients/gif"
 require_relative "lib/clients/wolfram_alpha"
 require_relative "lib/clients/texter"
+require_relative "lib/clients/wikipedia_client"
 
 require_relative "lib/base_command"
 require_relative "lib/base_subcommand"
@@ -74,6 +76,7 @@ require_relative "lib/commands/chat_command"
 require_relative "lib/commands/train_command"
 require_relative "lib/commands/text_command"
 require_relative "lib/commands/alchemy_command"
+require_relative "lib/commands/wikipedia_command"
 
 require_relative "lib/responders/base_responder"
 require_relative "lib/responders/simple_responder"

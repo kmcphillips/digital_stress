@@ -156,6 +156,7 @@ GEM
     websocket-client-simple (0.3.0)
       event_emitter
       websocket
+    wikipedia-client (1.10.0)
     zeitwerk (2.3.0)
 
 PLATFORMS
@@ -179,6 +180,7 @@ DEPENDENCIES
   tabulo
   time_difference
   twilio-ruby
+  wikipedia-client
 
 BUNDLED WITH
    2.1.4
