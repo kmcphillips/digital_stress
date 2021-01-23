@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Dedup
-  CACHE = Lightly.new(dir: "tmp/dedup", life: "1d", hash: true)
+  CACHE_LENGTH_SECONDS = 1.day.to_i
 
   attr_reader :namespace
 
@@ -10,7 +10,7 @@ class Dedup
 
   def found?(value)
     k = key(value)
-    v = CACHE.cached?(k)
+    v = !!kv_store.read(k)
     Global.logger.info("[Dedup] found?=#{ v } '#{ k }'")
     v
   end
@@ -18,14 +18,13 @@ class Dedup
   def register(value)
     k = key(value)
     Global.logger.info("[Dedup] register '#{ k }'")
-    CACHE.save(key(value), value)
+    !!kv_store.write(key(value), value, ttl: CACHE_LENGTH_SECONDS)
   end
 
   def list(values)
     values.each do |value|
       if !found?(value)
         register(value)
-
         return value
       end
     end
@@ -37,5 +36,9 @@ class Dedup
 
   def key(value)
     Array(namespace).map { |v| (v.presence || "").downcase.strip }.join("__").concat("__").concat(value)
+  end
+
+  def kv_store
+    Global.kv
   end
 end
