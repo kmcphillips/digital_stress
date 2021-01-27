@@ -35,7 +35,9 @@ class Duck
       token: token,
       prefix: COMMAND_PREFIXES,
       spaces_allowed: true,
-      command_doesnt_exist_message: "Quack???"
+      command_doesnt_exist_message: ->(event) {
+        "Quack? Why is this so hard #{ event.user.mention }?"
+      },
     )
     Global.bot = @bot
   end
