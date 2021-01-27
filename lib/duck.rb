@@ -11,7 +11,7 @@ class Duck
   COMMANDS = [
     { class_name: PingCommand, command: :ping, description: "Hello, is it me you're looking for?" },
     { class_name: SteamCommand, command: :steam, description: "Paste a link to the steam game matching the search." },
-    { class_name: ImageCommand, command: [:image, :images], description: "Search for an image and post it." },
+    { class_name: ImageCommand, command: :image, aliases: [:images], description: "Search for an image and post it." },
     { class_name: GifCommand, command: :gif, description: "Search for a gif and post it." },
     { class_name: StatusCommand, command: :status, description: "Check on status of the bot." },
     { class_name: LearnCommand, command: :learn, description: "Learn a phrase." },
@@ -19,12 +19,12 @@ class Duck
     { class_name: OffTheRecordCommand, command: :off, description: "Go off the record." },
     { class_name: OnTheRecordCommand, command: :on, description: "Go back on the record." },
     { class_name: ChatCommand, command: :chat, description: "Chat like us. Can accept a username as an argument." },
-    { class_name: WolframAlphaCommand, command: [:wa, :wolfram, :wolframalpha], description: "Query Wolfram|Alpha." },
-    { class_name: TrainCommand, command: [:train], description: "Train accidents." },
-    { class_name: TextCommand, command: [:text], description: "Send a text message. Name a person then the message to text them." },
-    { class_name: AlchemyCommand, command: [:tonight], description: "We playing games tonight? Who's coming?" },
-    { class_name: GamesCommand, command: [:games, :game], description: "What should we play?" },
-    { class_name: WikipediaCommand, command: [:w, :wiki, :wikipedia], description: "Search a topic on Wikipedia." },
+    { class_name: WolframAlphaCommand, command: :wolfram, aliases: [:wa, :wolframalpha], description: "Query Wolfram|Alpha." },
+    { class_name: TrainCommand, command: :train, description: "Train accidents." },
+    { class_name: TextCommand, command: :text, description: "Send a text message. Name a person then the message to text them." },
+    { class_name: AlchemyCommand, command: :tonight, description: "We playing games tonight? Who's coming?" },
+    { class_name: GamesCommand, command: :games, aliases: [:game], description: "What should we play?" },
+    { class_name: WikipediaCommand, command: :wikipedia, aliases: [:w, :wiki], description: "Search a topic on Wikipedia." },
   ].freeze
 
   attr_reader :bot
@@ -82,7 +82,7 @@ class Duck
     end
 
     COMMANDS.each do |command|
-      bot.command command[:command], description: command[:description] do |event, *params|
+      bot.command(command[:command], description: command[:description], aliases: command[:aliases] || []) do |event, *params|
         command[:class_name].new(event: event, bot: bot, params: params).respond
       end
     end
