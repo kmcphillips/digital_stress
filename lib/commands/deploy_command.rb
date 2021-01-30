@@ -3,9 +3,15 @@ class DeployCommand < BaseCommand
   class DeployError < StandardError ; end
 
   DEPLOY_APPS = {
-    "quigital" => {},
-    "quigital_infohub" => { aliases: [ "infohub", "quigital.infohub", ] },
-    "mandate.industries" => { aliases: [ "mandate", "mandate_industries", "brochure", ] },
+    "kmcphillips/quigital" => {
+      aliases: ["quigital"]
+    },
+    "kmcphillips/quigital_infohub" => {
+      aliases: ["quigital_infohub", "infohub", "quigital.infohub"]
+    },
+    "kmcphillips/mandate.industries" => {
+      aliases: ["mandate", "mandate.industries", "mandate_industries", "brochure"]
+    },
   }.freeze
 
   def response
