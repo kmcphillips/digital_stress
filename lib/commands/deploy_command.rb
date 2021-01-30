@@ -5,6 +5,7 @@ class DeployCommand < BaseCommand
   DEPLOY_APPS = {
     "quigital" => {},
     "quigital_infohub" => { aliases: [ "infohub", "quigital.infohub", ] },
+    "mandate.industries" => { aliases: [ "mandate", "mandate_industries", "brochure", ] },
   }.freeze
 
   def response
