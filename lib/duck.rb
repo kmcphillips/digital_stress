@@ -24,7 +24,7 @@ class Duck
     { class_name: TextCommand, command: :text, description: "Send a text message. Name a person then the message to text them." },
     { class_name: AlchemyCommand, command: :tonight, description: "We playing games tonight? Who's coming?" },
     { class_name: GamesCommand, command: :games, aliases: [:game], description: "What should we play?" },
-    { class_name: WikipediaCommand, command: :wikipedia, aliases: [:w, :wiki], description: "Search a topic on Wikipedia." },
+    { class_name: WikipediaCommand, command: :wikipedia, aliases: [:Wikipedia, :w, :wiki], description: "Search a topic on Wikipedia." },
   ].freeze
 
   attr_reader :bot
