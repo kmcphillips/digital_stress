@@ -41,7 +41,7 @@ class DeployCommand < BaseCommand
   def deploy(app)
     working_dir = "#{ base_working_dir }/#{ app }"
 
-    @event.respond(":rocket: Deploying #{ app }")
+    @event.respond(":rocket: Deploying **#{ app }**")
 
     begin
       Bundler.with_clean_env do
