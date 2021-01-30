@@ -2,17 +2,27 @@
 class DeployCommand < BaseCommand
   class DeployError < StandardError ; end
 
+  DEPLOY_APPS = {
+    "quigital" => {},
+    "quigital_infohub" => { aliases: [ "infohub", "quigital.infohub", ] },
+  }.freeze
+
   def response
     if params.count == 0
       "Quack! What should I deploy?"
     elsif params.count > 1
       "Quack! Just deploy one thing."
-    elsif params.first == "quigital"
-      deploy("quigital")
-    elsif params.first == "infohub" || params.first == "quigital_infohub"
-      deploy("quigital_infohub")
     else
-      "Quack! Don't know how to deploy that."
+      deploy_app_param = params.first.downcase
+      deploy_app_name, _config = DEPLOY_APPS.find { |name, conf|
+        deploy_app_param == name || (conf[:aliases] || []).include?(deploy_app_param)
+      }
+
+      if deploy_app_name
+        deploy(deploy_app_name)
+      else
+        "Quack! Don't know how to deploy that."
+      end
     end
   end
 
@@ -20,6 +30,7 @@ class DeployCommand < BaseCommand
     [
       "mandatemandate#general",
       "mandatemandate#quigital",
+      "mandatemandate#websites",
       "duck-bot-test#testing",
     ].freeze
   end
