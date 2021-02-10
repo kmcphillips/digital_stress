@@ -9,7 +9,9 @@ class SimpleResponder < BaseResponder
     react_match(text, /(noot|neet)/i, "👢")
     react_match(text, /(good|great|nice|best) duck/i, "❤️")
     respond_match(text, /several people are typing/i, "https://i.kym-cdn.com/photos/images/newsfeed/001/249/060/9c3.gif")
-    respond_match(text, /safe/, "https://i.imgur.com/1WReL2h.jpg")
+    respond_match(text, /safe/i, "https://i.imgur.com/1WReL2h.jpg")
+    respond_match(text, /brain injur/i, "https://media3.giphy.com/media/NhXhI7kHCwxRC/giphy.gif")
+    respond_match(text, /concussion/i, "https://media3.giphy.com/media/NhXhI7kHCwxRC/giphy.gif")
   end
 
   private
