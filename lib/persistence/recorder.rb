@@ -98,14 +98,12 @@ module Recorder
     false
   end
 
-  # TODO: Scope by :server
-  def counts
-    Global.db["SELECT DISTINCT user_id, COUNT(*) AS count, sum(length(message) - length(replace(message, ' ', ''))+1) AS words FROM messages GROUP BY user_id ORDER BY count DESC"].all
+  def counts(server:)
+    Global.db["SELECT DISTINCT user_id, COUNT(*) AS count, sum(length(message) - length(replace(message, ' ', ''))+1) AS words FROM messages WHERE server = ? GROUP BY user_id ORDER BY count DESC", server].all
   end
 
-  # TODO: Scope by :server
-  def last
-    Global.db["SELECT username, user_id, message, timestamp, server, channel FROM messages ORDER BY timestamp DESC LIMIT 1"].first
+  def last(server:)
+    Global.db["SELECT username, user_id, message, timestamp, server, channel FROM messages WHERE server = ? ORDER BY timestamp DESC LIMIT 1", server].first
   end
 
   def off_the_record?(server:, channel:)
