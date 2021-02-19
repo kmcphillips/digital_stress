@@ -42,5 +42,6 @@ class SimpleResponder < BaseResponder
     event.message.server.emoji.each do |id, emoji_obj|
       return emoji_obj if emoji_obj.name == str
     end
+    nil
   end
 end
