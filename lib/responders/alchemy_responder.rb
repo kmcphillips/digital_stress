@@ -11,11 +11,6 @@ class AlchemyResponder < BaseResponder
     repeat:  "🔁",
   }.freeze
 
-  CHANNELS = [
-    "mandatemandate#general",
-    "duck-bot-test#testing",
-  ].freeze
-
   RESPONSES = [
     "Everyone accounted for tonight.",
     "Full strength mandate",
@@ -47,11 +42,16 @@ class AlchemyResponder < BaseResponder
     end
   end
 
+  def channels
+    [
+      "mandatemandate#general",
+      "duck-bot-test#testing",
+    ].freeze
+  end
+
   def respond
     server = event.server&.name || ""
     channel = event.channel&.name || ""
-    return unless CHANNELS.include?("#{ server }##{ channel }")
-
     element = self.class.element_from_message(event.message.content)
 
     if element

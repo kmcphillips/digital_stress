@@ -26,4 +26,14 @@ class BaseResponder
   def channel
     event.channel&.name
   end
+
+  def channels
+    nil
+  end
+
+  def permitted?
+    return true unless channels
+    return true unless channels.any?
+    channels.include?("#{ server }##{ channel }")
+  end
 end

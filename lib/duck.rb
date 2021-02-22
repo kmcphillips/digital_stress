@@ -110,7 +110,8 @@ class Duck
       else # in a channel
         RESPONDERS.each do |responder|
           begin
-            responder.new(event, bot: bot).respond
+            r = responder.new(event, bot: bot)
+            r.respond if r.permitted?
           rescue => e
             Global.logger.error("#{ responder } returned error #{ e.message }")
             Global.logger.error(e)
