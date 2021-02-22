@@ -7,6 +7,7 @@ class Duck
     AlchemyResponder,
     GoogleImageSearchResponder,
     TemperatureResponder,
+    TopicResponder,
   ].freeze
   COMMANDS = [
     { class_name: PingCommand, command: :ping, description: "Hello, is it me you're looking for?" },
