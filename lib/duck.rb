@@ -37,7 +37,7 @@ class Duck
       prefix: COMMAND_PREFIXES,
       spaces_allowed: true,
       command_doesnt_exist_message: ->(event) {
-        "Quack? Why is this so hard #{ event.user.mention }?"
+        "Quack? What is up #{ event.user.mention }?"
       },
     )
     Global.bot = @bot
@@ -82,9 +82,9 @@ class Duck
       end
     end
 
-    COMMANDS.each do |command|
-      bot.command(command[:command], description: command[:description], aliases: command[:aliases] || []) do |event, *params|
-        command[:class_name].new(event: event, bot: bot, params: params).respond
+    COMMANDS.each do |command_config|
+      bot.command(command_config[:command], description: command_config[:description], aliases: command_config[:aliases] || []) do |event, *params|
+        command_config[:class_name].new(event: event, bot: bot, params: params).respond
       end
     end
 
@@ -109,14 +109,13 @@ class Duck
         Global.logger.info("pm #{event.author.name}: #{event.message.content}")
         event.respond(Quacker.quack)
       else # in a channel
-        RESPONDERS.each do |responder|
+        RESPONDERS.each do |responder_class|
           begin
-            r = responder.new(event, bot: bot)
-            r.respond if r.permitted?
+            responder_class.new(event, bot: bot).then { |r| r.respond if r.permitted? }
           rescue => e
-            Global.logger.error("#{ responder } returned error #{ e.message }")
+            Global.logger.error("#{ responder_class } returned error #{ e.message }")
             Global.logger.error(e)
-            message = ":bangbang: Quack error in #{ responder }: #{ e.message }"
+            message = ":bangbang: Quack error in #{ responder_class }: #{ e.message }"
             event.respond(message)
           end
         end
