@@ -78,6 +78,7 @@ require_relative "lib/commands/text_command"
 require_relative "lib/commands/alchemy_command"
 require_relative "lib/commands/wikipedia_command"
 
+require_relative "lib/responders/concerns/responder_matcher"
 require_relative "lib/responders/base_responder"
 require_relative "lib/responders/simple_responder"
 require_relative "lib/responders/t_minus_responder"
