@@ -12,18 +12,17 @@ class AlchemyResponder < BaseResponder
   }.freeze
 
   RESPONSES = [
-    # "Everyone accounted for tonight.",
-    # "Full strength mandate",
-    # "We are 4/4 for tonight",
-    # "nice",
-    # "Quack, full strength",
-    # "4 of 4",
-    # "Mandate: Full Strength Edition",
-    # "Quack! 🔥🌊🌬️🏔️",
-    # "Full strength. Keep it light, keep it tight.",
-    # "That's ✅✅✅✅ / 4",
-    # "Full strength.",
-    "Full strength. Fucking finally. :brain:"
+    "Everyone accounted for tonight.",
+    "Full strength mandate",
+    "We are 4/4 for tonight",
+    "nice",
+    "Quack, full strength",
+    "4 of 4",
+    "Mandate: Full Strength Edition",
+    "Quack! 🔥🌊🌬️🏔️",
+    "Full strength. Keep it light, keep it tight.",
+    "That's ✅✅✅✅ / 4",
+    "Full strength.",
   ].freeze
 
   @parties = {}
