@@ -68,7 +68,7 @@ class AlchemyResponder < BaseResponder
         end
 
         if party.full_strength?
-          # party.clear
+          party.clear
           event.respond(RESPONSES.sample)
         end
       else
