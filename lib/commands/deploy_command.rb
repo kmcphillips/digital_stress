@@ -12,6 +12,10 @@ class DeployCommand < BaseCommand
     "kmcphillips/mandate.industries" => {
       aliases: ["mandate", "mandate.industries", "mandate_industries", "brochure"]
     },
+    "kmcphillips/quigital_smarthome" => {
+      aliases: ["quigital_smarthome", "smarthome", "homecomfort", "home_comfort", "home_comfort_advisor"]
+    },
+
   }.freeze
 
   def response
