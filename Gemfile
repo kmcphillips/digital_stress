@@ -19,6 +19,7 @@ gem "systemcall"
 gem "twilio-ruby"
 gem "tabulo"
 gem "wikipedia-client"
+gem "clockwork", require: false
 
 gem "capistrano", "3.6.1"
 gem "capistrano-bundler"
