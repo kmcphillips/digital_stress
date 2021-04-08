@@ -36,12 +36,20 @@ class BaseCommand
     message
   end
 
+  def after(message)
+    nil
+  end
+
   def server
     event.server&.name
   end
 
   def channel
     event.channel&.name
+  end
+
+  def user
+    event.user
   end
 
   def channels

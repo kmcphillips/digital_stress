@@ -13,6 +13,7 @@ module Recorder
     "🚫",
     "❎",
   ].freeze
+  AGAIN_COMMAND_SECONDS = 1.hour
 
   def record(event)
     if record_event?(event)
@@ -132,6 +133,28 @@ module Recorder
     end
   end
 
+  def set_againable(command_class:, query:, query_user_id:, query_message_id:, response_user_id:, response_message_id:, server:, channel:)
+    data = {
+      command_class: command_class,
+      query: query,
+      query_user_id: query_user_id,
+      query_message_id: query_message_id,
+      response_user_id: response_user_id,
+      response_message_id: response_message_id,
+      server: server,
+      channel: channel,
+    }
+    key = againable_key(server: server, channel: channel, user_id: query_user_id)
+
+    kv_store.write(key, data.to_json, ttl: AGAIN_COMMAND_SECONDS.to_i)
+    AGAIN_COMMAND_SECONDS.to_i
+  end
+
+  def get_againable(server:, channel:, user_id:)
+    data = kv_store.read(againable_key(server: server, channel: channel, user_id: user_id))
+    JSON.parse(data).symbolize_keys rescue nil
+  end
+
   private
 
   def table
@@ -151,5 +174,10 @@ module Recorder
 
   def otr_key(server:, channel:)
     "off_the_record:#{ server }:#{ channel }"
+  end
+
+  def againable_key(server:, channel:, user_id:)
+    raise "invalid againable_key #{ server } / #{ channel } / #{ user_id }" if [server, channel, user_id].any?(&:blank?)
+    "againable:#{ server }:#{ channel }:#{ user_id }"
   end
 end

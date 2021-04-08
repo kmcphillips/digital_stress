@@ -26,6 +26,7 @@ class Duck
     { class_name: AlchemyCommand, command: :tonight, description: "We playing games tonight? Who's coming?" },
     { class_name: GamesCommand, command: :games, aliases: [:game], description: "What should we play?" },
     { class_name: WikipediaCommand, command: :wikipedia, aliases: [:Wikipedia, :w, :wiki], description: "Search a topic on Wikipedia." },
+    { class_name: AgainCommand, command: :again, aliases: [:retry, :try, :redo], description: "Redo the search for a gif or image." },
   ].freeze
 
   attr_reader :bot
@@ -84,7 +85,11 @@ class Duck
 
     COMMANDS.each do |command_config|
       bot.command(command_config[:command], description: command_config[:description], aliases: command_config[:aliases] || []) do |event, *params|
-        command_config[:class_name].new(event: event, bot: bot, params: params).respond
+        instance = command_config[:class_name].new(event: event, bot: bot, params: params)
+        response = instance.respond
+        message = event.respond(response) if response.present?
+        instance.after(message) if message
+        nil
       end
     end
 
