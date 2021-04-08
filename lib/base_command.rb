@@ -48,10 +48,6 @@ class BaseCommand
     event.channel&.name
   end
 
-  def user
-    event.user
-  end
-
   def channels
     nil
   end
