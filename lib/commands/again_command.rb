@@ -22,8 +22,8 @@ class AgainCommand < BaseCommand
     end
   end
 
-  def after(message)
-    if previous_data
+  def after(message:)
+    if previous_data && message
       Recorder.set_againable(
         command_class: previous_data[:command_class],
         query: previous_data[:query],

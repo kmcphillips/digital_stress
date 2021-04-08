@@ -36,7 +36,7 @@ class BaseCommand
     message
   end
 
-  def after(message)
+  def after(message:)
     nil
   end
 

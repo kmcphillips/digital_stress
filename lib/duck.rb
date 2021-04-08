@@ -88,7 +88,7 @@ class Duck
         instance = command_config[:class_name].new(event: event, bot: bot, params: params)
         response = instance.respond
         message = event.respond(response) if response.present?
-        instance.after(message) if message
+        instance.after(message: message)
         nil
       end
     end
