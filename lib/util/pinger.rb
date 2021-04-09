@@ -10,8 +10,8 @@ module Pinger
   end
 
   def find_channel(server:, channel:)
-    found_server = Global.bot.servers.values.find { |s| s.name == server }
+    found_server = Global.bot.servers.values.find { |s| s.name == server.to_s }
     return nil unless found_server
-    found_server.channels.find { |c| c.name == channel.gsub("#", "") }
+    found_server.channels.find { |c| c.name == channel.to_s.gsub("#", "") }
   end
 end
