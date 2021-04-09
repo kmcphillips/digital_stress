@@ -1,4 +1,13 @@
 GIT
+  remote: https://github.com/kmcphillips/config
+  revision: a085f0bc68f24165db9b7a38128315e4e6aae251
+  ref: a085f0bc68f24165db9b7a38128315e4e6aae251
+  specs:
+    config (3.0.0)
+      deep_merge (~> 1.2, >= 1.2.1)
+      dry-validation (~> 1.0, >= 1.0.0)
+
+GIT
   remote: https://github.com/shardlab/discordrb
   revision: 23467b493fbebaa5f117e93992332bd86be87f1e
   ref: 23467b493fbebaa5f117e93992332bd86be87f1e
@@ -38,9 +47,6 @@ GEM
       tzinfo
     coderay (1.1.3)
     concurrent-ruby (1.1.8)
-    config (3.0.0)
-      deep_merge (~> 1.2, >= 1.2.1)
-      dry-validation (~> 1.0, >= 1.0.0)
     deep_merge (1.2.1)
     discordrb-webhooks (3.3.0)
       rest-client (>= 2.1.0.rc1)
@@ -174,7 +180,7 @@ DEPENDENCIES
   capistrano-bundler
   capistrano-rbenv
   clockwork
-  config
+  config!
   discordrb!
   httparty
   nokogiri

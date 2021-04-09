@@ -25,7 +25,10 @@ end.new
 
 Global.root = Pathname.new(File.dirname(__FILE__))
 
-Config.setup { |config| config.const_name = 'IgnoreMeGlobalConfiguration' }
+Config.setup do |config|
+  config.const_name = 'IgnoreMeGlobalConfiguration'
+  config.evaluate_erb_in_yaml = false
+end
 Config.load_and_set_settings(Global.root.join("config/config.yml"))
 Global.config = IgnoreMeGlobalConfiguration # Can't tell rubyconfig to not export a `const_name` so we just ignore it and pass it through
 

@@ -6,12 +6,19 @@ class DailyAnnouncements < TaskBase
         server_config.tasks.daily_announcements.each do |task_config|
           if Date.today.day == task_config.day.to_i && Date.today.month == task_config.month.to_i
             channel = Pinger.find_channel(server: server_name, channel: task_config.channel)
-            channel.send_message(task_config.message)
+            channel.send_message(render(task_config.message))
           end
         end
       end
     end
 
     nil
+  end
+
+  private
+
+  def render(message)
+    template = ERB.new(message)
+    template.result(binding) # TODO: expose a more useful binding here rather than counting on globals
   end
 end
