@@ -11,18 +11,21 @@ namespace :bot do
   task :restart do
     on roles(:app) do
       execute "sudo service digital_stress restart"
+      execute "sudo service clockwork-digital_stress restart"
     end
   end
 
   task :stop do
     on roles(:app) do
       execute "sudo service digital_stress stop"
+      execute "sudo service clockwork-digital_stress stop"
     end
   end
 
   task :start do
     on roles(:app) do
       execute "sudo service digital_stress start"
+      execute "sudo service clockwork-digital_stress start"
     end
   end
 end
