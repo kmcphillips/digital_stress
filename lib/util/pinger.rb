@@ -8,4 +8,10 @@ module Pinger
     ping = PING_REGEX.match(input)
     ping[1].to_i if ping
   end
+
+  def find_channel(server:, channel:)
+    found_server = Global.bot.servers.values.find { |s| s.name == server }
+    return nil unless found_server
+    found_server.channels.find { |c| c.name == channel.gsub("#", "") }
+  end
 end

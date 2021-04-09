@@ -88,5 +88,8 @@ require_relative "lib/responders/google_image_search_responder"
 require_relative "lib/responders/temperature_responder"
 require_relative "lib/responders/topic_responder"
 
+require_relative "lib/tasks/task_base"
+require_relative "lib/tasks/daily_announcements"
+
 require_relative "lib/web_duck"
 require_relative "lib/duck"

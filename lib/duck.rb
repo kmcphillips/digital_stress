@@ -127,7 +127,7 @@ class Duck
       end
     end
 
-    Global.logger.info("Starting")
+    Global.logger.info("Starting Duck")
 
     bot.run(true)
 

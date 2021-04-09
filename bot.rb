@@ -4,7 +4,8 @@ require_relative "base"
 raise "discord token not set in config file" unless Global.config.discord.token.present?
 
 begin
-  Duck.new(token: Global.config.discord.token).run
+  duck = Duck.new(token: Global.config.discord.token)
+  duck.run
 rescue => e
   Global.logger.error("Exception in Duck#quack: #{e.message}")
   Global.logger.error(e)

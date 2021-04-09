@@ -3,22 +3,21 @@ require "clockwork"
 
 require_relative "base"
 
+Global.bot = Discordrb::Bot.new(token: Global.config.discord.token)
+Global.bot.run(true)
+
 module Clockwork
-  # configure do |config|
-  #   config[:logger] = Global.logger
-  # end
+  configure do |config|
+    config[:logger] = Global.logger
+  end
 
   error_handler do |error|
     Global.logger.error("Clockwork error: #{ error }")
     Global.logger.error(error)
   end
 
-  every(1.day, 'test.morning', at: '12:00', tz: 'UTC') do
-    Global.logger.info("Nice... called this from clock.rb in the morning")
-  end
-
-  every(1.minute, 'test.minutely') do
-    Global.logger.info("Tick... called this from clock.rb every minute")
+  every(1.day, 'daily_announcements', at: '12:00', tz: 'UTC') do
+    Global.logger.info("[clock] running DailyAnnouncements")
+    DailyAnnouncements.new.run
   end
 end
-
