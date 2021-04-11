@@ -33,3 +33,10 @@ servers:
         discriminator: 1234
         location: "Place, Province"
         phone_number: "+19998887777"
+    tasks:
+      daily_announcements:
+        -
+          day: 1
+          month: 2
+          channel: XXX
+          message: Oh, hello
