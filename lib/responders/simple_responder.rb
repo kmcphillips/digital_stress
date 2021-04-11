@@ -8,7 +8,7 @@ class SimpleResponder < BaseResponder
     react_match(/tight/i, "🤏")
     react_match(/(noot|neet)/i, "👢")
     react_match(/(good|great|nice|best) duck/i, "❤️")
-    react_match(/quigital/i, "quigital", channels: [ "mandatemandate#general", "duck-bot-test#testing" ])
+    # react_match(/quigital/i, "quigital", channels: [ "mandatemandate#general", "duck-bot-test#testing" ])
 
     respond_match(/hang(ing)?.?in.?there/i, "https://i.imgur.com/1FlykyH.jpg")
     respond_match(/\bheat\b/i, "don't be hwat...", chance: 0.08)
