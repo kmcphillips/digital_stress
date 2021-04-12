@@ -15,7 +15,6 @@ require "sinatra/base"
 require "systemcall"
 require "tempfile"
 require "twilio-ruby"
-require "tabulo"
 require "wikipedia"
 
 # Inject all dependencies as exported globals

@@ -141,13 +141,9 @@ GEM
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     systemcall (1.0.3)
-    tabulo (2.6.2)
-      tty-screen (= 0.8.1)
-      unicode-display_width (= 1.7.0)
     tilt (2.0.10)
     time_difference (0.5.0)
       activesupport
-    tty-screen (0.8.1)
     twilio-ruby (5.51.0)
       faraday (>= 0.9, < 2.0)
       jwt (>= 1.5, <= 2.5)
@@ -157,7 +153,6 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.7)
-    unicode-display_width (1.7.0)
     websocket (1.2.9)
     websocket-client-simple (0.3.0)
       event_emitter
@@ -184,7 +179,6 @@ DEPENDENCIES
   sinatra
   sqlite3
   systemcall
-  tabulo
   time_difference
   twilio-ruby
   wikipedia-client

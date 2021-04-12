@@ -17,7 +17,6 @@ gem "sinatra"
 gem "redis"
 gem "systemcall"
 gem "twilio-ruby"
-gem "tabulo"
 gem "wikipedia-client"
 gem "clockwork", require: false
 
