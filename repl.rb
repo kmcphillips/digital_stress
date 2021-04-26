@@ -6,7 +6,7 @@ def run_bot
     Global.bot = Discordrb::Bot.new(token: Global.config.discord.token)
     Global.bot.run(true)
   end
-  Global.bot
+  !!Global.bot
 end
 
 def test_channel
