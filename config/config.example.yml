@@ -37,6 +37,11 @@ servers:
       daily_announcements:
         -
           day: 1
-          month: 2
+          month: 2 # omit for every month
+          year: 2021 # omit for every year
+          channel: XXX
+          message: Oh, hello
+        -
+          weekday: Monday # instead of d/m/y trigger on a weekday or weekdays
           channel: XXX
           message: Oh, hello
