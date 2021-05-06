@@ -16,7 +16,7 @@ module Clockwork
     Global.logger.error(error)
   end
 
-  every(1.day, 'daily_announcements', at: '12:00', tz: 'UTC') do
+  every(1.day, 'daily_announcements', at: '14:00', tz: 'UTC') do
     Global.logger.info("[clock] running DailyAnnouncements")
     DailyAnnouncements.new.run
   end
