@@ -51,6 +51,7 @@ require_relative "lib/util/quacker"
 
 require_relative "lib/models/user"
 require_relative "lib/mandate_user_refinements"
+require_relative "lib/models/announcement"
 
 require_relative "lib/clients/steam"
 require_relative "lib/clients/azure"
