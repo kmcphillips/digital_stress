@@ -13,7 +13,7 @@ class DailyAnnouncements < TaskBase
   private
 
   def process_daily_announcement(announcement)
-    if announcement.triggers_on?(day: Date.today)
+    if announcement.triggers_on_day?(Date.today)
       channel = Pinger.find_channel(server: announcement.server, channel: announcement.channel)
       channel.send_message(announcement.rendered_message)
 

@@ -83,17 +83,15 @@ class Announcement
     }
   end
 
-  def triggers_on?(day: nil)
-    if day
-      if weekdays.any?
-        weekdays.include?(Date::DAYNAMES[day.wday].downcase)
-      else
-        return false if year.present? && year != day.year
-        return false if month.present? && month != day.month
-        day.day == day
-      end
-    else # TODO: elsif time: etc
-      false
+  def triggers_on_day?(trigger_date)
+    if weekdays.any?
+      weekdays.include?(Date::DAYNAMES[trigger_date.wday].downcase)
+    elsif date
+      date == trigger_date
+    else
+      return false if year.present? && year != trigger_date.year
+      return false if month.present? && month != trigger_date.month
+      trigger_date.day == day
     end
   end
 
