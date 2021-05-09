@@ -52,6 +52,37 @@ class Announcement
     end
   end
 
+  def date
+    Date.new(year, month, day) if day && month && year
+  end
+
+  def formatted_conditions
+    if weekdays.any?
+      weekdays.map(&:titleize).to_sentence
+    else
+      if year.blank?
+        if month.blank?
+          "the #{ day }#{ day.ordinal } of every month"
+        else
+          "#{ Date::MONTHNAMES[month] } #{ day }#{ day.ordinal } every year"
+        end
+      elsif date
+        date.inspect
+      else
+        ":question: #{ conditions_hash.inspect }"
+      end
+    end
+  end
+
+  def conditions_hash
+    {
+      day: day,
+      month: month,
+      year: year,
+      weekdays: weekdays,
+    }
+  end
+
   def triggers_on?(day: nil)
     if day
       if weekdays.any?
@@ -64,5 +95,10 @@ class Announcement
     else # TODO: elsif time: etc
       false
     end
+  end
+
+  def expired?
+    # TODO: this only looks at y/m/d full combinations
+    !!(date && date < Date.today)
   end
 end

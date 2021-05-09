@@ -27,6 +27,7 @@ class Duck
     { class_name: GamesCommand, command: :games, aliases: [:game], description: "What should we play?" },
     { class_name: WikipediaCommand, command: :wikipedia, aliases: [:Wikipedia, :w, :wiki], description: "Search a topic on Wikipedia." },
     { class_name: AgainCommand, command: :again, aliases: [:retry, :try, :redo], description: "Redo the search for a gif or image." },
+    { class_name: AnnouncementCommand, command: :announcement, aliases: [:announcements], description: "Manage the announcements." },
   ].freeze
 
   attr_reader :bot
