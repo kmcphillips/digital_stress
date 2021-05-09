@@ -58,11 +58,11 @@ class Announcement
 
   def formatted_conditions
     if weekdays.any?
-      "every #{ weekdays.map(&:titleize).to_sentence }"
+      "Every #{ weekdays.map(&:titleize).to_sentence }"
     else
       if year.blank?
         if month.blank?
-          "the #{ day }#{ day.ordinal } of every month"
+          "The #{ day }#{ day.ordinal } of every month"
         else
           "#{ Date::MONTHNAMES[month] } #{ day }#{ day.ordinal } every year"
         end
