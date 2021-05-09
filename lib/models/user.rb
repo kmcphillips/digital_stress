@@ -15,7 +15,7 @@ class User
     @phone_number = nil
 
     # Load extras from the config.yml Global.config object
-    @config = USERS[server][id]
+    @config = USERS.dig(server, id)
     @location = @config[:location] if @config
     @phone_number = @config[:phone_number] if @config
   end
