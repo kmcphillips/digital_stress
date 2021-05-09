@@ -52,6 +52,10 @@ class BaseCommand
     nil
   end
 
+  def pm?
+    event.channel.pm?
+  end
+
   def typing?
     true
   end

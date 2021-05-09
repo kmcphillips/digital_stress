@@ -9,7 +9,10 @@ class AnnouncementCommand < BaseSubcommand
   private
 
   def list
-    announcements = Announcement.find(server: server).reject(&:expired?)
+    server_name = server
+    server_name = params[1] if pm? && params[1].present?
+
+    announcements = Announcement.find(server: server_name).reject(&:expired?)
 
     if announcements.any?
       announcements.map { |a| format_announcement(a) }.join("\n")
