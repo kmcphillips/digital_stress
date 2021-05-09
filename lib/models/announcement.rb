@@ -58,7 +58,7 @@ class Announcement
 
   def formatted_conditions
     if weekdays.any?
-      weekdays.map(&:titleize).to_sentence
+      "every #{ weekdays.map(&:titleize).to_sentence }"
     else
       if year.blank?
         if month.blank?
