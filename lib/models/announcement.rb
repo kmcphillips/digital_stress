@@ -106,4 +106,10 @@ class Announcement
     template = ERB.new(message)
     template.result(binding) # TODO: expose a more useful binding here rather than counting on globals
   end
+
+  def channel_link
+    if c = Pinger.find_channel(server: server, channel: channel)
+      "<##{ c.id }>"
+    end
+  end
 end
