@@ -12,15 +12,10 @@ class DailyAnnouncements < TaskBase
 
   private
 
-  def render(message)
-    template = ERB.new(message)
-    template.result(binding) # TODO: expose a more useful binding here rather than counting on globals
-  end
-
   def process_daily_announcement(announcement)
     if announcement.triggers_on?(day: Date.today)
       channel = Pinger.find_channel(server: announcement.server, channel: announcement.channel)
-      channel.send_message(render(announcement.message))
+      channel.send_message(announcement.rendered_message)
 
       true
     end

@@ -101,4 +101,9 @@ class Announcement
     # TODO: this only looks at y/m/d full combinations
     !!(date && date < Date.today)
   end
+
+  def rendered_message
+    template = ERB.new(message)
+    template.result(binding) # TODO: expose a more useful binding here rather than counting on globals
+  end
 end
