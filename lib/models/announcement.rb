@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class Announcement
-  attr_reader :server, :channel, :message, :day, :month, :year, :weekdays, :source
+  attr_reader :server, :channel, :message, :day, :month, :year, :weekdays, :source, :secret
 
-  def initialize(server:, channel:, message:, day: nil, month: nil, year: nil, weekdays: nil, source:)
+  def initialize(server:, channel:, message:, day: nil, month: nil, year: nil, weekdays: nil, source:, secret: false)
     @server = server
     @channel = channel
     @message = message
@@ -11,6 +11,7 @@ class Announcement
     @year = year.presence&.to_i
     @weekdays = Array(weekdays).compact.map(&:downcase)
     @source = source.to_sym
+    @secret = !!secret
   end
 
   class << self
@@ -47,6 +48,7 @@ class Announcement
         month: config.month,
         year: config.year,
         weekdays: config.weekdays,
+        secret: config.secret,
         source: :config
       )
     end
