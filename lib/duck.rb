@@ -96,11 +96,13 @@ class Duck
     end
 
     bot.mention do |event|
-      Global.logger.info("mention #{event.author.name}: #{event.message.content}")
-      event.channel.start_typing
-      response = Learner.random_message(server: event.server&.name, prevent_recent: true) || Quacker.quack
-      sleep(0.6)
-      event.respond(response)
+      if event.message && !event.message.reply?
+        Global.logger.info("mention #{event.author.name}: #{event.message.content}")
+        event.channel.start_typing
+        response = Learner.random_message(server: event.server&.name, prevent_recent: true) || Quacker.quack
+        sleep(0.6)
+        event.respond(response)
+      end
     end
 
     bot.message do |event|
