@@ -14,6 +14,8 @@ class AbortCommand < BaseCommand
 
       redacted_message = ":negative_squared_cross_mark:"
       message.edit(redacted_message)
+
+      nil
     else
       "#{ Quacker.quack } :no_entry_sign: Nothing recent to abort."
     end
