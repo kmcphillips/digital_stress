@@ -81,6 +81,7 @@ require_relative "lib/commands/text_command"
 require_relative "lib/commands/alchemy_command"
 require_relative "lib/commands/wikipedia_command"
 require_relative "lib/commands/again_command"
+require_relative "lib/commands/abort_command"
 require_relative "lib/commands/announcement_command"
 
 require_relative "lib/responders/concerns/responder_matcher"
