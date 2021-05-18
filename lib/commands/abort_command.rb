@@ -20,4 +20,8 @@ class AbortCommand < BaseCommand
       "#{ Quacker.quack } :no_entry_sign: Nothing recent to abort."
     end
   end
+
+  def typing?
+    false
+  end
 end
