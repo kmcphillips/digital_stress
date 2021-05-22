@@ -41,8 +41,13 @@ module Recorder
   end
 
   def delete(event)
-    return nil unless event.message&.id
-    table.where(message_id: event.message.id).delete
+    id = if event.respond_to?(:message)
+      event.message&.id
+    else
+      event.id
+    end
+
+    table.where(message_id: id).delete if id
   end
 
   def delete_last(n)

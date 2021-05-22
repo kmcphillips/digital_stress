@@ -113,6 +113,10 @@ class Duck
       Recorder.edit(event)
     end
 
+    bot.message_delete do |event|
+      Recorder.delete(event)
+    end
+
     bot.message do |event|
       if event.channel.pm? && !COMMAND_PREFIXES.any?{ |c| event.message.content.starts_with?(c) }
         Global.logger.info("pm #{event.author.name}: #{event.message.content}")
