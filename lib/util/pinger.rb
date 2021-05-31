@@ -2,7 +2,7 @@
 module Pinger
   extend self
 
-  PING_REGEX = /\A<@\!([0-9]+)>/
+  PING_REGEX = /\A<@\!?([0-9]+)>/
 
   def extract_user_id(input)
     ping = PING_REGEX.match(input)
