@@ -22,6 +22,6 @@ class AnnouncementCommand < BaseSubcommand
   end
 
   def format_announcement(announcement)
-    "* `#{ announcement.formatted_conditions } in #{ announcement.channel }: #{ announcement.message }`"
+    "* **#{ announcement.formatted_conditions }** in **#{ announcement.channel }**: `#{ announcement.message }`"
   end
 end
