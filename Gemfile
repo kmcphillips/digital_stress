@@ -6,7 +6,7 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
 gem "activesupport"
 gem "pry"
-gem "discordrb", github: "shardlab/discordrb", ref: "23467b493fbebaa5f117e93992332bd86be87f1e"
+gem "discordrb", github: "shardlab/discordrb"
 gem "config", ">= 3.1.0"
 gem "sqlite3"
 gem "sequel"
