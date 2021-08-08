@@ -29,6 +29,7 @@ class Duck
     { class_name: AgainCommand, command: :again, aliases: [:retry, :try, :redo], description: "Redo the search for a gif or image." },
     { class_name: AbortCommand, command: :abort, description: "Give up redoing image search." },
     { class_name: AnnouncementCommand, command: :announcement, aliases: [:announcements], description: "Manage the announcements." },
+    { class_name: RollCommand, command: :roll, aliases: [:r], description: "Roll some dice." },
   ].freeze
 
   attr_reader :bot

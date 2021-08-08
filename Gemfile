@@ -18,6 +18,7 @@ gem "redis"
 gem "systemcall"
 gem "twilio-ruby"
 gem "wikipedia-client"
+gem "games_dice"
 gem "clockwork", require: false
 
 gem "capistrano", "3.6.1"

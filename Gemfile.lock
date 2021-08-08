@@ -87,6 +87,8 @@ GEM
       ruby2_keywords
     faraday-net_http (1.0.1)
     ffi (1.15.0)
+    games_dice (0.3.12)
+      parslet (>= 1.5.0)
     http-accept (1.7.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -115,6 +117,7 @@ GEM
       racc (~> 1.4)
     opus-ruby (1.0.1)
       ffi
+    parslet (2.0.0)
     pry (0.14.0)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -171,6 +174,7 @@ DEPENDENCIES
   clockwork
   config (>= 3.1.0)
   discordrb!
+  games_dice
   httparty
   nokogiri
   pry
@@ -184,4 +188,4 @@ DEPENDENCIES
   wikipedia-client
 
 BUNDLED WITH
-   2.2.15
+   2.2.18

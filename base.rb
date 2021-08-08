@@ -16,6 +16,7 @@ require "systemcall"
 require "tempfile"
 require "twilio-ruby"
 require "wikipedia"
+require "games_dice"
 
 # Inject all dependencies as exported globals
 Global = Class.new do
@@ -83,6 +84,7 @@ require_relative "lib/commands/wikipedia_command"
 require_relative "lib/commands/again_command"
 require_relative "lib/commands/abort_command"
 require_relative "lib/commands/announcement_command"
+require_relative "lib/commands/roll_command"
 
 require_relative "lib/responders/concerns/responder_matcher"
 require_relative "lib/responders/base_responder"
