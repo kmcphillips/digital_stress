@@ -12,7 +12,8 @@ class AnnouncementCommand < BaseSubcommand
     server_name = server
     server_name = params[1] if pm? && params[1].present?
 
-    announcements = Announcement.find(server: server_name).reject(&:expired?).reject(&:secret)
+    announcements = Announcement.find(server: server_name).reject(&:expired?)
+    announcements = announcements.reject(&:secret) unless pm?
 
     if announcements.any?
       announcements.map { |a| format_announcement(a) }.join("\n")
@@ -22,6 +23,6 @@ class AnnouncementCommand < BaseSubcommand
   end
 
   def format_announcement(announcement)
-    "* **#{ announcement.formatted_conditions }** in **#{ announcement.channel }**: `#{ announcement.message }`"
+    "* **#{ announcement.formatted_conditions }** in **#{ announcement.channel }**#{ announcement.secret ? " (secret)" : "" }: `#{ announcement.message }`"
   end
 end
