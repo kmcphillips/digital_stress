@@ -34,7 +34,8 @@ Global.config = IgnoreMeGlobalConfiguration # Can't tell rubyconfig to not expor
 
 logger_file = File.open(Global.root.join("bot.log"), File::WRONLY | File::APPEND | File::CREAT)
 logger_file.sync = true
-Global.logger = Logger.new(logger_file, level: Logger::INFO)
+Global.logger = Logger.new(logger_file, level: (Global.config.discord.debug_log ? Logger::DEBUG : Logger::INFO))
+Discordrb::LOGGER.streams << logger_file if Global.config.discord.debug_log
 
 db_file = Global.root.join("chat.sqlite3").to_s
 Global.db = Sequel.sqlite(db_file)

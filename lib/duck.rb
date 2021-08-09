@@ -43,6 +43,7 @@ class Duck
       command_doesnt_exist_message: ->(event) {
         "Quack? What is up #{ event.user.mention }?"
       },
+      log_mode: (Global.config.discord.debug_log ? :debug : :normal),
     )
     Global.bot = @bot
   end

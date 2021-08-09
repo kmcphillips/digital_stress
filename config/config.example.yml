@@ -1,5 +1,6 @@
 discord:
   token: XXXX
+  debug_log: false
 
 redis:
   url: redis://127.0.0.1:6379/0
