@@ -14,4 +14,10 @@ module Pinger
     return nil unless found_server
     found_server.channels.find { |c| c.name == channel.to_s.gsub("#", "") }
   end
+
+  def find_emoji(emoji, server:)
+    found_server = Global.bot.servers.values.find { |s| s.name == server.to_s }
+    return nil unless found_server
+    found_server.emoji.values.find { |e| e.name == emoji }
+  end
 end
