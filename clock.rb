@@ -21,4 +21,3 @@ module Clockwork
     DailyAnnouncements.new.run
   end
 end
-l
