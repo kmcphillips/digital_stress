@@ -5,7 +5,7 @@ module Steam
   USERAGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:70.0) Gecko/20100101 Firefox/70.0"
 
   def search_game_url(search)
-    url = "https://store.steampowered.com/search/?term=#{ URI.encode(search.strip) }"
+    url = "https://store.steampowered.com/search/?term=#{ URI.encode_www_form_component(search.strip) }"
     response = HTTParty.get(url, { headers: { "User-Agent" => USERAGENT } })
     begin
       document = Nokogiri::HTML(response.body)
