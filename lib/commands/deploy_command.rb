@@ -3,7 +3,7 @@ class DeployCommand < BaseCommand
   class DeployError < StandardError ; end
 
   DEPLOY_APPS = {
-    "kmcphillips/quigital" => {
+    "quigital/quigital" => {
       aliases: ["quigital"]
     },
     "quigital/infohub" => {
