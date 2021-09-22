@@ -19,6 +19,10 @@ class BaseResponder
     event.user.mention
   end
 
+  def user
+    event.user
+  end
+
   def server
     event.server&.name
   end
