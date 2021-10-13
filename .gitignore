@@ -65,3 +65,4 @@ nohup.out
 
 /data/absurdity_chats/*.txt
 /data/output/*.txt
+/*.jsonl

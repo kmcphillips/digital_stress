@@ -8,6 +8,7 @@ class Duck
     GoogleImageSearchResponder,
     TemperatureResponder,
     TopicResponder,
+    OpenaiClassificationsResponder,
   ].freeze
   COMMANDS = [
     { class_name: PingCommand, command: :ping, description: "Hello, is it me you're looking for?" },
@@ -30,6 +31,7 @@ class Duck
     { class_name: AbortCommand, command: :abort, description: "Give up redoing image search." },
     { class_name: AnnouncementCommand, command: :announcement, aliases: [:announcements], description: "Manage the announcements." },
     { class_name: RollCommand, command: :roll, aliases: [:r], description: "Roll some dice." },
+    { class_name: OpenaiCommand, command: :openai, aliases: [:ai], description: "Interact with OpenAI GPT-3." },
   ].freeze
 
   attr_reader :bot

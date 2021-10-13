@@ -17,10 +17,11 @@ require "tempfile"
 require "twilio-ruby"
 require "wikipedia"
 require "games_dice"
+require "ruby/openai"
 
 # Inject all dependencies as exported globals
 Global = Class.new do
-  attr_accessor :root, :config, :db, :logger, :kv, :bot
+  attr_accessor :root, :config, :db, :logger, :kv, :bot, :openai_client
 end.new
 
 Global.root = Pathname.new(File.dirname(__FILE__))
@@ -43,8 +44,11 @@ Global.db = Sequel.sqlite(db_file)
 require_relative "lib/persistence/key_value_store"
 Global.kv = KeyValueStore.new(Global.db.opts[:database]) # Global.config.redis.url
 
+Global.openai_client = OpenAI::Client.new(access_token: Global.config.openai.access_token)
+
 require_relative "lib/persistence/recorder"
 require_relative "lib/persistence/learner"
+require_relative "lib/persistence/openai_data"
 
 require_relative "lib/util/pinger"
 require_relative "lib/util/formatter"
@@ -86,6 +90,7 @@ require_relative "lib/commands/again_command"
 require_relative "lib/commands/abort_command"
 require_relative "lib/commands/announcement_command"
 require_relative "lib/commands/roll_command"
+require_relative "lib/commands/openai_command"
 
 require_relative "lib/responders/concerns/responder_matcher"
 require_relative "lib/responders/base_responder"
@@ -95,6 +100,7 @@ require_relative "lib/responders/alchemy_responder"
 require_relative "lib/responders/google_image_search_responder"
 require_relative "lib/responders/temperature_responder"
 require_relative "lib/responders/topic_responder"
+require_relative "lib/responders/openai_classifications_responder"
 
 require_relative "lib/tasks/task_base"
 require_relative "lib/tasks/daily_announcements"

@@ -43,6 +43,10 @@ module MandateUserRefinements
   def patrick?
     self == self.class.patrick
   end
+
+  def mandate_name
+    User::USERS.dig("mandatemandate", id, :name)
+  end
 end
 
 class User

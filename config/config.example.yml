@@ -24,6 +24,9 @@ twilio:
   account_sid: XXX
   auth_token: XXX
 
+openai:
+  access_token: "XXXX"
+
 servers:
   server-name:
     users:
