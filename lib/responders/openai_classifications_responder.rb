@@ -11,7 +11,7 @@ class OpenaiClassificationsResponder < BaseResponder
     response = Global.openai_client.classifications(parameters: {
       file: OpenaiData.classifications_file(server: server, channel: channel),
       query: text,
-      model: "ada"
+      model: "curie"
     })
 
     name = response["label"]
