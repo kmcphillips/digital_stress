@@ -6,7 +6,7 @@ class OpenaiClassificationsResponder < BaseResponder
 
   def respond
     return unless OpenaiData.classifying?(server: server, channel: channel)
-    return if text.downcase.starts_with?("duck ")
+    return if text.blank? || Recorder::MESSAGE_IGNORED_PREFIXES.any? { |prefix| text.starts_with?(prefix) }
 
     response = Global.openai_client.classifications(parameters: {
       file: OpenaiData.classifications_file(server: server, channel: channel),
