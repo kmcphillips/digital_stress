@@ -9,6 +9,7 @@ class ChatCommand < BaseCommand
 
   def response
     user = User.from_input(params.first, server: server)
+    raise "Cannot find user: #{ params.first }" if params.first.present && user.blank?
     message = consume_message(user: user)
 
     "> **#{ message[:username] }**: #{ message[:message] }"
