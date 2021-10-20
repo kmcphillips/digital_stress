@@ -32,6 +32,7 @@ class Duck
     { class_name: AnnouncementCommand, command: :announcement, aliases: [:announcements], description: "Manage the announcements." },
     { class_name: RollCommand, command: :roll, aliases: [:r], description: "Roll some dice." },
     { class_name: OpenaiCommand, command: :openai, aliases: [:ai], description: "Interact with OpenAI GPT-3." },
+    { class_name: ImagineCommand, command: :imagine, description: "Imagine something with GPT-3." },
   ].freeze
 
   attr_reader :bot

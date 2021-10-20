@@ -14,7 +14,7 @@ class OpenaiClassificationsResponder < BaseResponder
       model: "curie"
     })
 
-    Global.logger.info("[OpenaiClassificationsResponder] #{ response }")
+    # Global.logger.info("[OpenaiClassificationsResponder] #{ response }")
 
     name = response["label"]
     emoji = name_emoji(name)
