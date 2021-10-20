@@ -4,7 +4,7 @@ class ImagineCommand < BaseCommand
     if query.blank?
       "Quacking-imagine something"
     else
-      OpenaiData.completion(promp(query), max_tokens: rand(70..100))
+      OpenaiData.completion(prompt(query), max_tokens: rand(70..100))
     end
   end
 
