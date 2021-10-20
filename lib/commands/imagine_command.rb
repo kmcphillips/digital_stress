@@ -4,10 +4,7 @@ class ImagineCommand < BaseCommand
     if query.blank?
       "Quacking-imagine something"
     else
-      response = Global.openai_client.completions(engine: "davinci", parameters: { prompt: prompt(query), max_tokens: rand(50..75) })
-      result = response.parsed_response['choices'].map{ |c| c["text"] }
-      raise "Got a blank result: #{ response.parsed_response }" if result.blank?
-      result
+      OpenaiData.completion(promp(text), max_tokens: rand(70..100))
     end
   end
 

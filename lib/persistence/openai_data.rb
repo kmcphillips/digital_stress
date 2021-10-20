@@ -23,6 +23,13 @@ module OpenaiData
     f
   end
 
+  def completion(prompt, max_tokens: )
+    response = Global.openai_client.completions(engine: "davinci", parameters: { prompt: prompt, max_tokens: max_tokens })
+    result = response.parsed_response["choices"].map{ |c| c["text"] }
+    raise "Got a blank result: #{ response.parsed_response }" if result.blank?
+    result
+  end
+
   private
 
   def kv_store
