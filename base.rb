@@ -92,6 +92,7 @@ require_relative "lib/commands/announcement_command"
 require_relative "lib/commands/roll_command"
 require_relative "lib/commands/openai_command"
 require_relative "lib/commands/imagine_command"
+require_relative "lib/commands/dnd_command"
 
 require_relative "lib/responders/concerns/responder_matcher"
 require_relative "lib/responders/base_responder"
