@@ -9,11 +9,50 @@ module Dnd5eData
 
     @db = Sequel.sqlite(DB_FILE.to_s)
 
+    spells = @db[:spells].all.map { |s| Spell.new(s) }
+    @spell_matcher = FuzzyMatch.new(spells, read: :name)
+
     @loaded = true
+  end
+
+  def find_spell(search)
+    @spell_matcher.find(search)
   end
 
   def loader
     @loader ||= Dnd5eData::Loader.new(DB_FILE)
+  end
+
+  class Spell
+    attr_reader :name, :slug, :description, :casting_time, :source, :url, :components, :duration, :range, :spell_lists, :level, :school
+
+    def initialize(attributes)
+      @name = attributes[:name]
+      @slug = attributes[:slug]
+      @description = attributes[:description]
+      @casting_time = attributes[:casting_time]
+      @source = attributes[:source]
+      @url = attributes[:url]
+      @components = attributes[:components]
+      @duration = attributes[:duration]
+      @range = attributes[:range]
+      @spell_lists = attributes[:spell_lists]
+      @level = attributes[:level]
+      @school = attributes[:school]
+    end
+
+    def to_s
+      [
+        "**#{ name }**",
+        url,
+        "#{ level } (#{ school })",
+        "Casting time: #{ casting_time }",
+        "Components: #{ components }",
+        "Duration: #{ duration }",
+        "Range: #{ range }",
+        "\n#{ description.gsub("\n", "\n\n") }",
+      ].join("\n")
+    end
   end
 
   class Loader

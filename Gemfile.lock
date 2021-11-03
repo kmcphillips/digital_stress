@@ -103,6 +103,7 @@ GEM
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
     ffi (1.15.3)
+    fuzzy_match (2.1.0)
     games_dice (0.3.12)
       parslet (>= 1.5.0)
     http-accept (1.7.0)
@@ -195,6 +196,7 @@ DEPENDENCIES
   clockwork
   config (>= 3.1.0)
   discordrb!
+  fuzzy_match
   games_dice
   httparty
   nokogiri

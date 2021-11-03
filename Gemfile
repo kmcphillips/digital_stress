@@ -20,6 +20,7 @@ gem "twilio-ruby"
 gem "wikipedia-client"
 gem "games_dice"
 gem "ruby-openai"
+gem "fuzzy_match"
 gem "clockwork", require: false
 
 gem "capistrano", "3.6.1"

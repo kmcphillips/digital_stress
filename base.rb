@@ -19,6 +19,7 @@ require "twilio-ruby"
 require "wikipedia"
 require "games_dice"
 require "ruby/openai"
+require "fuzzy_match"
 
 # Inject all dependencies as exported globals
 Global = Class.new do
