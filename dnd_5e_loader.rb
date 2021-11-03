@@ -30,6 +30,7 @@ spell_urls.each do |spell_url|
   spell_doc = Nokogiri.HTML5(spell_html)
 
   lines = spell_doc.css("#page-content p").map{ |p| p.text }.join("\n").split("\n")
+  # TODO: need ul/li
 
   spell = {
     name: spell_url[:name],

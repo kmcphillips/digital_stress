@@ -41,16 +41,16 @@ module Dnd5eData
       @school = attributes[:school]
     end
 
-    def to_s
+    def to_discord_s
       [
         "**#{ name }**",
         url,
-        "#{ level } (#{ school })",
-        "Casting time: #{ casting_time }",
-        "Components: #{ components }",
-        "Duration: #{ duration }",
-        "Range: #{ range }",
-        "\n#{ description.gsub("\n", "\n\n") }",
+        "> #{ level } (#{ school })",
+        "> Casting time: _#{ casting_time }_",
+        "> Components: _#{ components }_",
+        "> Duration: _#{ duration }_",
+        "> Range: _#{ range }_",
+        "> \n> #{ description.gsub("\n", "\n> \n> ") }",
       ].join("\n")
     end
   end

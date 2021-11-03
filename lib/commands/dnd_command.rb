@@ -24,7 +24,7 @@ class DndCommand < BaseSubcommand
     result = Dnd5eData.find_spell(params.join(" "))
 
     if result
-      result.to_s
+      result.to_discord_s
     else
       "Quack! Nothing found??"
     end
