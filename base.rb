@@ -14,6 +14,7 @@ require "securerandom"
 require "sinatra/base"
 require "systemcall"
 require "tempfile"
+require "fileutils"
 require "twilio-ruby"
 require "wikipedia"
 require "games_dice"
@@ -49,6 +50,7 @@ Global.openai_client = OpenAI::Client.new(access_token: Global.config.openai.acc
 require_relative "lib/persistence/recorder"
 require_relative "lib/persistence/learner"
 require_relative "lib/persistence/openai_data"
+require_relative "lib/persistence/dnd_5e_data"
 
 require_relative "lib/util/pinger"
 require_relative "lib/util/formatter"
@@ -109,3 +111,5 @@ require_relative "lib/tasks/daily_announcements"
 
 require_relative "lib/web_duck"
 require_relative "lib/duck"
+
+Dnd5eData.load
