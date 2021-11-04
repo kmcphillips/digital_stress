@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Announcement
+  include Comparable
+
   attr_reader :server, :channel, :message, :day, :month, :year, :weekdays, :source, :secret
 
   def initialize(server:, channel:, message:, day: nil, month: nil, year: nil, weekdays: nil, source:, secret: false)
@@ -22,7 +24,7 @@ class Announcement
         results << from_config(config, server: server)
       end
 
-      results
+      results.sort
     end
 
     def all
@@ -36,7 +38,7 @@ class Announcement
         end
       end
 
-      results
+      results.sort
     end
 
     def from_config(config, server:)
@@ -56,6 +58,22 @@ class Announcement
 
   def date
     Date.new(year, month, day) if day && month && year
+  end
+
+  def <=>(other)
+    comparable_attributes <=> other.comparable_attributes
+  end
+
+  def comparable_attributes
+    [
+      server,
+      channel,
+      date || Date.new(1970,1,1),
+      year || "",
+      month || "",
+      day || "",
+      weekdays,
+    ]
   end
 
   def formatted_conditions
