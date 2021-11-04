@@ -52,6 +52,7 @@ require_relative "lib/persistence/recorder"
 require_relative "lib/persistence/learner"
 require_relative "lib/persistence/openai_data"
 require_relative "lib/persistence/dnd_5e_data"
+require_relative "lib/persistence/dnd_5e_parser"
 
 require_relative "lib/util/pinger"
 require_relative "lib/util/formatter"
