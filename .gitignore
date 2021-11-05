@@ -52,8 +52,10 @@ build-iPhoneSimulator/
 .DS_Store
 
 /bot.log
+/bot.spec.log
 /.env
 /chat.sqlite3
+/chat.spec.sqlite3
 *.sqlite3.backup
 *.sqlite3.bak
 *.csv

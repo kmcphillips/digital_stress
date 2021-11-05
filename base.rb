@@ -21,35 +21,29 @@ require "games_dice"
 require "ruby/openai"
 require "fuzzy_match"
 
-# Inject all dependencies as exported globals
-Global = Class.new do
-  attr_accessor :root, :config, :db, :logger, :kv, :bot, :openai_client
-end.new
+require_relative "lib/global"
 
-Global.root = Pathname.new(File.dirname(__FILE__))
-
-environment = {
-  config: Global.root.join("config/config.yml"),
-  log: Global.root.join("bot.log"),
-  db_file: Global.root.join("chat.sqlite3"),
-}.freeze
+Global.environment[:config] ||= Global.root.join("config/config.yml")
+Global.environment[:log] ||=  Global.root.join("bot.log")
+Global.environment[:db_file] ||= Global.root.join("chat.sqlite3")
+Global.environment[:kv] ||= Global.root.join("chat.sqlite3")
 
 Config.setup do |config|
   config.const_name = 'IgnoreMeGlobalConfiguration'
   config.evaluate_erb_in_yaml = false
 end
-Config.load_and_set_settings(environment[:config])
+Config.load_and_set_settings(Global.environment[:config])
 Global.config = IgnoreMeGlobalConfiguration # Can't tell rubyconfig to not export a `const_name` so we just ignore it and pass it through
 
-logger_file = File.open(environment[:log], File::WRONLY | File::APPEND | File::CREAT)
+logger_file = File.open(Global.environment[:log], File::WRONLY | File::APPEND | File::CREAT)
 logger_file.sync = true
 Global.logger = Logger.new(logger_file, level: (Global.config.discord.debug_log ? Logger::DEBUG : Logger::INFO))
 Discordrb::LOGGER.streams << logger_file if Global.config.discord.debug_log
 
-Global.db = Sequel.sqlite(environment[:db_file].to_s)
+Global.db = Sequel.sqlite(Global.environment[:db_file].to_s)
 
 require_relative "lib/persistence/key_value_store"
-Global.kv = KeyValueStore.new(Global.db.opts[:database]) # Global.config.redis.url
+Global.kv = KeyValueStore.new(Global.environment[:kv].to_s) # Global.config.redis.url
 
 Global.openai_client = OpenAI::Client.new(access_token: Global.config.openai.access_token)
 

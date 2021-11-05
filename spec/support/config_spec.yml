@@ -1,0 +1,29 @@
+discord:
+  token: xxxxx
+  debug_log: true
+
+web_auth:
+  username: username
+  password: password
+
+azure:
+  key: xxxxx
+
+giphy:
+  key: xxxxx
+
+wolfram_alpha:
+  appid: xxxxx
+
+twilio:
+  outgoing_phone_number: "+15554443333"
+  account_sid: ACxxxx
+  auth_token: xxxxx
+
+openai:
+  access_token: xxxxx
+
+deploy_command:
+  base_working_dir: null
+
+servers: {}

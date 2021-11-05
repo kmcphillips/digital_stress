@@ -65,7 +65,7 @@ RSpec.configure do |config|
 
   # This setting enables warnings. It's recommended, but in some cases may
   # be too noisy due to issues in dependencies.
-  config.warnings = true
+  # config.warnings = true
 
   # Many RSpec users commonly either run the entire suite or an individual
   # file, and it's useful to allow more verbose output when running an
@@ -94,3 +94,12 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   # Kernel.srand config.seed
 end
+
+require_relative "../lib/global"
+
+Global.environment[:config] ||= Global.root.join("spec/support/config_spec.yml")
+Global.environment[:log] ||=  Global.root.join("bot.spec.log")
+Global.environment[:db_file] ||= Global.root.join("chat.spec.sqlite3")
+Global.environment[:kv] ||= Global.root.join("chat.spec.sqlite3")
+
+require_relative "../base"
