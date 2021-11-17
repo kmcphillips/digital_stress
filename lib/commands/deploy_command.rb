@@ -76,7 +76,7 @@ class DeployCommand < BaseCommand
     rescue DeployError => e
       return e.message
     end
-``
+
     ":tada: Quack! Deploy complete."
   end
 
