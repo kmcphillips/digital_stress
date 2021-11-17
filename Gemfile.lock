@@ -133,6 +133,7 @@ GEM
     nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
+    open3 (0.1.1)
     opus-ruby (1.0.1)
       ffi
     parslet (2.0.0)
@@ -214,6 +215,7 @@ DEPENDENCIES
   games_dice
   httparty
   nokogiri
+  open3
   pry
   redis
   rspec
@@ -227,4 +229,4 @@ DEPENDENCIES
   wikipedia-client
 
 BUNDLED WITH
-   2.2.25
+   2.2.30

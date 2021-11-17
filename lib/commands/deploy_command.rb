@@ -55,37 +55,40 @@ class DeployCommand < BaseCommand
     begin
       Bundler.with_clean_env do
         run_command("git pull", working_dir: working_dir)
-        run_command("bundle install", working_dir: working_dir)
+        run_command("bundle install", working_dir: working_dir, on_error: ->(event, command, stdout, stderr, status) {
+          msg = [stdout, stderr].reject(&:blank?).join("\n")
+          event.respond("```\n#{ msg }\n```") if msg.present?
+        })
         if File.exists?("#{ working_dir }/spec")
           if !File.exists?("#{ working_dir }/config/credentials/test.key")
             `ln -s #{ base_working_dir }/shared/#{ app }/test.key #{ working_dir }/config/credentials/test.key`
           end
-          run_command("RSPEC_SUPPRESS_PENDING=true bundle exec rspec", working_dir: working_dir, description: "Running test suite", on_error: ->(event, command, output) {
-            msg = (output.split("Failures:\n").last || "").truncate(1980, omission: "")
+          run_command("RSPEC_SUPPRESS_PENDING=true bundle exec rspec", working_dir: working_dir, description: "Running test suite", on_error: ->(event, command, stdout, stderr, status) {
+            msg = (stdout.split("Failures:\n").last || "").truncate(1980, omission: "")
             event.respond("```\n#{ msg }\n```") if msg.present?
           })
         end
-        run_command("bundle exec cap production deploy", working_dir: working_dir, on_error: ->(event, command, output) {
-            msg = (output || "").reverse.truncate(1200, omission: "").reverse
+        run_command("bundle exec cap production deploy", working_dir: working_dir, on_error: ->(event, command, stdout, stderr, status) {
+            msg = (stdout || "").reverse.truncate(1200, omission: "").reverse
             event.respond("```\n#{ msg }\n```") if msg.present?
           })
       end
     rescue DeployError => e
       return e.message
     end
-
+``
     ":tada: Quack! Deploy complete."
   end
 
   def run_command(command, working_dir:, description: nil, on_error: nil)
     description = description.presence || "`#{ command }`"
     message = @event.respond(description)
-    output = `cd #{ working_dir } && #{ command }`
+    stdout, stderr, status = Open3.capture3("cd #{ working_dir } && #{ command }")
     if $?.success?
       message.react("✅")
     else
-      Global.logger.error(output)
-      on_error.call(@event, command, output) if on_error
+      Global.logger.error("Failed command with status #{ status }\nSTDOUT: #{ stdout }\nSTDERR: #{ stderr }")
+      on_error.call(@event, command, stdout, stderr, status) if on_error
       raise DeployError, ":warning: Quack! Error with #{ description }!"
     end
   end
