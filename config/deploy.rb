@@ -1,5 +1,5 @@
 # config valid for current version and patch releases of Capistrano
-lock '3.6.1'
+lock '3.16.0'
 
 set :application, 'Duck'
 set :repo_url, 'git@github.com:kmcphillips/digital_stress.git'

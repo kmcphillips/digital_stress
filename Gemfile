@@ -25,7 +25,7 @@ gem "fuzzy_match"
 gem "open3"
 gem "clockwork", require: false
 
-gem "capistrano", "3.6.1"
+gem "capistrano", "3.16.0"
 gem "capistrano-bundler"
 gem "capistrano-rbenv"
 
