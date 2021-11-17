@@ -29,7 +29,7 @@ class User
     def from_id(user_id, server:)
       return nil unless user_id.present?
       return nil unless server.present? && USERS.keys.include?(server.to_s)
-      from_config(USERS[server.to_s][user_id.to_i], server: server)
+      from_config(config: USERS[server.to_s][user_id.to_i], server: server)
     end
 
     def from_fuzzy_match(string, server:)
@@ -39,7 +39,7 @@ class User
       cfg = USERS[server.to_s].values.find do |value|
         value[:name].downcase == fuzzy_match || value[:username].downcase == fuzzy_match
       end
-      from_config(cfg, server: server)
+      from_config(config: cfg, server: server)
     end
 
     def from_input(string, server:)
@@ -47,13 +47,13 @@ class User
       User.from_fuzzy_match(string, server: server) || User.from_id(string, server: server) || User.from_id(Pinger.extract_user_id(string), server: server)
     end
 
-    def from_config(config, server:)
+    def from_config(config:, server:)
       return nil unless config
-      self.new(config.slice(:username, :id, :discriminator).merge(server: server))
+      self.new(**config.slice(:username, :id, :discriminator).merge(server: server))
     end
 
     def all(server:)
-      (USERS[server.to_s] || {}).values.map { |cfg| from_config(cfg, server: server) }
+      (USERS[server.to_s] || {}).values.map { |cfg| from_config(config: cfg, server: server) }
     end
   end
 

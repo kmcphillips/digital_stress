@@ -24,7 +24,7 @@ module MandateUserRefinements
     private
 
     def mandate_user(name)
-      from_config(User::USERS["mandatemandate"].values.find {|cfg| cfg[:name] == name }, server: "mandatemandate")
+      from_config(config: User::USERS["mandatemandate"].values.find {|cfg| cfg[:name] == name }, server: "mandatemandate")
     end
   end
 

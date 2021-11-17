@@ -9,7 +9,7 @@ class StatusCommand < BaseCommand
     hostname = `hostname -I`.split(" ").first
 
     lines = [
-      ":duck: on `#{ hostname }` `(#{ ip_address })`",
+      ":duck: on `#{ hostname }` `(#{ ip_address })` on `ruby #{ RUBY_VERSION}`",
     ]
 
     if server && last_learned = Learner.last(server: server)

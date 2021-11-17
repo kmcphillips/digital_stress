@@ -5,7 +5,7 @@ set :application, 'Duck'
 set :repo_url, 'git@github.com:kmcphillips/digital_stress.git'
 
 set :user, "deploy"
-set :rbenv_ruby, "2.6.0"
+set :rbenv_ruby, "3.0.2"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
