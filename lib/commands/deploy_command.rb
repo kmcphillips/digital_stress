@@ -84,7 +84,7 @@ class DeployCommand < BaseCommand
     description = description.presence || "`#{ command }`"
     message = @event.respond(description)
     stdout, stderr, status = Open3.capture3("cd #{ working_dir } && #{ command }")
-    if $?.success?
+    if status.success?
       message.react("✅")
     else
       Global.logger.error("Failed command with status #{ status }\nSTDOUT: #{ stdout }\nSTDERR: #{ stderr }")
