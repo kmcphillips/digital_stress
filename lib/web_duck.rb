@@ -18,9 +18,12 @@ class WebDuck < Sinatra::Application
 
     Global.logger.warn("No channels found for #{ server }##{ channel_name }") if channels.empty?
 
-    channels.each { |channel| channel.send_message(message) }
-
-    "Quack, ok."
+    if !Flags.active?("silence_notifications", server: server)
+      channels.each { |channel| channel.send_message(message) }
+      "Quack, ok."
+    else
+      "Quack, silenced."
+    end
   end
 
   post '/train_accident/:server/:channel/:username' do
