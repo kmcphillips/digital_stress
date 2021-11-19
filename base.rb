@@ -50,6 +50,7 @@ Global.openai_client = OpenAI::Client.new(access_token: Global.config.openai.acc
 
 require_relative "lib/persistence/recorder"
 require_relative "lib/persistence/learner"
+require_relative "lib/persistence/flags"
 require_relative "lib/persistence/openai_data"
 require_relative "lib/persistence/dnd_5e_data"
 require_relative "lib/persistence/dnd_5e_parser"
