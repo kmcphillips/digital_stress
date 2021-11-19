@@ -51,15 +51,6 @@ class WebDuck < Sinatra::Application
 
     "Quack, train."
   end
-
-  post '/ifttt/vaccine' do
-    raw_body = request.body.rewind
-    message = "/ifttt/vaccine: params=#{ params } body=#{ raw_body }"
-    Global.logger.info(message)
-    Global.bot.user(User.kevin.id).pm(message)
-
-    "OK"
-  end
 end
 
 # I wonder where this could go that would be better?
