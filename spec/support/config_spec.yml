@@ -26,4 +26,7 @@ openai:
 deploy_command:
   base_working_dir: null
 
+duck:
+  api_key: xxxxxxxxxxxxxxxxxx
+
 servers: {}

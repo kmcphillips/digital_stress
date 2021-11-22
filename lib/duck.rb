@@ -35,6 +35,7 @@ class Duck
     { class_name: ImagineCommand, command: :imagine, description: "Imagine something with GPT-3." },
     { class_name: DndCommand, command: :dnd, description: "DND 5e things." },
     { class_name: NotificationsCommand, command: :notifications, aliases: [:notification, :notify], description: "Silence notifications." },
+    { class_name: QuigitalCommand, command: :quigital, description: "Engage with Quigital!" },
   ].freeze
 
   attr_reader :bot

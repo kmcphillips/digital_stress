@@ -27,6 +27,9 @@ twilio:
 openai:
   access_token: "XXXX"
 
+duck:
+  api_key: xxxxxxxxxxxxxxxxxxx
+
 servers:
   server-name:
     users:
