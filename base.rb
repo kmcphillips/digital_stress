@@ -51,7 +51,6 @@ Global.openai_client = OpenAI::Client.new(access_token: Global.config.openai.acc
 require_relative "lib/persistence/recorder"
 require_relative "lib/persistence/learner"
 require_relative "lib/persistence/flags"
-require_relative "lib/persistence/openai_data"
 require_relative "lib/persistence/dnd_5e_data"
 require_relative "lib/persistence/dnd_5e_parser"
 
@@ -70,6 +69,7 @@ require_relative "lib/clients/gif"
 require_relative "lib/clients/wolfram_alpha"
 require_relative "lib/clients/texter"
 require_relative "lib/clients/wikipedia_client"
+require_relative "lib/clients/openai_client"
 
 require_relative "lib/base_command"
 require_relative "lib/base_subcommand"
@@ -109,7 +109,6 @@ require_relative "lib/responders/alchemy_responder"
 require_relative "lib/responders/google_image_search_responder"
 require_relative "lib/responders/temperature_responder"
 require_relative "lib/responders/topic_responder"
-require_relative "lib/responders/openai_classifications_responder"
 
 require_relative "lib/tasks/task_base"
 require_relative "lib/tasks/daily_announcements"

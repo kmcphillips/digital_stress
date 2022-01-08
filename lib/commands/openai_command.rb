@@ -2,6 +2,7 @@
 class OpenaiCommand < BaseSubcommand
   CHANNELS = [
     "mandatemandate#general",
+    "mandatemandate#quigital",
     "duck-bot-test#testing",
   ].freeze
 
@@ -11,31 +12,31 @@ class OpenaiCommand < BaseSubcommand
 
   def subcommands
     {
-      classification: "Toggle classifying messages.",
-      product: "Generate a smarthome product."
+      imagine: "Tell it to imagine something",
+      instruct: "Instruct it to return something",
     }.freeze
   end
 
   private
 
-  def classification
-    action = (params[1] || "").downcase
-    if action == "on"
-      OpenaiData.classifying_on(server: server, channel: channel)
-      "🤖 Classification for this channel is now **on**."
-    elsif action == "off"
-      OpenaiData.classifying_off(server: server, channel: channel)
-      "🤖 Classification for this channel is now **off**."
-    else
-      "🤖 Must enter either **on** or **off**. Currently is **#{ OpenaiData.classifying?(server: server, channel: channel) ? 'on' : 'off' }**."
-    end
+  def imagine
+    ImagineCommand.new(event: event, bot: bot, params: params.dup.drop(1)).response
   end
 
-  def product
-    prompt = "This is a brainstorming session to create new smarthome technology products. Our company wants our new products to have a catchy title, that references the functionality of the product. Sometimes the product name includes a completely made-up word. I'll describe what the product does, and you'll give it a name.
+  def instruct
+    if query.blank?
+      "Quack! Instruct something."
+    else
+      openai_params = {
+        engine: "davinci-instruct-beta-v3",
+        max_tokens: 300,
+        temperature: 0.8,
+        top_p: 1.0,
+        frequency_penalty: 0.4,
+        presence_penalty: 0.4,
+      }
 
-    Description: #{ params[1..-1].join(" ") }
-    Name: "
-    OpenaiData.completion(prompt, max_tokens: rand(100..160))
+      OpenaiClient.completion(query.strip, openai_params)
+    end
   end
 end

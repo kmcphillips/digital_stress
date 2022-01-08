@@ -4,16 +4,24 @@ class ImagineCommand < BaseCommand
     if query.blank?
       "Quacking-imagine something"
     else
-      OpenaiData.completion(prompt(query), max_tokens: rand(70..100))
+      OpenaiClient.completion(prompt(query), openai_params)
     end
   end
 
   private
 
   def prompt(text)
-    "This is an exercise in creativity. I'll give you an example, and you'll tell me a creative short story based on that example.
+    "In a couple sentences, describe what #{ text.strip.gsub(/[.!?:;]\Z/, "") } would be like."
+  end
 
-    Example: #{ text }
-    Story: "
+  def openai_params
+    {
+      engine: "davinci-instruct-beta-v3",
+      max_tokens: rand(120..256),
+      temperature: 0.8,
+      top_p: 1.0,
+      frequency_penalty: 0.4,
+      presence_penalty: 0.4,
+    }
   end
 end
