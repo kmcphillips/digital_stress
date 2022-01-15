@@ -20,7 +20,7 @@ class ImagineCommand < BaseCommand
       max_tokens: rand(120..256),
       temperature: 0.8,
       top_p: 1.0,
-      frequency_penalty: 0.4,
+      frequency_penalty: 1.8,
       presence_penalty: 0.4,
     }
   end
