@@ -33,6 +33,7 @@ class Duck
     { class_name: OpenaiCommand, command: :openai, aliases: [:ai], description: "Interact with OpenAI GPT-3." },
     { class_name: ImagineCommand, command: :imagine, description: "Imagine something with GPT-3." },
     { class_name: HaikuCommand, command: :haiku, description: "Compose a haiku GPT-3." },
+    { class_name: WhatCommand, command: :what, description: "do you think?" },
     { class_name: DndCommand, command: :dnd, description: "DND 5e things." },
     { class_name: NotificationsCommand, command: :notifications, aliases: [:notification, :notify], description: "Silence notifications." },
     { class_name: QuigitalCommand, command: :quigital, description: "Engage with Quigital!" },

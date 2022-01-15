@@ -112,6 +112,14 @@ module Recorder
     Global.db["SELECT username, user_id, message, timestamp, server, channel FROM messages WHERE server = ? ORDER BY timestamp DESC LIMIT 1", server].first
   end
 
+  def recent(server:, channel:, limit: 6, time_offset: 10.minutes)
+    table
+      .where(server: server, channel: channel)
+      .where{ timestamp > (Time.now - time_offset).to_i }
+      .order(Sequel.desc(:timestamp))
+      .limit(limit)
+  end
+
   def off_the_record?(server:, channel:)
     !!kv_store.read(otr_key(server: server, channel: channel))
   end
