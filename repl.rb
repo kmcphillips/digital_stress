@@ -1,10 +1,5 @@
-#!/usr/bin/env ruby
-# -*- mode: ruby -*-
-
-ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../Gemfile', __dir__)
-require "bundler/setup"
-
-require_relative "../base"
+# frozen_string_literal: true
+require_relative "base"
 
 def run_bot
   if !Global.bot

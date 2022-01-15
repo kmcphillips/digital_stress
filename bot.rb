@@ -1,10 +1,5 @@
-#!/usr/bin/env ruby
-# -*- mode: ruby -*-
-
-ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../Gemfile', __dir__)
-require "bundler/setup"
-
-require_relative "../base"
+# frozen_string_literal: true
+require_relative "base"
 
 raise "discord token not set in config file" unless Global.config.discord.token.present?
 

@@ -9,12 +9,12 @@ cp config/config.example.yml config/config.yml
 Then to run:
 
 ```bash
-bin/bot
+bundle exec bot.rb
 ```
 
 Work with:
 ```bash
-bin/repl
+bundle exec repl.rb
 ```
 
 Install:
