@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require "pry"
 require "active_support/all"
 require "config"
 require "discordrb"

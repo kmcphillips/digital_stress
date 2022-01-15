@@ -18,4 +18,4 @@ end
 # To connect to bot: run_bot
 # For the test channel: test_channel
 
-binding.pry
+binding.irb
