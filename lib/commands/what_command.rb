@@ -24,7 +24,7 @@ class WhatCommand < BaseCommand
   end
 
   def prompt(recent)
-    "In a couple sentences, give your opinion on the following conversation:\n#{ recent.strip }"
+    "In a couple sentences, give a strong and funny opinion on the following conversation:\n#{ recent.strip }"
   end
 
   def openai_params
