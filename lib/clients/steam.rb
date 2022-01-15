@@ -25,7 +25,7 @@ module Steam
     if document.css("a.search_result_row").any?
       document.css("a.search_result_row").first.attribute("href").value.gsub(/\/\?.+/, "")
     else
-      nil
+      ":grey_question: Quack? Nothing found. Does that game exist?"
     end
   end
 end

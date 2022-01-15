@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 class Dnd5eParser
-  ROOT_URL = "http://dnd5e.wikidot.com".freeze
-
-  def initialize
-  end
+  ROOT_URL = "http://dnd5e.wikidot.com"
 
   def fetch_urls_from_index
     spell_urls = []
@@ -90,5 +87,3 @@ class Dnd5eParser
     spell
   end
 end
-
-# spell = Dnd5eParser.new.fetch_spell_from_url({:url=>"http://dnd5e.wikidot.com/spell:thaumaturgy", :name=>"Thaumaturgy", :slug=>"thaumaturgy"})
