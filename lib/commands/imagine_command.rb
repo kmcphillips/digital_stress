@@ -11,7 +11,7 @@ class ImagineCommand < BaseCommand
   private
 
   def prompt(text)
-    "In a couple sentences, describe what #{ text.strip.gsub(/[.!?:;]\Z/, "") } would be like."
+    "In a couple sentences, describe #{ tone } what #{ text.strip.gsub(/[.!?:;]\Z/, "") } would be like."
   end
 
   def openai_params
@@ -23,5 +23,17 @@ class ImagineCommand < BaseCommand
       frequency_penalty: 1.8,
       presence_penalty: 0.4,
     }
+  end
+
+  def tone
+    [
+      "in a sarcastic tone",
+      "in an exaggerated tone",
+      "in a funny and sarcastic way",
+      "using big words",
+      "in an excited way",
+      "enthusiastically",
+      "critically",
+    ].sample
   end
 end
