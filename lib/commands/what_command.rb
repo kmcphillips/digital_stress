@@ -4,8 +4,10 @@ class WhatCommand < BaseCommand
     if query.present? && query.match(/think/) # what do you think?
       recent = recent_conversation
 
-      if recent.blank?
-        "What are we talking about?"
+      if !Recorder.record_channel?(server: server, channel: channel)
+        "Quack, sorry. I'm not following what's happening in this channel."
+      elsif recent.blank?
+        "Quack? What are we talking about? Doesn't look like much."
       else
         OpenaiClient.completion(prompt(recent), openai_params)
       end
