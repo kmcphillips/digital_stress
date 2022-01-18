@@ -17,7 +17,7 @@ class WhatCommand < BaseCommand
   private
 
   def recent_conversation
-    Recorder.recent(server: server, channel: channel)
+    Recorder.recent(server: server, channel: channel, time_offset: 2.hours)
       .to_a.reverse
       .map { |r| "#{ r[:username] }: #{ r[:message] }" }
       .join("\n")
