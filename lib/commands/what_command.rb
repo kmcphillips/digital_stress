@@ -2,14 +2,12 @@
 class WhatCommand < BaseCommand
   def response
     if query.present? && query.match(/think/) # what do you think?
-      recent = recent_conversation
-
       if !Recorder.record_channel?(server: server, channel: channel)
         "Quack, sorry. I'm not following what's happening in this channel."
-      elsif recent.blank?
+      elsif recent_conversation.blank?
         "Quack? What are we talking about? Doesn't look like much."
       else
-        OpenaiClient.completion(prompt(recent), openai_params)
+        OpenaiClient.completion(prompt, openai_params)
       end
     else
       "What?"
@@ -25,8 +23,22 @@ class WhatCommand < BaseCommand
       .join("\n")
   end
 
-  def prompt(recent)
-    "In a couple sentences, give a strong and funny opinion on the following conversation:\n#{ recent.strip }"
+  def prompt
+    "In a couple sentences, give #{ tone } opinion on the following conversation:\n#{ recent_conversation.strip }"
+  end
+
+  def tone
+    [
+      "a strong and funny",
+      "an extremely sarcastic",
+      "a funny and strongly worded",
+      "a very negative",
+      "a very enthusiastic and happy",
+      "a highly critical",
+      "a sarcastic and dissatisfied",
+      "an angry",
+      "a sarcastic and excited",
+    ].sample
   end
 
   def openai_params
