@@ -27,6 +27,8 @@ gem "clockwork", require: false
 gem "capistrano", "3.16.0"
 gem "capistrano-bundler"
 gem "capistrano-rbenv"
+gem "ed25519"
+gem "bcrypt_pbkdf"
 
 group :development, :test do
   gem "rspec"
