@@ -73,6 +73,7 @@ require_relative "lib/clients/openai_client"
 require_relative "lib/base_command"
 require_relative "lib/base_subcommand"
 
+require_relative "lib/commands/concerns/after_recorder_againable"
 require_relative "lib/commands/ping_command"
 require_relative "lib/commands/games_command"
 require_relative "lib/commands/gif_command"

@@ -1,25 +1,12 @@
 # frozen_string_literal: true
 class ImagineCommand < BaseCommand
+  include AfterRecorderAgainable
+
   def response
     if query.blank?
       "Quacking-imagine something"
     else
       OpenaiClient.completion(prompt(query), openai_params)
-    end
-  end
-
-  def after(message:)
-    if message
-      Recorder.set_againable(
-        command_class: self.class.name,
-        query: query.strip,
-        query_user_id: event.author.id,
-        query_message_id: event.message.id,
-        response_user_id: message.author.id,
-        response_message_id: message.id,
-        server: server,
-        channel: channel,
-      )
     end
   end
 
