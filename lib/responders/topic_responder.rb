@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class TopicResponder < BaseResponder
-  TOPIC_REGEX = /(?:^|\s)#([-_0-9a-zA-Z]{3,20})(?:$|\s|\.|\?|\!)/i
+  TOPIC_REGEX = /(?:^|\s)#([-_0-9a-zA-Z]{3,50})(?:$|\s|\.|\?|\!)/i
 
   def channels
     [
