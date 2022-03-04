@@ -12,12 +12,17 @@ class TopicResponder < BaseResponder
   def respond
     if match = TOPIC_REGEX.match(event.message.content)
       topic_name = match[1]
-      message = "💬 Current topic: **##{ topic_name }**"
-      topic = "Welcome to **##{ topic_name }**"
 
-      event.channel.topic = topic
-      event.channel.start_typing
-      event.respond(message)
+      begin
+        Timeout::timeout(5) do
+          event.channel.topic = "Welcome to **##{ topic_name }**"
+        end
+      rescue Timeout::Error => e
+        event.message.react("🐌")
+      else
+        event.channel.start_typing
+        event.respond("💬 Current topic: **##{ topic_name }**")
+      end
     end
   end
 end

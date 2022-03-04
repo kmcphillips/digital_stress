@@ -20,6 +20,7 @@ require "wikipedia"
 require "games_dice"
 require "ruby/openai"
 require "fuzzy_match"
+require "timeout"
 
 require_relative "lib/global"
 
