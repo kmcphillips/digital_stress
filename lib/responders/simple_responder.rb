@@ -21,8 +21,5 @@ class SimpleResponder < BaseResponder
     respond_match(/brain injur|concussion/i, "https://media3.giphy.com/media/NhXhI7kHCwxRC/giphy.gif", channels: MANDATE_CHANNELS, chance: 0.3)
     respond_match(/unnecessary/i, "https://i.imgur.com/MDKW4nw.png")
     respond_match(/\Afuck ./i, "You talking to me?", channels: MANDATE_CHANNELS, chance: 0.3)
-
-    respond_match(/youtube\.com\//, "https://www.youtube.com/watch?v=DcC31r1BxBY", channels: MANDATE_CHANNELS, users: User.eliot)
-    respond_match(/youtu\.be\//, "https://www.youtube.com/watch?v=DcC31r1BxBY", channels: MANDATE_CHANNELS, users: User.eliot)
   end
 end
