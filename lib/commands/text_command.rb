@@ -33,6 +33,7 @@ class TextCommand < BaseCommand
     end
   end
 
-  private
-
+  def typing?
+    false
+  end
 end
