@@ -2,15 +2,13 @@
 class WebDuck < Sinatra::Application
   set :port, Global.config.web_auth.port
 
-  use Rack::Auth::Basic do |username, password|
-    username == Global.config.web_auth.username && password == Global.config.web_auth.password
-  end
-
   get '/' do
     'Quack!'
   end
 
   post '/message/:server/:channel' do
+    web_auth!
+
     server = params["server"]
     channel_name = params["channel"]
     message = params["message"]
@@ -27,6 +25,8 @@ class WebDuck < Sinatra::Application
   end
 
   post '/train_accident/:server/:channel/:username' do
+    web_auth!
+
     server = params["server"]
     channel_name = params["channel"]
     username = params["username"]
@@ -50,6 +50,23 @@ class WebDuck < Sinatra::Application
     end
 
     "Quack, train."
+  end
+
+  helpers do
+    def web_auth!
+      return if authorized?
+      headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
+      halt 401, "Not authorized\n"
+    end
+
+    def authorized?
+      @auth ||=  Rack::Auth::Basic::Request.new(request.env)
+      @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == web_auth_credentials
+    end
+
+    def web_auth_credentials
+      [Global.config.web_auth.username, Global.config.web_auth.password]
+    end
   end
 end
 
