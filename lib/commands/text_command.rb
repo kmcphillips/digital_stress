@@ -14,11 +14,11 @@ class TextCommand < BaseCommand
 
       if user
         if user.phone_number
-          message = params.join(" ")
+          text = params.join(" ")
 
-          if !message.blank?
-            Texter.send_text(phone_number: user.phone_number, message: "#{ Quacker.quack } #{ message }")
-            ":mobile_phone: Text sent."
+          if !text.blank?
+            Texter.send_text(phone_number: user.phone_number, message: "#{ Quacker.quack } #{ text }")
+            event.message.react("📲")
           else
             ":question: Quack! Your message is blank."
           end
