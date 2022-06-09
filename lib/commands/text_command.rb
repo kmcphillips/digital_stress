@@ -17,7 +17,7 @@ class TextCommand < BaseCommand
           text = params.join(" ")
 
           if !text.blank?
-            Texter.send_text(phone_number: user.phone_number, message: "#{ Quacker.quack } #{ text }")
+            Texter.send_text(phone_number: user.phone_number, message: "🦆: #{ text }")
             event.message.react("📲")
           else
             ":question: Quack! Your message is blank."
