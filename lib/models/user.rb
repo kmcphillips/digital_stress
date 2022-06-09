@@ -52,6 +52,20 @@ class User
       self.new(**config.slice(:username, :id, :discriminator).merge(server: server))
     end
 
+    def from_phone(phone_number, server: nil)
+      User::USERS.each do |server_name, users_by_server|
+        if server.blank? || server_name == server.to_s
+          users_by_server.each do |user_id, user_config|
+            if phone_number == user_config[:phone_number]
+              return from_id(user_id, server: server_name)
+            end
+          end
+        end
+      end
+
+      nil
+    end
+
     def all(server:)
       (USERS[server.to_s] || {}).values.map { |cfg| from_config(config: cfg, server: server) }
     end

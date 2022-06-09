@@ -52,6 +52,28 @@ class WebDuck < Sinatra::Application
     "Quack, train."
   end
 
+  post "/twilio/:server/:channel/message" do
+    server = params["server"]
+    channel_name = params["channel"]
+
+    Global.logger.error("Received Twilio server=#{ server } channel=#{ channel_name }: #{ params }")
+
+    channels = Global.bot.find_channel(channel_name, server)
+    Global.logger.warn("No channels found for #{ server }##{ channel_name }") if channels.empty?
+
+    if params["SmsStatus"] == "received"
+      user = User.from_phone(params["From"], server: server)
+
+      channels.each do |channel|
+        message = "> 📲 **#{ user.username }**: #{ params["Body"] }"
+
+        channel.send_message(message)
+      end
+    end
+
+    "ok"
+  end
+
   helpers do
     def web_auth!
       return if authorized?
