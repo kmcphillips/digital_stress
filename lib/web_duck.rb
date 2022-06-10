@@ -61,17 +61,25 @@ class WebDuck < Sinatra::Application
     channels = Global.bot.find_channel(channel_name, server)
     Global.logger.warn("No channels found for #{ server }##{ channel_name }") if channels.empty?
 
-    if params["SmsStatus"] == "received"
-      user = User.from_phone(params["From"], server: server)
+    if Flags.active?("silence_notifications", server: server)
+      "Quack, silenced."
+    else
+      if params["SmsStatus"] == "received"
+        user = User.from_phone(params["From"], server: server)
 
-      channels.each do |channel|
-        message = "> 📲 **#{ user.username }**: #{ params["Body"] }"
+        channels.each do |channel|
+          message = if user
+            "> 📲 **#{ user.username }**: #{ params["Body"] }"
+          else
+            "> 📲 **#{ params["From"].presence || "(unknown number)" }**: #{ params["Body"] }"
+          end
 
-        channel.send_message(message)
+          channel.send_message(message)
+        end
       end
-    end
 
-    "ok"
+      "Quack, OK."
+    end
   end
 
   helpers do
