@@ -17,7 +17,7 @@ class User
     # Load extras from the config.yml Global.config object
     @config = USERS.dig(server, id)
     @location = @config[:location] if @config
-    @phone_number = @config[:phone_number] if @config
+    @phone_number = Formatter.phone_number(@config[:phone_number]) if @config
   end
 
   class << self
@@ -56,7 +56,7 @@ class User
       User::USERS.each do |server_name, users_by_server|
         if server.blank? || server_name == server.to_s
           users_by_server.each do |user_id, user_config|
-            if phone_number == user_config[:phone_number]
+            if Formatter.phone_number(phone_number) == Formatter.phone_number(user_config[:phone_number])
               return from_id(user_id, server: server_name)
             end
           end
