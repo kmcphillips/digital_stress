@@ -98,7 +98,13 @@ class Duck
       bot.command(command_config[:command], description: command_config[:description], aliases: command_config[:aliases] || []) do |event, *params|
         instance = command_config[:class_name].new(event: event, bot: bot, params: params)
         response = instance.respond
-        message = event.respond(response) if response.present?
+        if response.present?
+          begin
+            message = event.respond(response)
+          rescue Discordrb::Errors::InvalidFormBody
+            message = event.respond("Quack!! Error in error. Response looks too long!! #{ response.first(3600) }")
+          end
+        end
         instance.after(message: message)
         nil
       end
