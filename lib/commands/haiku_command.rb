@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class HaikuCommand < BaseCommand
-  include AfterRecorderAgainable
+  include AfterRecorderStrikethroughAgainable
 
   def response
     if query.blank?

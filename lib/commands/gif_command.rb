@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class GifCommand < BaseCommand
-  include AfterRecorderAgainable
+  include AfterRecorderRedactAgainable
 
   def response
     if query.blank?

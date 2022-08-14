@@ -12,11 +12,22 @@ class AgainCommand < BaseCommand
       server_channel = bot.servers.values.find {|s| s.name == server }.channels.find { |c| c.name == channel }
       message = server_channel.message(previous_data[:response_message_id])
 
-      redacted_message = ":repeat:"
-      message.edit(redacted_message)
+      if previous_data[:redaction_action].present?
+        redacted_message = case previous_data[:redaction_action].intern
+        when :strikethrough
+          "~~#{ message.content }~~"
+        when :redact
+          ":repeat:"
+        else
+          ":repeat:"
+        end
+
+        message.edit(redacted_message)
+      end
 
       command_class = previous_data[:command_class].constantize
-      command_class.new(event: event, bot: bot, params: [previous_data[:query]]).response
+      command_class.new(event: event, bot: bot, params: [previous_data[:query]])
+        .send(previous_data[:subcommand].presence || :response)
     else
       "#{ Quacker.quack } :no_entry_sign: Nothing recent to try again."
     end
@@ -33,6 +44,8 @@ class AgainCommand < BaseCommand
         response_message_id: message.id,
         server: server,
         channel: channel,
+        subcommand: previous_data[:subcommand],
+        redaction_action: previous_data[:redaction_action]
       )
     end
   end

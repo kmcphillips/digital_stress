@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class ImagineCommand < BaseCommand
-  include AfterRecorderAgainable
+  include AfterRecorderStrikethroughAgainable
 
   def response
     if query.blank?

@@ -146,7 +146,7 @@ module Recorder
     end
   end
 
-  def set_againable(command_class:, query:, query_user_id:, query_message_id:, response_user_id:, response_message_id:, server:, channel:)
+  def set_againable(command_class:, query:, query_user_id:, query_message_id:, response_user_id:, response_message_id:, server:, channel:, redaction_action: nil, subcommand: nil)
     data = {
       command_class: command_class,
       query: query,
@@ -156,6 +156,8 @@ module Recorder
       response_message_id: response_message_id,
       server: server,
       channel: channel,
+      subcommand: subcommand,
+      redaction_action: redaction_action,
     }
     key = againable_key(server: server, channel: channel, user_id: query_user_id)
 

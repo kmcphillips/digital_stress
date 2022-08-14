@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class ImageCommand < BaseCommand
-  include AfterRecorderAgainable
+  include AfterRecorderRedactAgainable
 
   def response
     if query.blank?

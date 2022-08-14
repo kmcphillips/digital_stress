@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class OpenaiCommand < BaseSubcommand
+  include AfterRecorderStrikethroughAgainable
+
   CHANNELS = [
     "mandatemandate#general",
     "mandatemandate#quigital",
