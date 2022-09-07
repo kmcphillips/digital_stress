@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class WhatCommand < BaseCommand
+  include AfterRecorderStrikethroughAgainable
+
   def response
     if query.present? && query.match(/think/) # what do you think?
       if !Recorder.record_channel?(server: server, channel: channel)
@@ -24,7 +26,7 @@ class WhatCommand < BaseCommand
   end
 
   def prompt
-    "In a couple sentences, give #{ tone } opinion on the following conversation:\n#{ recent_conversation.strip }"
+    "In two or three detailed sentences sentences, give #{ tone } opinion on the following conversation:\n#{ recent_conversation.strip }"
   end
 
   def tone
