@@ -31,14 +31,14 @@ class WhatCommand < BaseCommand
 
   def tone
     [
-      "a strong and funny",
+      "a funny",
       "an extremely sarcastic",
       "a funny and strongly worded",
       "a very negative",
       "a very enthusiastic and happy",
       "a highly critical",
-      "a sarcastic and dissatisfied",
-      "an angry",
+      "a sarcastic and negative",
+      "a confused",
       "a sarcastic and excited",
     ].sample
   end
