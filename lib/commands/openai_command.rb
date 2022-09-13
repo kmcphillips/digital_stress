@@ -47,15 +47,9 @@ class OpenaiCommand < BaseSubcommand
     if subcommand_query.blank?
       "Quack! What do you want an image of?"
     else
-      artifact = Dreamstudio.generate_image(prompt: subcommand_query)
-
-      if artifact
-        Tempfile.create(["stability-ai-artifact-image", ".png"], binmode: true) do |file|
-          file.write(artifact.binary)
-          file.rewind
-
-          event.send_file(file, filename: "stability-ai.png")
-        end
+      if file = Dreamstudio.image_file(subcommand_query)
+        event.send_file(file, filename: "ai.png")
+        nil
       else
         "Quack! Got no image back??"
       end

@@ -6,14 +6,29 @@ class ImagineCommand < BaseCommand
     if query.blank?
       "Quacking-imagine something"
     else
-      OpenaiClient.completion(prompt(query), openai_params)
+      file = nil
+
+      thread = Thread.new do
+        file = Dreamstudio.image_file("#{ scrubbed_query } #{ style }")
+      end
+
+      text = OpenaiClient.completion(prompt, openai_params)
+
+      thread.join
+
+      event.send_file(file, filename: "ai.png") if file
+      text
     end
   end
 
   private
 
-  def prompt(text)
-    "In a couple sentences, describe #{ tone } what #{ text.strip.gsub(/[.!?:;]\Z/, "") } would be like."
+  def prompt
+    "In a couple sentences, describe #{ tone } what #{ scrubbed_query } would be like."
+  end
+
+  def scrubbed_query
+    query.strip.gsub(/[.!?:;]\Z/, "")
   end
 
   def openai_params
@@ -36,6 +51,25 @@ class ImagineCommand < BaseCommand
       "in an excited way",
       "enthusiastically",
       "critically",
+    ].sample
+  end
+
+  def style
+    [
+      "pencil sketch",
+      "watercolor",
+      "oil on canvas",
+      "pastel",
+      "digital art",
+      "photograph",
+      "epic lighting",
+      "cell shaded",
+      "pixel art",
+      "vector art",
+      "3D rendering",
+      "product shot",
+      "retro style",
+      "new yorker cartoon",
     ].sample
   end
 end

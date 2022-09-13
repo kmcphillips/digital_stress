@@ -44,6 +44,19 @@ module Dreamstudio
     generate_images(prompt: prompt).first
   end
 
+  def image_file(prompt)
+    artifact = generate_image(prompt: prompt)
+
+    if artifact
+      file = Tempfile.create(["stability-ai-artifact-image", ".png"], binmode: true)
+      file.write(artifact.binary)
+      file.rewind
+      file
+    else
+      nil
+    end
+  end
+
   private
 
   def api_key
