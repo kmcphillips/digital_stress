@@ -26,6 +26,10 @@ class BaseSubcommand < BaseCommand
     @subcommand_params
   end
 
+  def subcommand_query
+    subcommand_params.join(" ")
+  end
+
   def help
     ["**List of `#{ @event.command.name }` subcommands:**"] + subcommands.map{|k,v| "`#{ k }`: #{ v }" }
   end

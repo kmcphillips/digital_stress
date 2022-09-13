@@ -16,6 +16,7 @@ class OpenaiCommand < BaseSubcommand
     {
       imagine: "Tell it to imagine something",
       instruct: "Instruct it to return something",
+      image: "Generate an image with Stability AI",
     }.freeze
   end
 
@@ -26,7 +27,7 @@ class OpenaiCommand < BaseSubcommand
   end
 
   def instruct
-    if query.blank?
+    if subcommand_query.blank?
       "Quack! Instruct something."
     else
       openai_params = {
@@ -38,7 +39,26 @@ class OpenaiCommand < BaseSubcommand
         presence_penalty: 0.4,
       }
 
-      OpenaiClient.completion(query.strip, openai_params)
+      OpenaiClient.completion(subcommand_query.strip, openai_params)
+    end
+  end
+
+  def image
+    if subcommand_query.blank?
+      "Quack! What do you want an image of?"
+    else
+      artifact = Dreamstudio.generate_image(prompt: subcommand_query)
+
+      if artifact
+        Tempfile.create(["stability-ai-artifact-image", ".png"], binmode: true) do |file|
+          file.write(artifact.binary)
+          file.rewind
+
+          event.send_file(file, filename: "stability-ai.png")
+        end
+      else
+        "Quack! Got no image back??"
+      end
     end
   end
 end
