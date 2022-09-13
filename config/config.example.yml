@@ -27,6 +27,9 @@ twilio:
 openai:
   access_token: "XXXX"
 
+dreamstudio:
+  key: "XXXX"
+
 duck:
   api_key: xxxxxxxxxxxxxxxxxxx
 

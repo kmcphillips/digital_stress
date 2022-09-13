@@ -20,6 +20,8 @@ gem "twilio-ruby"
 gem "wikipedia-client"
 gem "games_dice"
 gem "ruby-openai"
+gem "google-protobuf"
+gem "grpc"
 gem "fuzzy_match"
 gem "open3"
 gem "clockwork", require: false

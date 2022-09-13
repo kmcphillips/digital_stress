@@ -87,6 +87,12 @@ GEM
     fuzzy_match (2.1.0)
     games_dice (0.4.0)
       parslet (>= 1.5.0)
+    google-protobuf (3.21.5)
+    googleapis-common-protos-types (1.4.0)
+      google-protobuf (~> 3.14)
+    grpc (1.48.0)
+      google-protobuf (~> 3.19)
+      googleapis-common-protos-types (~> 1.0)
     http-accept (1.7.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
@@ -190,6 +196,8 @@ DEPENDENCIES
   ed25519
   fuzzy_match
   games_dice
+  google-protobuf
+  grpc
   httparty
   nokogiri
   open3

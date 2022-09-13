@@ -23,6 +23,9 @@ twilio:
 openai:
   access_token: xxxxx
 
+dreamstudio:
+  key: xxxxx
+
 deploy_command:
   base_working_dir: null
 
