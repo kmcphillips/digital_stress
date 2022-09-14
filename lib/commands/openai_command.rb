@@ -5,6 +5,7 @@ class OpenaiCommand < BaseSubcommand
   CHANNELS = [
     "mandatemandate#general",
     "mandatemandate#quigital",
+    "mandatemandate#apps",
     "duck-bot-test#testing",
   ].freeze
 
