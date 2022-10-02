@@ -19,7 +19,6 @@ class SimpleResponder < BaseResponder
     respond_match(/several people are typing/i, "https://i.kym-cdn.com/photos/images/newsfeed/001/249/060/9c3.gif")
     respond_match(/safe/i, "https://i.imgur.com/1WReL2h.jpg", channels: MANDATE_CHANNELS, chance: 0.2)
     respond_match(/brain injur|concussion/i, "https://media3.giphy.com/media/NhXhI7kHCwxRC/giphy.gif", channels: MANDATE_CHANNELS, chance: 0.3)
-    respond_match(/unnecessary/i, "https://i.imgur.com/MDKW4nw.png")
     respond_match(/\Afuck ./i, "You talking to me?", channels: MANDATE_CHANNELS, chance: 0.3)
   end
 end
