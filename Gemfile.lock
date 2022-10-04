@@ -88,7 +88,7 @@ GEM
     fuzzy_match (2.1.0)
     games_dice (0.4.0)
       parslet (>= 1.5.0)
-    google-protobuf (3.21.6)
+    google-protobuf (3.21.7)
     googleapis-common-protos-types (1.4.0)
       google-protobuf (~> 3.14)
     grpc (1.48.0)
