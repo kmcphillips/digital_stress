@@ -81,9 +81,9 @@ module Dreamstudio
         )
       ],
       image: Gooseai::ImageParameters.new(
-        height: 512,
-        width: 512,
-        steps: 50,
+        height: 600,
+        width: 800,
+        steps: 100,
         samples: 1,
         seed: [ rand(4294967295) ],
         transform: Gooseai::TransformType.new(diffusion: Gooseai::DiffusionSampler::SAMPLER_K_LMS),
