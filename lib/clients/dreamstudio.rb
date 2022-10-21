@@ -81,8 +81,8 @@ module Dreamstudio
         )
       ],
       image: Gooseai::ImageParameters.new(
-        height: 600,
-        width: 800,
+        height: 576, # Height and width have to be multiples of 64
+        width: 768,
         steps: 100,
         samples: 1,
         seed: [ rand(4294967295) ],
