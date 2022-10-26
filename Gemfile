@@ -22,6 +22,7 @@ gem "games_dice"
 gem "ruby-openai"
 gem "google-protobuf"
 gem "grpc"
+gem "aws-sdk-polly"
 gem "fuzzy_match"
 gem "open3"
 gem "clockwork", require: false

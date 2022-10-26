@@ -21,6 +21,8 @@ require "twilio-ruby"
 require "wikipedia"
 require "games_dice"
 require "ruby/openai"
+require "aws-sdk-core"
+require "aws-sdk-polly"
 require "fuzzy_match"
 require "timeout"
 
@@ -50,6 +52,14 @@ Global.kv = KeyValueStore.new(Global.environment[:kv].to_s) # Global.config.redi
 
 Global.openai_client = OpenAI::Client.new(access_token: Global.config.openai.access_token)
 
+Aws.config.update(
+  region: 'us-west-2',
+  credentials: Aws::Credentials.new(
+    Global.config.aws.access_key_id,
+    Global.config.aws.secret_access_key
+  )
+)
+
 require_relative "lib/persistence/recorder"
 require_relative "lib/persistence/learner"
 require_relative "lib/persistence/flags"
@@ -76,6 +86,7 @@ require_relative "lib/clients/texter"
 require_relative "lib/clients/wikipedia_client"
 require_relative "lib/clients/openai_client"
 require_relative "lib/clients/dreamstudio"
+require_relative "lib/clients/aws_client"
 
 require_relative "lib/base_command"
 require_relative "lib/base_subcommand"

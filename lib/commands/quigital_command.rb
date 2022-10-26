@@ -3,6 +3,7 @@ class QuigitalCommand < BaseSubcommand
   def subcommands
     {
       stats: "Show some stats from quigital.com.",
+      say: "Say something with Quigital's voice.",
     }.freeze
   end
 
@@ -15,6 +16,16 @@ class QuigitalCommand < BaseSubcommand
   end
 
   private
+
+  def say
+    if query.blank?
+      "Quack? Nothing to say."
+    else
+      file = AwsClient.polly_say(subcommand_query)
+      event.send_file(file, filename: "quigital.mp3")
+      nil
+    end
+  end
 
   def stats
     response = HTTParty.get(stats_url)
