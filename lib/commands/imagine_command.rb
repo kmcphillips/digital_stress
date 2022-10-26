@@ -16,7 +16,7 @@ class ImagineCommand < BaseCommand
 
       thread.join
 
-      event.send_file(file, filename: "ai.png") if file
+      event.send_file(file, filename: "imagine.png") if file
       text
     end
   end
