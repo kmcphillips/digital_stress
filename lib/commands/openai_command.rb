@@ -16,6 +16,7 @@ class OpenaiCommand < BaseSubcommand
   def subcommands
     {
       imagine: "Tell it to imagine something",
+      reimagine: "Tell it to imagine an image of something",
       instruct: "Instruct it to return something",
       image: "Generate an image with Stability AI",
     }.freeze
@@ -25,6 +26,10 @@ class OpenaiCommand < BaseSubcommand
 
   def imagine
     ImagineCommand.new(event: event, bot: bot, params: params.dup.drop(1)).response
+  end
+
+  def reimagine
+    ReimagineCommand.new(event: event, bot: bot, params: params.dup.drop(1)).response
   end
 
   def instruct
