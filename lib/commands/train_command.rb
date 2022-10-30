@@ -83,7 +83,7 @@ class TrainCommand < BaseCommand
     SIGN_TEMPLATE_PATH = Global.root.join("data", "train_accident_template.png")
 
     def it_has_been_days_file(days)
-      raise "Cannot find file '#{  }'" unless File.exists?(SIGN_TEMPLATE_PATH)
+      raise "Cannot find file '#{ SIGN_TEMPLATE_PATH }'" unless File.exists?(SIGN_TEMPLATE_PATH)
 
       Tempfile.create(["train_duck", ".png"]) do |temp|
         left_padding = days < 10 ? "106" : "82"
