@@ -163,6 +163,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.11.0)
     rspec-support (3.11.1)
+    ruby-mysql (3.0.1)
     ruby-openai (1.4.0)
       dotenv (~> 2.7.6)
       httparty (>= 0.18.1, < 0.21.0)
@@ -222,6 +223,7 @@ DEPENDENCIES
   open3
   redis
   rspec
+  ruby-mysql
   ruby-openai
   sequel
   sinatra

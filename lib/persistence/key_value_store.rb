@@ -14,6 +14,8 @@ class KeyValueStore
       end
     elsif datastore_url.starts_with?("sqlite://")
       @redis = SqliteRedis.new(datastore_url)
+    elsif datastore_url.starts_with?("mysql://")
+      @redis = MysqlRedis.new(datastore_url)
     else
       @redis = FakeRedis.new
     end
@@ -23,7 +25,7 @@ class KeyValueStore
 
   def write(key, value, ttl:nil)
     result = @redis.set(format_key(key), value)
-    @redis.expire(format_key(key), ttl) if ttl
+    @redis.expire(format_key(key), ttl.to_i) if ttl
     result == "OK"
   end
 
@@ -93,24 +95,13 @@ class FakeRedis
   end
 end
 
-class SqliteRedis
-  def initialize(sqlite_url, name=nil)
-    @db = Sequel.connect(sqlite_url)
-    @db_name = "redis_#{ name || '0' }"
-    @db.create_table?(@db_name) do
-      String :key
-      String :value
-      Integer :timestamp
-    end
-    @dataset = @db.from(@db_name)
-  end
-
-  def inspect
-    "<SqliteRedis:#{ object_id } db_name=#{ @db_name } #{ @db }>"
+class AbstractSqlRedis
+  def initialize
+    raise NotImplementedError
   end
 
   def to_s
-    "SqliteRedis in `#{ File.basename(@db.opts[:database]) }`"
+    raise NotImplementedError
   end
 
   def set(key, val)
@@ -133,5 +124,42 @@ class SqliteRedis
 
   def expire(key, seconds)
     @dataset.where(key: key).update(timestamp: Time.now.to_i + seconds.to_i) != 0
+  end
+end
+
+class SqliteRedis < AbstractSqlRedis
+  def initialize(sqlite_url, name=nil)
+    @db = Sequel.connect(sqlite_url)
+    @db_name = "redis_#{ name || '0' }"
+    @db.create_table?(@db_name) do
+      String :key
+      String :value
+      Integer :timestamp
+    end
+    @dataset = @db.from(@db_name)
+  end
+
+  def inspect
+    "<SqliteRedis:#{ object_id } db_name=#{ @db_name } #{ @db }>"
+  end
+
+  def to_s
+    "SqliteRedis in `#{ File.basename(@db.opts[:database]) }`"
+  end
+end
+
+class MysqlRedis < AbstractSqlRedis
+  def initialize(connection_string, name=nil)
+    @db = Sequel.connect(connection_string)
+    @db_name = "redis_#{ name || '0' }"
+    @dataset = @db.from(@db_name)
+  end
+
+  def inspect
+    "<MysqlRedis:#{ object_id } db_name=#{ @db_name } #{ @db }>"
+  end
+
+  def to_s
+    "MysqlRedis `#{ @db.opts[:database] }` at `#{ @db.opts[:host] }:#{ @db.opts[:port] }`"
   end
 end

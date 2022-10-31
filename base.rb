@@ -5,6 +5,7 @@ require "discordrb"
 require "logger"
 require "redis"
 require "sqlite3"
+require "mysql"
 require "sequel"
 require "httparty"
 require "nokogiri"
@@ -46,7 +47,7 @@ if Global.environment[:db] != false
   Global.logger.info("Using db: #{ datastore_url }")
   raise "Database URL must be set or explicitly be set to false. Set it in `Global.environment[:db] or DUCK_DB or `db:` in config file." unless datastore_url.present?
 
-  if datastore_url.to_s.start_with?("sqlite")
+  if datastore_url.to_s.start_with?("sqlite://") || datastore_url.to_s.start_with?("mysql://")
     Global.db = Sequel.connect(datastore_url.to_s)
   else
     raise "Do not know how to connect to db: #{ datastore_url }"

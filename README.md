@@ -58,18 +58,19 @@ CREATE TABLE messages (
   timestamp INTEGER,
   user_id INTEGER,
   username VARCHAR(255),
-  message TEXT,
+  message TEXT ,
   server VARCHAR(255),
-  channel VARCHAR(255)
+  channel VARCHAR(255),
+  message_id INTEGER
 );
 CREATE TABLE learned (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   timestamp INTEGER,
   user_id INTEGER,
-  message_id INTEGER,
   message TEXT,
   server VARCHAR(255),
-  channel VARCHAR(255)
+  channel VARCHAR(255),
+  message_id INTEGER
 );
 CREATE TABLE absurdity_chats (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -86,6 +87,59 @@ CREATE TABLE train_accidents (
   server VARCHAR(255),
   channel VARCHAR(255)
 );
+CREATE TABLE redis_0 (
+  key VARCHAR(255),
+  value VARCHAR(255),
+  timestamp INTEGER
+);
+```
+
+An in process migration to MySQL uses these similar tables:
+
+```sql
+CREATE DATABASE digital_stress_db CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE USER 'digital_stress_user'@'%' IDENTIFIED BY '12345';
+GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES ON digital_stress_db.* TO 'digital_stress_user'@'%' WITH GRANT OPTION;
+
+CREATE TABLE messages (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  timestamp INTEGER,
+  user_id INTEGER,
+  username VARCHAR(255),
+  message TEXT ,
+  server VARCHAR(255),
+  channel VARCHAR(255),
+  message_id INTEGER
+) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE TABLE learned (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  timestamp BIGINT,
+  user_id BIGINT,
+  message TEXT,
+  server VARCHAR(255),
+  channel VARCHAR(255),
+  message_id BIGINT
+) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE TABLE absurdity_chats (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  user_id BIGINT,
+  username VARCHAR(255),
+  message TEXT,
+  server VARCHAR(255),
+  consumed_timestamp BIGINT
+) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE TABLE train_accidents (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  timestamp BIGINT,
+  user_id BIGINT,
+  server VARCHAR(255),
+  channel VARCHAR(255)
+) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE TABLE redis_0 (
+  `key` VARCHAR(255),
+  value VARCHAR(255),
+  timestamp BIGINT
+) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 Some messages are omitted from being recorded based on filters. If those filters are updated, run:

@@ -105,7 +105,7 @@ module Recorder
   end
 
   def counts(server:)
-    Global.db["SELECT DISTINCT user_id, COUNT(*) AS count, sum(length(message) - length(replace(message, ' ', ''))+1) AS words FROM messages WHERE server = ? GROUP BY user_id ORDER BY count DESC", server].all
+    Global.db["SELECT DISTINCT user_id, COUNT(*) AS count, cast(sum(length(message) - length(replace(message, ' ', ''))+1) AS UNSIGNED) AS words FROM messages WHERE server = ? GROUP BY user_id ORDER BY count DESC", server].all
   end
 
   def last(server:)

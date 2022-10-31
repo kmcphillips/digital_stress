@@ -5,7 +5,7 @@ module AbsurdityChatStore
   def consume(user_id:, server:)
     record = table
       .where(server: server, user_id: user_id, consumed_timestamp: nil)
-      .order(Sequel.lit('RANDOM()'))
+      .order(Sequel.lit('RAND()'))
       .first
 
     return nil unless record

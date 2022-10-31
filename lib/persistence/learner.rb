@@ -56,7 +56,7 @@ module Learner
   def random(server:, prevent_recent: false)
     scope = table
       .where(server: server)
-      .order(Sequel.lit('RANDOM()'))
+      .order(Sequel.lit('RAND()'))
 
     scope = scope.exclude(id: recent_ids(server: server)) if prevent_recent
 

@@ -5,6 +5,9 @@ discord:
 redis:
   url: redis://127.0.0.1:6379/0
 
+mysql:
+  url: 'mysql://user:pass@127.0.0.1:3306/duck_db?compress=true'
+
 web_auth:
   port: 9999
   username: XXX

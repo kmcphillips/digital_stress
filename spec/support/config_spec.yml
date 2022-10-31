@@ -2,6 +2,12 @@ discord:
   token: xxxxx
   debug_log: true
 
+redis:
+  url: redis://127.0.0.1:6379/0
+
+mysql:
+  url: 'mysql://user:pass@127.0.0.1:3306/duck_test'
+
 web_auth:
   username: username
   password: password
