@@ -1,14 +1,5 @@
 # frozen_string_literal: true
 class DndCommand < BaseSubcommand
-  CHANNELS = [
-    "mandatemandate#general",
-    "duck-bot-test#testing",
-  ].freeze
-
-  def channels
-    CHANNELS
-  end
-
   def subcommands
     {
       dates: "Show the upcoming announcement dates.",
