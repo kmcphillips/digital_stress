@@ -1,23 +1,32 @@
-# Digital Stress - Discord bot
+# Digital Stress aka @Duck Discord bot
 
-Add a `config.yml` with:
+## Running
 
-```bash
-cp config/config.example.yml config/config.yml
-```
-
-Then to run:
+To run the bot:
 
 ```bash
-bundle exec bot.rb
+bundle exec ruby bot.rb
 ```
 
-Work with:
+A REPL is available with:
+
 ```bash
-bundle exec repl.rb
+bundle exec ruby repl.rb
 ```
 
-Install:
+From there you can call `run_bot` to connect to Discord, and `test_channel` to get a handle on a channel for testing.
+
+
+## Config
+
+A config file is commited to the repo and written to disk in plain text. The `config/config.yml` is decrypted from `config/config.yml.enc` on run if it does not already exist. In production or other envs override the config file with the ENV var `DUCK_CONFIG_FILE` to something like `config/config.production.yml`.
+
+The decryption key is either loaded from `config/config_key` or from the ENV var `DUCK_CONFIG_KEY`. The ENV var takes precedence.
+
+To write the plain text config files to the encrypted ones, edit `config/config.yml` or `config/config.*.yml` etc. and run `bundle exec ruby encrypt_config_files.rb`. The changes can then be commited to the repo. To revert at anytime, delete the plain text config and it will be loaded from the encrypted version on run. Decrypting all config files can be forced by running `bundle exec ruby decrypt_config_files.rb`.
+
+
+## Install to a Discord
 
 ```
 https://discordapp.com/oauth2/authorize?&client_id=<CLIENT_ID>&scope=bot&permissions=8
@@ -25,13 +34,13 @@ https://discordapp.com/oauth2/authorize?&client_id=<CLIENT_ID>&scope=bot&permiss
 Where `<CLIENT_ID>` is the `client_id` for the application registered in discord.
 
 
-Deploy:
+## Deploy
 
 ```bash
 bundle exec cap production deploy
 ```
 
-Manage:
+Cap can also be used to stop and start the remote service:
 
 ```bash
 bundle exec cap production bot:start
@@ -39,7 +48,9 @@ bundle exec cap production bot:stop
 bundle exec cap production bot:restart
 ```
 
-Database:
+## Database
+
+Currently using a SQLite database not included with the repo.
 
 ```sql
 CREATE TABLE messages (
@@ -69,19 +80,21 @@ CREATE TABLE train_accidents (
 );
 ```
 
-Clean up:
+Some messages are omitted from being recorded based on filters. If those filters are updated, run:
 
 ```ruby
 Recorder.delete_sweep
 ```
 
-Dump:
+All recorded messages can be dumped with:
 
 ```ruby
 File.open("dump_all.txt", "w"){|f|f.write(DB[:messages].map{|r|r[:message]}.reject(&:blank?).join("\n"))}
 ```
 
-Release Factorio mod:
+## Factorio mod
+
+To release the mod in the format Factorio expects it to be uploaded:
 
 ```bash
 cd factorio_mod

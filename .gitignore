@@ -60,7 +60,6 @@ build-iPhoneSimulator/
 *.sqlite3.bak
 *.csv
 nohup.out
-/config/config.yml
 /dedup.json
 /log
 /factorio_mod/duck_*.zip
@@ -68,3 +67,7 @@ nohup.out
 /data/absurdity_chats/*.txt
 /data/output/*.txt
 /*.jsonl
+
+/config/config.yml
+/config/config.*.yml
+/config/config_key

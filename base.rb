@@ -28,23 +28,28 @@ require "timeout"
 
 require_relative "lib/global"
 
-Global.environment[:config] ||= Global.root.join("config/config.yml")
+Global.environment[:config] ||= ENV["DUCK_CONFIG_FILE"].presence || Global.root.join("config/config.yml.enc")
+Global.environment[:config_key] ||= ENV["DUCK_CONFIG_KEY"].presence
 Global.environment[:log] ||=  Global.root.join("bot.log")
-Global.environment[:db_file] ||= Global.root.join("chat.sqlite3")
-Global.environment[:kv] ||= Global.root.join("chat.sqlite3")
+Global.environment[:db_file] = Global.root.join("chat.sqlite3") if Global.environment[:db_file].nil?
+Global.environment[:kv] = Global.root.join("chat.sqlite3") if Global.environment[:kv].nil?
 
 require_relative "lib/configuration"
-Global.config = Configuration.new(key: "TODO", file: Global.environment[:config]).load
+Global.config = Configuration.new(key: Global.environment[:config_key], file: Global.environment[:config]).read
 
 logger_file = File.open(Global.environment[:log], File::WRONLY | File::APPEND | File::CREAT)
 logger_file.sync = true
 Global.logger = Logger.new(logger_file, level: (Global.config.discord.debug_log ? Logger::DEBUG : Logger::INFO))
 Discordrb::LOGGER.streams << logger_file if Global.config.discord.debug_log
 
-Global.db = Sequel.sqlite(Global.environment[:db_file].to_s)
+if Global.environment[:db_file]
+  Global.db = Sequel.sqlite(Global.environment[:db_file].to_s)
+end
 
 require_relative "lib/persistence/key_value_store"
-Global.kv = KeyValueStore.new(Global.environment[:kv].to_s) # Global.config.redis.url
+if Global.environment[:kv]
+  Global.kv = KeyValueStore.new(Global.environment[:kv].to_s) # Global.config.redis.url
+end
 
 Global.openai_client = OpenAI::Client.new(access_token: Global.config.openai.access_token)
 
