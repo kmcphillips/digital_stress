@@ -33,12 +33,8 @@ Global.environment[:log] ||=  Global.root.join("bot.log")
 Global.environment[:db_file] ||= Global.root.join("chat.sqlite3")
 Global.environment[:kv] ||= Global.root.join("chat.sqlite3")
 
-Config.setup do |config|
-  config.const_name = 'IgnoreMeGlobalConfiguration'
-  config.evaluate_erb_in_yaml = false
-end
-Config.load_and_set_settings(Global.environment[:config])
-Global.config = IgnoreMeGlobalConfiguration # Can't tell rubyconfig to not export a `const_name` so we just ignore it and pass it through
+require_relative "lib/configuration"
+Global.config = Configuration.new(key: "TODO", file: Global.environment[:config]).load
 
 logger_file = File.open(Global.environment[:log], File::WRONLY | File::APPEND | File::CREAT)
 logger_file.sync = true
