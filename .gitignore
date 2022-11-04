@@ -64,7 +64,6 @@ nohup.out
 /log
 /factorio_mod/duck_*.zip
 
-/data/absurdity_chats/*.txt
 /data/output/*.txt
 /*.jsonl
 

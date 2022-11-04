@@ -3,6 +3,7 @@ class ChatCommand < BaseCommand
   def channels
     [
       "mandatemandate#general",
+      "mandatemandate#quigital",
       "duck-bot-test#testing",
     ]
   end
@@ -10,24 +11,13 @@ class ChatCommand < BaseCommand
   def response
     user = User.from_input(params.first, server: server)
     raise "Cannot find user: #{ params.first }" if params.first.present? && user.blank?
-    message = consume_message(user: user)
+    user = User.all(server: server).sample if user.blank?
+    chat = AbsurdityChatStore.consume(user_id: user.id, server: server)
 
-    "> **#{ message[:username] }**: #{ message[:message] }"
+    if chat
+      "> **#{ chat.username }**: #{ chat.message }"
+    else
+      ":bangbang: No more chats for #{ user.username }"
+    end
   end
-
-  private
-
-  def consume_message(user: nil)
-    user ||= User.all(server: server).sample
-    filename = Global.root.join("data", "absurdity_chats", "#{ user.id }.txt")
-
-    lines = File.readlines(filename)
-    lines = lines.shuffle
-    message = lines.pop.strip
-
-    File.open(filename, "w") { |f| f.write(lines.join("")) }
-
-    { user_id: user.id, message: message, username: user.username }
-  end
-
 end

@@ -71,6 +71,14 @@ CREATE TABLE learned (
   server VARCHAR(255),
   channel VARCHAR(255)
 );
+CREATE TABLE absurdity_chats (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER,
+  username VARCHAR(255),
+  message TEXT,
+  server VARCHAR(255),
+  consumed_timestamp INTEGER
+);
 CREATE TABLE train_accidents (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   timestamp INTEGER,
