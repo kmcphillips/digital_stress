@@ -27,7 +27,9 @@ module AbsurdityChatStore
       message: message,
     }
 
-    table.insert(args)
+    id = table.insert(args)
+
+    AbsurdityChat.new(**args.except(:consumed_timestamp).merge(id: id))
   end
 
   def tally(server:)
