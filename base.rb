@@ -48,7 +48,7 @@ end
 
 require_relative "lib/persistence/key_value_store"
 if Global.environment[:kv]
-  Global.kv = KeyValueStore.new(Global.environment[:kv].to_s) # Global.config.redis.url
+  Global.kv = KeyValueStore.new(Global.environment[:kv].to_s)
 end
 
 Global.openai_client = OpenAI::Client.new(access_token: Global.config.openai.access_token)

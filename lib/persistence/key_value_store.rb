@@ -8,7 +8,8 @@ class KeyValueStore
         @redis = Redis.new(url: datastore_url)
         @redis.echo("Connected to redis #{ datastore_url }")
       rescue Redis::BaseError => e
-        puts e.inspect
+        Global.logger.error("Failed to connect to real redis. Falling back to FakeRedis. #{ e.message }")
+        Global.logger.error(e)
         @redis = FakeRedis.new
       end
     elsif datastore_url.ends_with?(".sqlite3")
@@ -17,7 +18,7 @@ class KeyValueStore
       @redis = FakeRedis.new
     end
 
-    puts "[KeyValueStore Connected to #{ @redis.inspect }"
+    Global.logger.info("[KeyValueStore Connected to #{ @redis.inspect }")
   end
 
   def write(key, value, ttl:nil)

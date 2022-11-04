@@ -76,8 +76,6 @@ class Configuration
     raise "Expected `#{ @file }` to end with `.enc`" unless @file.to_s.ends_with?('.enc')
 
     @encrypted_file_path = Global.root.join(@file.to_s)
-    # raise "Config file `#{ @encrypted_file_path }` does not exist" unless File.exist?(@encrypted_file_path)
-
     @decrypted_file_path = Global.root.join(@file.to_s.gsub(/\.enc\Z/, ''))
 
     nil
