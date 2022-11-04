@@ -16,7 +16,7 @@ class Configuration
   def initialize(key:, file:, key_file: "config/config_key")
     @key_file = key_file
     @file = file
-    @key = load_key
+    @key = key.presence || load_key_from_file
     @encryptor = ActiveSupport::MessageEncryptor.new([@key].pack('H*'), cipher: CYPHER)
     load_file_paths
   end
@@ -83,13 +83,11 @@ class Configuration
     nil
   end
 
-  def load_key
+  def load_key_from_file
     @key ||= begin
       key_file_path = Global.root.join(@key_file)
 
-      if key.present?
-        key
-      elsif File.exist?(key_file_path)
+      if File.exist?(key_file_path)
         key_file_contents = File.read(key_file_path).strip
 
         if key_file_contents.present?
