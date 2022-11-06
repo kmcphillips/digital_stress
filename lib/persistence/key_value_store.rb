@@ -37,7 +37,7 @@ class KeyValueStore
 
   def to_s
     if @redis.is_a?(::Redis)
-      @redis.inspect
+      "Redis client v#{ ::Redis::VERSION } `#{ @redis.id }`"
     else
       @redis.to_s
     end
