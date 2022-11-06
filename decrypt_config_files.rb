@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "lib/global"
-Global.environment[:db_file] = false
+Global.environment[:db] = false
 Global.environment[:kv] = false
 
 require_relative "base"

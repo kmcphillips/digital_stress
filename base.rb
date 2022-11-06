@@ -28,11 +28,9 @@ require "timeout"
 
 require_relative "lib/global"
 
+Global.environment[:log] ||= ENV["DUCK_LOG_FILE"].presence || Global.root.join("bot.log")
 Global.environment[:config] ||= ENV["DUCK_CONFIG_FILE"].presence || Global.root.join("config/config.yml.enc")
 Global.environment[:config_key] ||= ENV["DUCK_CONFIG_KEY"].presence
-Global.environment[:log] ||=  Global.root.join("bot.log")
-Global.environment[:db_file] = Global.root.join("chat.sqlite3") if Global.environment[:db_file].nil?
-Global.environment[:kv] = Global.root.join("chat.sqlite3") if Global.environment[:kv].nil?
 
 require_relative "lib/configuration"
 Global.config = Configuration.new(key: Global.environment[:config_key], file: Global.environment[:config]).read
@@ -42,13 +40,27 @@ logger_file.sync = true
 Global.logger = Logger.new(logger_file, level: (Global.config.discord.debug_log ? Logger::DEBUG : Logger::INFO))
 Discordrb::LOGGER.streams << logger_file if Global.config.discord.debug_log
 
-if Global.environment[:db_file]
-  Global.db = Sequel.sqlite(Global.environment[:db_file].to_s)
+if Global.environment[:db] != false
+  datastore_url = Global.environment[:db].presence || ENV["DUCK_DB"].presence || Global.config.db.url.presence
+  Global.logger.info("Selecting db: Global.environment[:db]: #{ Global.environment[:db].inspect } || ENV['DUCK_DB']: #{ ENV['DUCK_DB'].inspect } || Global.config.db.url: #{ Global.config.db.url.inspect }")
+  Global.logger.info("Using db: #{ datastore_url }")
+  raise "Database URL must be set or explicitly be set to false. Set it in `Global.environment[:db] or DUCK_DB or `db:` in config file." unless datastore_url.present?
+
+  if datastore_url.to_s.start_with?("sqlite")
+    Global.db = Sequel.connect(datastore_url.to_s)
+  else
+    raise "Do not know how to connect to db: #{ datastore_url }"
+  end
 end
 
 require_relative "lib/persistence/key_value_store"
-if Global.environment[:kv]
-  Global.kv = KeyValueStore.new(Global.environment[:kv].to_s)
+if Global.environment[:kv] != false
+  datastore_url = Global.environment[:kv].presence || ENV["DUCK_KV"].presence || Global.config.kv.url.presence
+  Global.logger.info("Selecting kv: Global.environment[:kv]: #{ Global.environment[:kv].inspect } || ENV['DUCK_KV']: #{ ENV['DUCK_KV'].inspect } || Global.config.kv.url: #{ Global.config.kv.url.inspect }")
+  Global.logger.info("Using kv: #{ datastore_url }")
+  raise "Key value store URL must be set or must explicitly be set to false. Set it in `Global.environment[:kv] or DUCK_KV or `kv:` in config file." unless datastore_url.present?
+
+  Global.kv = KeyValueStore.new(datastore_url.to_s)
 end
 
 Global.openai_client = OpenAI::Client.new(access_token: Global.config.openai.access_token)

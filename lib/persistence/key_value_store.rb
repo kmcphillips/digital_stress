@@ -12,7 +12,7 @@ class KeyValueStore
         Global.logger.error(e)
         @redis = FakeRedis.new
       end
-    elsif datastore_url.ends_with?(".sqlite3")
+    elsif datastore_url.starts_with?("sqlite://")
       @redis = SqliteRedis.new(datastore_url)
     else
       @redis = FakeRedis.new
@@ -94,8 +94,8 @@ class FakeRedis
 end
 
 class SqliteRedis
-  def initialize(sqlite_file, name=nil)
-    @db = Sequel.sqlite(sqlite_file)
+  def initialize(sqlite_url, name=nil)
+    @db = Sequel.connect(sqlite_url)
     @db_name = "redis_#{ name || '0' }"
     @db.create_table?(@db_name) do
       String :key
@@ -132,6 +132,6 @@ class SqliteRedis
   end
 
   def expire(key, seconds)
-    @dataset.where(key: key).update(timestamp: Time.now.to_i + seconds) != 0
+    @dataset.where(key: key).update(timestamp: Time.now.to_i + seconds.to_i) != 0
   end
 end
