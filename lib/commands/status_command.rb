@@ -5,12 +5,15 @@ class StatusCommand < BaseCommand
   ]
 
   def response
-    ip_address = `hostname`.strip
-    hostname = `hostname -I`.split(" ").first
+    lines = []
 
-    lines = [
-      ":duck: on `#{ hostname }` `(#{ ip_address })` on `ruby #{ RUBY_VERSION}`",
-    ]
+    if ENV["FLY_ALLOC_ID"]
+      lines << ":duck: on fly.io (#{ (ENV["FLY_REGION"] || "?").upcase } region #{ ENV["FLY_VCPU_COUNT"] } CPU #{ ENV["FLY_VM_MEMORY_MB"] }mb RAM)"
+    else
+      ip_address = `hostname`.strip
+      hostname = `hostname -I`.split(" ").first
+      lines << ":duck: on `#{ hostname }` `(#{ ip_address })` on `ruby #{ RUBY_VERSION}`",
+    end
 
     if server && last_learned = Learner.last(server: server)
       lines << "Learned **#{ Learner.count(server: server) }** things. Last learn was #{ TimeDifference.between(Time.at(last_learned[:timestamp]), Time.now).humanize.downcase || 'a second' } ago."
