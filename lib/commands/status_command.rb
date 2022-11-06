@@ -8,11 +8,20 @@ class StatusCommand < BaseCommand
     lines = []
 
     if ENV["FLY_ALLOC_ID"]
-      lines << ":duck: on fly.io (#{ (ENV["FLY_REGION"] || "?").upcase } region #{ ENV["FLY_VCPU_COUNT"] } CPU #{ ENV["FLY_VM_MEMORY_MB"] }mb RAM)"
+      lines << ":duck: on fly.io `#{ ENV["FLY_ALLOC_ID"] }` in #{ (ENV["FLY_REGION"] || "?").upcase } region (#{ ENV["FLY_VCPU_COUNT"] } CPU #{ ENV["FLY_VM_MEMORY_MB"] }mb RAM)"
     else
       ip_address = `hostname`.strip
       hostname = `hostname -I`.split(" ").first
-      lines << ":duck: on `#{ hostname }` `(#{ ip_address })` on `ruby #{ RUBY_VERSION}`",
+      lines << ":duck: on `#{ hostname }` `(#{ ip_address })` on `ruby #{ RUBY_VERSION}`"
+    end
+
+    lines << "Using:"
+    lines << "* #{ Global.kv.to_s }"
+
+    if Global.db.class.to_s == "Sequel::SQLite::Database"
+      lines << "* SQLite in `#{ File.basename(Global.db.opts[:database]) }`"
+    else
+      lines << "* #{ Global.db.to_s }"
     end
 
     if server && last_learned = Learner.last(server: server)

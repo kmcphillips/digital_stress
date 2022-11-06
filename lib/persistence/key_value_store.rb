@@ -5,7 +5,7 @@ class KeyValueStore
   def initialize(datastore_url)
     if datastore_url.starts_with?("redis://")
       begin
-        @redis = Redis.new(url: datastore_url)
+        @redis = ::Redis.new(url: datastore_url)
         @redis.echo("Connected to redis #{ datastore_url }")
       rescue Redis::BaseError => e
         Global.logger.error("Failed to connect to real redis. Falling back to FakeRedis. #{ e.message }")
@@ -35,6 +35,14 @@ class KeyValueStore
     @redis.del(format_key(key))
   end
 
+  def to_s
+    if @redis.is_a?(::Redis)
+      @redis.inspect
+    else
+      @redis.to_s
+    end
+  end
+
   private
 
   def format_key(key)
@@ -53,7 +61,7 @@ class FakeRedis
   end
 
   def to_s
-    inspect
+    "FakeRedis in memory"
   end
 
   def set(key, val)
@@ -102,7 +110,7 @@ class SqliteRedis
   end
 
   def to_s
-    inspect
+    "SqliteRedis in `#{ File.basename(@db.opts[:database]) }`"
   end
 
   def set(key, val)
