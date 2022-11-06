@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require_relative "base"
 
+# TODO get the chat.sqlite3 file from a remote url
 mysql = Mysql.connect(Global.config.db.url)
 sqlite = Sequel.sqlite(Global.root.join("chat.sqlite3").to_s)
 
