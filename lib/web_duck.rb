@@ -2,11 +2,15 @@
 class WebDuck < Sinatra::Application
   set :port, Global.config.web_auth.port
 
-  get '/' do
-    'Quack!'
+  get "/" do
+    Quacker.quack
   end
 
-  post '/message/:server/:channel' do
+  get "/ping" do
+    "PONG (#{ server_info })"
+  end
+
+  post "/message/:server/:channel" do
     web_auth!
 
     server = params["server"]
@@ -24,7 +28,7 @@ class WebDuck < Sinatra::Application
     end
   end
 
-  post '/train_accident/:server/:channel/:username' do
+  post "/train_accident/:server/:channel/:username" do
     web_auth!
 
     server = params["server"]
@@ -85,7 +89,7 @@ class WebDuck < Sinatra::Application
   helpers do
     def web_auth!
       return if authorized?
-      headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
+      headers["WWW-Authenticate"] = "Basic realm=\"Restricted Area\""
       halt 401, "Not authorized\n"
     end
 
@@ -96,6 +100,16 @@ class WebDuck < Sinatra::Application
 
     def web_auth_credentials
       [Global.config.web_auth.username, Global.config.web_auth.password]
+    end
+
+    def server_info
+      if SystemInfo.flyio?
+        "fly.io #{ SystemInfo.region }"
+      elsif SystemInfo.digitalocean?
+        "DigitalOcean #{ SystemInfo.hostname }"
+      else
+        "#{ SystemInfo.hostname }"
+      end
     end
   end
 end

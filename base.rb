@@ -84,6 +84,7 @@ require_relative "lib/util/pinger"
 require_relative "lib/util/formatter"
 require_relative "lib/util/dedup"
 require_relative "lib/util/quacker"
+require_relative "lib/util/system_info"
 
 require_relative "lib/models/user"
 require_relative "lib/mandate_user_refinements"

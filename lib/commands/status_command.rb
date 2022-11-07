@@ -7,17 +7,12 @@ class StatusCommand < BaseCommand
   def response
     lines = []
 
-    if ENV["FLY_ALLOC_ID"]
-      lines << "**Duck bot** running on **fly.io** `#{ ENV["FLY_ALLOC_ID"] }` in **#{ (ENV["FLY_REGION"] || "?").upcase }** region (#{ ENV["FLY_VCPU_COUNT"] } CPU #{ ENV["FLY_VM_MEMORY_MB"] }mb RAM)  running `ruby #{ RUBY_VERSION}`"
+    if SystemInfo.flyio?
+      lines << "**@duck** running on **fly.io** `#{ ENV["FLY_ALLOC_ID"] }` in **#{ SystemInfo.region }** region (#{ ENV["FLY_VCPU_COUNT"] } CPU #{ ENV["FLY_VM_MEMORY_MB"] }mb RAM)  running `ruby #{ RUBY_VERSION}`"
+    elsif SystemInfo.digitalocean?
+        lines << "**@duck** running on **DigitalOcean** `#{ SystemInfo.hostname }` `(#{ SystemInfo.ip_address })` running `ruby #{ RUBY_VERSION}`"
     else
-      hostname = `hostname`.strip
-      ip_address = `hostname -I`.split(" ").first
-
-      if File.exists?("/opt/digitalocean") || ip_address.match?(/app[0-9]/)
-        lines << "**Duck bot** running on **DigitalOcean** `#{ hostname }` `(#{ ip_address })` running `ruby #{ RUBY_VERSION}`"
-      else
-        lines << "**Duck bot** running on `#{ hostname }` `(#{ ip_address })` running `ruby #{ RUBY_VERSION}`"
-      end
+      lines << "**@duck** running on `#{ SystemInfo.hostname }` `(#{ SystemInfo.ip_address })` running `ruby #{ RUBY_VERSION}`"
     end
 
     lines << "Using:"
