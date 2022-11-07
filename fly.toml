@@ -1,24 +1,28 @@
-# fly.toml file generated for kmcphillips-duck on 2022-11-06T14:45:44-05:00
+# fly.toml file generated for kmcphillips-duck on 2022-11-06T19:12:38-05:00
 
 app = "kmcphillips-duck"
 kill_signal = "SIGINT"
 kill_timeout = 5
-processes = []
 
 [build]
   builder = "heroku/buildpacks:20"
+
+[deploy]
+  strategy = "immediate"
+  # release_command = "bundle exec ruby db_migration.rb"
 
 [experimental]
   allowed_public_ports = []
   auto_rollback = true
 
 [processes]
-web = "bundle exec ruby bot.rb"
+  bot = "bundle exec ruby bot.rb"
+  clockwork = "bundle exec clockwork clock.rb"
 
 [[services]]
+  processes = ["bot"]
   internal_port = 4444
   protocol = "tcp"
-
   [services.concurrency]
     hard_limit = 25
     soft_limit = 20
