@@ -8,7 +8,7 @@ class StatusCommand < BaseCommand
     lines = []
 
     if ENV["FLY_ALLOC_ID"]
-      lines << ":duck: on fly.io `#{ ENV["FLY_ALLOC_ID"] }` in #{ (ENV["FLY_REGION"] || "?").upcase } region (#{ ENV["FLY_VCPU_COUNT"] } CPU #{ ENV["FLY_VM_MEMORY_MB"] }mb RAM)"
+      lines << ":duck: on fly.io `#{ ENV["FLY_ALLOC_ID"] }` in **#{ (ENV["FLY_REGION"] || "?").upcase }** region (#{ ENV["FLY_VCPU_COUNT"] } CPU #{ ENV["FLY_VM_MEMORY_MB"] }mb RAM)"
     else
       ip_address = `hostname`.strip
       hostname = `hostname -I`.split(" ").first
@@ -20,6 +20,8 @@ class StatusCommand < BaseCommand
 
     if Global.db.class.to_s == "Sequel::SQLite::Database"
       lines << "* SQLite in `#{ File.basename(Global.db.opts[:database]) }`"
+    elsif Global.db.class.to_s == "Sequel::MySQL::Database"
+      lines << "* MySQL `#{ Global.db.opts[:database] }` at `#{ Global.db.opts[:host] }:#{ Global.db.opts[:port] }`"
     else
       lines << "* #{ Global.db.to_s }"
     end
