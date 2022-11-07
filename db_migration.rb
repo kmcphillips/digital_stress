@@ -1,9 +1,22 @@
 # frozen_string_literal: true
 require_relative "base"
 
-# TODO get the chat.sqlite3 file from a remote url
+migration_url = ENV["DUCK_DB_MIGRATION_URL"]
+raise "DUCK_DB_MIGRATION_URL not set" unless migration_url.present?
+
+tmp_db_file = Global.root.join("tmp_db.sqlite3").to_s
+
+File.open(tmp_db_file, "w") do |file|
+  file.binmode
+  HTTParty.get(migration_url, stream_body: true) do |fragment|
+    file.write(fragment)
+  end
+end
+
+puts "Connecting to MySQL #{ Global.config.db.url }"
 mysql = Mysql.connect(Global.config.db.url)
-sqlite = Sequel.sqlite(Global.root.join("chat.sqlite3").to_s)
+puts "Connecting to SQLite #{ tmp_db_file }"
+sqlite = Sequel.sqlite(tmp_db_file)
 
 tables = {
   messages: true,
@@ -36,7 +49,8 @@ if tables[:messages]
       statement = mysql.prepare('insert into messages (id, timestamp, user_id, username, message, server, channel, message_id) values (?,?,?,?,?,?,?,?)')
       statement.execute(source[:id], source[:timestamp], source[:user_id], source[:username], source[:message].to_s, source[:server], source[:channel], source[:message_id])
     rescue => e
-      binding.irb
+      puts "Error in #{ source } #{ e.message }"
+      raise e
     end
   end
 
@@ -70,7 +84,8 @@ if tables[:learned]
       statement = mysql.prepare('insert into learned (id, timestamp, user_id, message, server, channel, message_id) values (?,?,?,?,?,?,?)')
       statement.execute(source[:id], source[:timestamp], source[:user_id], source[:message].to_s, source[:server], source[:channel], source[:message_id])
     rescue => e
-      binding.irb
+      puts "Error in #{ source } #{ e.message }"
+      raise e
     end
   end
 
@@ -103,7 +118,8 @@ if tables[:absurdity_chats]
       statement = mysql.prepare('insert into absurdity_chats (id, user_id, username, message, server, consumed_timestamp) values (?,?,?,?,?,?)')
       statement.execute(source[:id], source[:user_id], source[:username], source[:message].to_s, source[:server], source[:consumed_timestamp])
     rescue => e
-      binding.irb
+      puts "Error in #{ source } #{ e.message }"
+      raise e
     end
   end
 
@@ -135,7 +151,8 @@ if tables[:train_accidents]
       statement = mysql.prepare('insert into train_accidents (id, timestamp, user_id, server, channel) values (?,?,?,?,?)')
       statement.execute(source[:id], source[:timestamp], source[:user_id], source[:server], source[:channel])
     rescue => e
-      binding.irb
+      puts "Error in #{ source } #{ e.message }"
+      raise e
     end
   end
 
