@@ -4,23 +4,17 @@ class KeyValueStore
 
   def initialize(datastore_url)
     if datastore_url.starts_with?("redis://")
-      begin
-        @redis = ::Redis.new(url: datastore_url)
-        @redis.echo("Connected to redis #{ datastore_url }")
-      rescue Redis::BaseError => e
-        Global.logger.error("Failed to connect to real redis. Falling back to FakeRedis. #{ e.message }")
-        Global.logger.error(e)
-        @redis = FakeRedis.new
-      end
+      @redis = ::Redis.new(url: datastore_url)
     elsif datastore_url.starts_with?("sqlite://")
       @redis = SqliteRedis.new(datastore_url)
     elsif datastore_url.starts_with?("mysql://")
       @redis = MysqlRedis.new(datastore_url)
     else
       @redis = FakeRedis.new
+      Global.logger.error("Could not parse redis string. Falling back to FakeRedis.")
     end
 
-    Global.logger.info("[KeyValueStore Connected to #{ @redis.inspect }")
+    Global.logger.info("KeyValueStore Connected to #{ @redis.inspect } (#{ datastore_url })")
   end
 
   def write(key, value, ttl:nil)
