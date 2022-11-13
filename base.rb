@@ -36,7 +36,12 @@ Global.environment[:config_key] ||= ENV["DUCK_CONFIG_KEY"].presence
 require_relative "lib/configuration"
 Global.config = Configuration.new(key: Global.environment[:config_key], file: Global.environment[:config]).read
 
-logger_file = File.open(Global.environment[:log], File::WRONLY | File::APPEND | File::CREAT)
+logger_file = if ENV["DUCK_LOG_STDOUT"]
+  STDOUT
+else
+  File.open(Global.environment[:log], File::WRONLY | File::APPEND | File::CREAT)
+end
+
 logger_file.sync = true
 Global.logger = Logger.new(logger_file, level: (Global.config.discord.debug_log ? Logger::DEBUG : Logger::INFO))
 Discordrb::LOGGER.streams << logger_file if Global.config.discord.debug_log

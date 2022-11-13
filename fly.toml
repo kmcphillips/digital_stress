@@ -4,6 +4,9 @@ app = "kmcphillips-duck"
 kill_signal = "SIGINT"
 kill_timeout = 5
 
+[env]
+  DUCK_LOG_STDOUT = "true"
+
 [build]
   builder = "heroku/buildpacks:20"
 
