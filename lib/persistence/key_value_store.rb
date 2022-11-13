@@ -4,7 +4,7 @@ class KeyValueStore
 
   def initialize(datastore_url)
     if datastore_url.starts_with?("redis://")
-      @redis = ::Redis.new(url: datastore_url)
+      @redis = ::Redis.new(url: datastore_url, timeout: 20) # timeout in seconds
     elsif datastore_url.starts_with?("sqlite://")
       @redis = SqliteRedis.new(datastore_url)
     elsif datastore_url.starts_with?("mysql://")
