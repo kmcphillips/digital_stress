@@ -59,11 +59,18 @@ class Configuration
     CONFIG_CONST_NAME.constantize
   end
 
-  def write
+  def write(force: false)
     raise "Decrypted file `#{ decrypted_file_path }` did not exist to write" unless File.exist?(decrypted_file_path)
 
     decrypted_yaml = File.read(decrypted_file_path)
-    yaml = YAML.safe_load(decrypted_yaml) # Unused but raises if invalid
+    yaml = YAML.safe_load(decrypted_yaml) # raises if invalid
+    if !force || !File.exist?(encrypted_file_path)
+      original_encrypted_yaml = File.read(encrypted_file_path)
+      original_decrypted_yaml = @encryptor.decrypt_and_verify(original_encrypted_yaml)
+      original_yaml = YAML.safe_load(original_decrypted_yaml)
+
+      return false if original_yaml == yaml
+    end
     encrypted_yaml = @encryptor.encrypt_and_sign(decrypted_yaml)
     File.write(encrypted_file_path, encrypted_yaml)
 
