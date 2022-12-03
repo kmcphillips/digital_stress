@@ -18,7 +18,7 @@ class HaikuCommand < BaseCommand
 
   def openai_params
     {
-      engine: "davinci-instruct-beta-v3",
+      engine: OpenaiClient.default_engine,
       max_tokens: 64,
       temperature: 0.9,
       top_p: 1.0,

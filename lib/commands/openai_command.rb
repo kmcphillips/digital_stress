@@ -37,7 +37,7 @@ class OpenaiCommand < BaseSubcommand
       "Quack! Instruct something."
     else
       openai_params = {
-        engine: "davinci-instruct-beta-v3",
+        engine: OpenaiClient.default_engine,
         max_tokens: 300,
         temperature: 0.8,
         top_p: 1.0,

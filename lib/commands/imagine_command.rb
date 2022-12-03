@@ -33,7 +33,7 @@ class ImagineCommand < BaseCommand
 
   def openai_params
     {
-      engine: "davinci-instruct-beta-v3",
+      engine: OpenaiClient.default_engine,
       max_tokens: rand(120..256),
       temperature: 0.8,
       top_p: 1.0,
