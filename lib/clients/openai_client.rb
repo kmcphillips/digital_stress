@@ -3,7 +3,7 @@ module OpenaiClient
   extend self
 
   def default_engine
-    "davinci-instruct-beta-v3"
+    "text-davinci-003"
   end
 
   def default_model
