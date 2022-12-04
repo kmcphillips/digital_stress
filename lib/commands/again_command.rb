@@ -26,7 +26,7 @@ class AgainCommand < BaseCommand
       end
 
       command_class = previous_data[:command_class].constantize
-      command_class.new(event: event, bot: bot, params: [previous_data[:query]])
+      command_class.new(event: event, bot: bot, params: previous_data[:query].split(" "))
         .send(previous_data[:subcommand].presence || :response)
     else
       "#{ Quacker.quack } :no_entry_sign: Nothing recent to try again."
