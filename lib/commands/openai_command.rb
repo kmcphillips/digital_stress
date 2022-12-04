@@ -18,7 +18,8 @@ class OpenaiCommand < BaseSubcommand
       imagine: "Tell it to imagine something",
       reimagine: "Tell it to imagine an image of something",
       instruct: "Instruct it to return something",
-      image: "Generate an image with Stability AI",
+      image: "Generate an image with Dall-E 2",
+      stability: "Generate an image with Stability AI",
     }.freeze
   end
 
@@ -50,6 +51,14 @@ class OpenaiCommand < BaseSubcommand
   end
 
   def image
+    if subcommand_query.blank?
+      "Quack! What do you want an image of?"
+    else
+      OpenaiClient.image(subcommand_query.strip).first
+    end
+  end
+
+  def stability
     if subcommand_query.blank?
       "Quack! What do you want an image of?"
     else
