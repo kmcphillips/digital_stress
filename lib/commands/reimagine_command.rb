@@ -25,7 +25,7 @@ class ReimagineCommand < BaseCommand
 
   def openai_params
     {
-      engine: OpenaiClient.default_engine,
+      model: OpenaiClient.default_model,
       max_tokens: rand(200..400),
       temperature: 0.8,
       top_p: 1.0,

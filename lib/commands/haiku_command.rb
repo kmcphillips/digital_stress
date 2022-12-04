@@ -18,7 +18,7 @@ class HaikuCommand < BaseCommand
 
   def openai_params
     {
-      engine: OpenaiClient.default_engine,
+      model: OpenaiClient.default_model,
       max_tokens: 64,
       temperature: 0.9,
       top_p: 1.0,
