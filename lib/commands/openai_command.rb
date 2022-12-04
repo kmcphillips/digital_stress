@@ -18,8 +18,9 @@ class OpenaiCommand < BaseSubcommand
       imagine: "Tell it to imagine something",
       reimagine: "Tell it to imagine an image of something",
       instruct: "Instruct it to return something",
-      image: "Generate an image with Dall-E 2",
-      stability: "Generate an image with Stability AI",
+      dalle: "Generate an image with OpenAI Dall-E 2",
+      sd: "Generate an image with Stability AI Stable Diffusion",
+      image: "Generate an image with Stability AI Stable Diffusion",
     }.freeze
   end
 
@@ -50,7 +51,7 @@ class OpenaiCommand < BaseSubcommand
     end
   end
 
-  def image
+  def dalle
     if subcommand_query.blank?
       "Quack! What do you want an image of?"
     else
@@ -58,7 +59,7 @@ class OpenaiCommand < BaseSubcommand
     end
   end
 
-  def stability
+  def sd
     if subcommand_query.blank?
       "Quack! What do you want an image of?"
     else
@@ -69,5 +70,9 @@ class OpenaiCommand < BaseSubcommand
         "Quack! Got no image back??"
       end
     end
+  end
+
+  def image
+    sd
   end
 end
