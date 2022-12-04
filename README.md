@@ -89,7 +89,7 @@ CREATE TABLE train_accidents (
 );
 CREATE TABLE redis_0 (
   key VARCHAR(255),
-  value VARCHAR(255),
+  value TEXT,
   timestamp INTEGER
 );
 ```
@@ -137,7 +137,7 @@ CREATE TABLE train_accidents (
 ) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE TABLE redis_0 (
   `key` VARCHAR(255),
-  value VARCHAR(255),
+  value TEXT,
   timestamp BIGINT
 ) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
