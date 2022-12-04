@@ -45,7 +45,13 @@ class BaseCommand
   end
 
   def channel
-    event.channel&.name
+    if !event.channel
+      nil
+    elsif event.channel.thread?
+      event.channel.parent.name
+    else
+      event.channel.name
+    end
   end
 
   def channels
@@ -54,6 +60,10 @@ class BaseCommand
 
   def pm?
     event.channel.pm?
+  end
+
+  def thread?
+    event.channel.thread?
   end
 
   def typing?
