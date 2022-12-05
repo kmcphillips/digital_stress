@@ -2,15 +2,18 @@
 module ResponderMatcher
   private
 
-  def respond_match(regex, reply_message, source: nil, chance: nil, channels: nil, users: nil)
+  def respond_match(regex, reply_message=nil, source: nil, chance: nil, channels: nil, users: nil, &block)
+    raise "[ResponderMatcher] Either a reply_message or a block is needed" unless reply_message || block_given?
+    raise "[ResponderMatcher] Cannot have both a reply_message and a block" if reply_message && block_given?
+
     source ||= text
     return if channels && !Array(channels).include?("#{ server }##{ channel }")
     return if users && !Array(users).map(&:id).include?(user.id)
     if source.match?(regex) && (!chance || rand < chance)
-      reply_message_text = if reply_message.respond_to?(:call)
-        reply_message.call
-      else
+      reply_message_text = if reply_message
         reply_message
+      else
+        yield
       end
 
       event.respond(reply_message_text) if reply_message_text.present?
