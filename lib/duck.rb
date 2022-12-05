@@ -43,6 +43,7 @@ class Duck
     { class_name: ReviewCommand, command: :review, description: "Create a review for a product using GPT-3" },
     { class_name: CatCommand, command: :cat, aliases: [:cats, :meow], description: "Meow?" },
     { class_name: DisclaimerCommand, command: :disclaimer, description: "Generate fine print with GPT-3" },
+    { class_name: InsultCommand, command: :insult, description: "Insult someone or something with GPT-3" },
   ].freeze
 
   attr_reader :bot
