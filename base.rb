@@ -144,6 +144,7 @@ require_relative "lib/commands/dnd_command"
 require_relative "lib/commands/notifications_command"
 require_relative "lib/commands/quigital_command"
 require_relative "lib/commands/recipe_command"
+require_relative "lib/commands/review_command"
 
 require_relative "lib/responders/concerns/responder_matcher"
 require_relative "lib/responders/base_responder"

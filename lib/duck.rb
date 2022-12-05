@@ -40,6 +40,7 @@ class Duck
     { class_name: NotificationsCommand, command: :notifications, aliases: [:notification, :notify], description: "Silence notifications." },
     { class_name: QuigitalCommand, command: :quigital, description: "Engage with Quigital!" },
     { class_name: RecipeCommand, command: :recipe, description: "Create a recipe using GPT-3" },
+    { class_name: ReviewCommand, command: :review, description: "Create a review for a product using GPT-3" },
   ].freeze
 
   attr_reader :bot
