@@ -7,7 +7,13 @@ module ResponderMatcher
     return if channels && !Array(channels).include?("#{ server }##{ channel }")
     return if users && !Array(users).map(&:id).include?(user.id)
     if source.match?(regex) && (!chance || rand < chance)
-      event.respond(reply_message)
+      reply_message_text = if reply_message.respond_to?(:call)
+        reply_message.call
+      else
+        reply_message
+      end
+
+      event.respond(reply_message_text) if reply_message_text.present?
     end
   end
 

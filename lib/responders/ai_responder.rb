@@ -3,7 +3,7 @@ class AiResponder < BaseResponder
   include ResponderMatcher
 
   def respond
-    respond_match(/kitchen.?noise/i, completion("Play a popular song using only kitchen noises."))
+    respond_match(/kitchen.?noise/i, ->{ completion("Play a popular song using only kitchen noises.") })
   end
 
   private
