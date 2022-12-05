@@ -4,7 +4,7 @@ class HaikuCommand < BaseCommand
 
   def response
     if query.blank?
-      "Your input is blank\nI can't compose from nothing\nTry again quack quack"
+      "*Your input is blank\nI can't compose from nothing\nTry again quack quack*"
     else
       "*#{ OpenaiClient.completion(prompt(query), openai_params).first.strip }*"
     end
