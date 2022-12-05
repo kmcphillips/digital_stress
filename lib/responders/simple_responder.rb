@@ -11,6 +11,7 @@ class SimpleResponder < BaseResponder
     react_match(/\bheat\b/i, "🔥")
     react_match(/\bhwat\b/i, "🔥")
     react_match(/tight/i, "🤏")
+    react_match(/(italy|italian)/i, "🤌")
     react_match(/(noot|neet)/i, "👢")
     react_match(/(good|great|nice|best) duck/i, "❤️")
 
