@@ -27,4 +27,16 @@ module SystemInfo
   def git_revision
     `git rev-parse --short HEAD`.strip rescue "unknown"
   end
+
+  def recently_deployed?
+    SystemInfo.flyio? && uptime_seconds < 180
+  end
+
+  def uptime_seconds
+    if SystemInfo.flyio?
+      `cat /proc/uptime`.split(" ").first.to_f.to_i
+    else
+      nil
+    end
+  end
 end

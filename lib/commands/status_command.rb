@@ -7,14 +7,21 @@ class StatusCommand < BaseCommand
   def response
     lines = []
 
-    if SystemInfo.flyio?
-      lines << "**@duck** at `#{ SystemInfo.git_revision }` running on **fly.io** `#{ ENV["FLY_ALLOC_ID"] }` in **#{ SystemInfo.region }** region (#{ ENV["FLY_VCPU_COUNT"] } CPU #{ ENV["FLY_VM_MEMORY_MB"] }mb RAM)  running `ruby #{ RUBY_VERSION}`"
+    env_info = if SystemInfo.flyio?
+      "**fly.io** `#{ ENV["FLY_ALLOC_ID"] }` in **#{ SystemInfo.region }** region (#{ ENV["FLY_VCPU_COUNT"] } CPU #{ ENV["FLY_VM_MEMORY_MB"] }mb RAM)"
     elsif SystemInfo.digitalocean?
-        lines << "**@duck** at `#{ SystemInfo.git_revision }` running on **DigitalOcean** `#{ SystemInfo.hostname }` `(#{ SystemInfo.ip_address })` running `ruby #{ RUBY_VERSION}`"
+      "**DigitalOcean** `#{ SystemInfo.hostname }` `(#{ SystemInfo.ip_address })`"
     else
-      lines << "**@duck** at `#{ SystemInfo.git_revision }` running on `#{ SystemInfo.hostname }` `(#{ SystemInfo.ip_address })` running `ruby #{ RUBY_VERSION}`"
+      "`#{ SystemInfo.hostname }` `(#{ SystemInfo.ip_address })`"
     end
 
+    flags = if SystemInfo.recently_deployed?
+      " :rocket:"
+    else
+      ""
+    end
+
+    lines << "**@duck** at `#{ SystemInfo.git_revision }`#{ flags } running on #{ env_info } using `ruby #{ RUBY_VERSION}`"
     lines << "Using:"
     lines << "• #{ Global.kv.to_s }"
 
