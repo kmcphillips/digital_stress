@@ -148,6 +148,7 @@ require_relative "lib/commands/review_command"
 require_relative "lib/commands/cat_command"
 require_relative "lib/commands/disclaimer_command"
 require_relative "lib/commands/insult_command"
+require_relative "lib/commands/complain_command"
 
 require_relative "lib/responders/concerns/responder_matcher"
 require_relative "lib/responders/base_responder"
