@@ -17,11 +17,15 @@ class InsultCommand < BaseCommand
   private
 
   def insult_prompt(text)
-    "Write a biting and witty insult directed at #{ text.strip }."
+    "Write a biting and witty insult directed at #{ scrub(text) }."
   end
 
   def insult_person_prompt(name)
-    "Write a biting and witty insult directed at #{ name.strip }, making it clear that you do not care for their attitude."
+    "Write a biting and witty insult directed at #{ scrub(name) }, making it clear that you do not care for their attitude."
+  end
+
+  def scrub(text)
+    text.strip.gsub(/^about /i, "")
   end
 
   def openai_params
