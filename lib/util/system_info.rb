@@ -23,4 +23,8 @@ module SystemInfo
       (ENV["FLY_REGION"] || "?").upcase
     end
   end
+
+  def git_revision
+    `git rev-parse --short HEAD`.strip rescue "unknown"
+  end
 end

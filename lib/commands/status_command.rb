@@ -8,11 +8,11 @@ class StatusCommand < BaseCommand
     lines = []
 
     if SystemInfo.flyio?
-      lines << "**@duck** running on **fly.io** `#{ ENV["FLY_ALLOC_ID"] }` in **#{ SystemInfo.region }** region (#{ ENV["FLY_VCPU_COUNT"] } CPU #{ ENV["FLY_VM_MEMORY_MB"] }mb RAM)  running `ruby #{ RUBY_VERSION}`"
+      lines << "**@duck** at `#{ SystemInfo.git_revision }` running on **fly.io** `#{ ENV["FLY_ALLOC_ID"] }` in **#{ SystemInfo.region }** region (#{ ENV["FLY_VCPU_COUNT"] } CPU #{ ENV["FLY_VM_MEMORY_MB"] }mb RAM)  running `ruby #{ RUBY_VERSION}`"
     elsif SystemInfo.digitalocean?
-        lines << "**@duck** running on **DigitalOcean** `#{ SystemInfo.hostname }` `(#{ SystemInfo.ip_address })` running `ruby #{ RUBY_VERSION}`"
+        lines << "**@duck** at `#{ SystemInfo.git_revision }` running on **DigitalOcean** `#{ SystemInfo.hostname }` `(#{ SystemInfo.ip_address })` running `ruby #{ RUBY_VERSION}`"
     else
-      lines << "**@duck** running on `#{ SystemInfo.hostname }` `(#{ SystemInfo.ip_address })` running `ruby #{ RUBY_VERSION}`"
+      lines << "**@duck** at `#{ SystemInfo.git_revision }` running on `#{ SystemInfo.hostname }` `(#{ SystemInfo.ip_address })` running `ruby #{ RUBY_VERSION}`"
     end
 
     lines << "Using:"
