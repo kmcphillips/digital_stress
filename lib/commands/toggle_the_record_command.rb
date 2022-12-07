@@ -25,3 +25,15 @@ class ToggleTheRecordCommand < BaseCommand
     TimeDifference.between(t, t + seconds).humanize.downcase
   end
 end
+
+class OffTheRecordCommand < ToggleTheRecordCommand
+  def record?
+    false
+  end
+end
+
+class OnTheRecordCommand < ToggleTheRecordCommand
+  def record?
+    true
+  end
+end
