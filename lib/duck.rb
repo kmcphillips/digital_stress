@@ -12,31 +12,31 @@ class Duck
   ].freeze
   COMMANDS = [
     { class_name: PingCommand, command: :ping, description: "Hello, is it me you're looking for?" },
-    { class_name: SteamCommand, command: :steam, description: "Paste a link to the steam game matching the search." },
-    { class_name: ImageCommand, command: :image, aliases: [:images], description: "Search for an image and post it." },
-    { class_name: GifCommand, command: :gif, description: "Search for a gif and post it." },
-    { class_name: StatusCommand, command: :status, description: "Check on status of the bot." },
-    { class_name: LearnCommand, command: :learn, description: "Learn a phrase." },
+    { class_name: SteamCommand, command: :steam, description: "Search for Steam games." },
+    { class_name: ImageCommand, command: :image, aliases: [:images], description: "Search for images." },
+    { class_name: GifCommand, command: :gif, description: "Search for a gif." },
+    { class_name: StatusCommand, command: :status, description: "Check on status of the duck bot." },
+    { class_name: LearnCommand, command: :learn, description: "Learn something." },
     { class_name: DeployCommand, command: :deploy, description: "Deploy an application." },
     { class_name: OffTheRecordCommand, command: :off, description: "Go off the record." },
     { class_name: OnTheRecordCommand, command: :on, description: "Go back on the record." },
-    { class_name: ChatCommand, command: :chat, description: "Chat like us. Can accept a username as an argument." },
+    { class_name: ChatCommand, command: :chat, description: "Chat like us. Optionally accept a name to chat like a specific person." },
     { class_name: WolframAlphaCommand, command: :wolfram, aliases: [:wa, :wolframalpha], description: "Query Wolfram|Alpha." },
     { class_name: TrainCommand, command: :train, description: "Train accidents." },
-    { class_name: TextCommand, command: :text, description: "Send a text message. Name a person then the message to text them." },
+    { class_name: TextCommand, command: :text, description: "Send a text message to a person by name." },
     { class_name: AlchemyCommand, command: :tonight, description: "We playing games tonight? Who's coming?" },
     { class_name: GamesCommand, command: :games, aliases: [:game], description: "What should we play?" },
     { class_name: WikipediaCommand, command: :wikipedia, aliases: [:Wikipedia, :w, :wiki], description: "Search a topic on Wikipedia." },
-    { class_name: AgainCommand, command: :again, aliases: [:retry, :try, :redo], description: "Redo the search for a gif or image." },
-    { class_name: AbortCommand, command: :abort, description: "Give up redoing image search." },
+    { class_name: AgainCommand, command: :again, aliases: [:retry, :try, :redo], description: "Redo the last search or prompt." },
+    { class_name: AbortCommand, command: :abort, description: "Give up redoing the search or prompt." },
     { class_name: AnnouncementCommand, command: :announcement, aliases: [:announcements], description: "Manage the announcements." },
     { class_name: RollCommand, command: :roll, aliases: [:r], description: "Roll some dice." },
-    { class_name: OpenaiCommand, command: :openai, aliases: [:ai], description: "Interact with OpenAI GPT-3." },
-    { class_name: ImagineCommand, command: :imagine, description: "Imagine something." },
-    { class_name: ReimagineCommand, command: :reimagine, description: "Imagine what something would look like." },
+    { class_name: OpenaiCommand, command: :openai, aliases: [:ai], description: "Commands relating to OpenAI." },
+    { class_name: ImagineCommand, command: :imagine, description: "Imagine something with AI." },
+    { class_name: ReimagineCommand, command: :reimagine, description: "Imagine something with AI, feeding the text into the image." },
     { class_name: HaikuCommand, command: :haiku, description: "Compose a haiku GPT-3." },
-    { class_name: WhatCommand, command: :what, description: "do you think?" },
-    { class_name: DndCommand, command: :dnd, description: "DND 5e things." },
+    { class_name: WhatCommand, command: :what, description: "What do you think?" },
+    { class_name: DndCommand, command: :dnd, description: "D&D 5e commands." },
     { class_name: NotificationsCommand, command: :notifications, aliases: [:notification, :notify], description: "Silence notifications." },
     { class_name: QuigitalCommand, command: :quigital, description: "Engage with Quigital!" },
     { class_name: RecipeCommand, command: :recipe, description: "Create a recipe using GPT-3" },
@@ -101,7 +101,7 @@ class Duck
       end
     end
 
-    COMMANDS.each do |command_config|
+    COMMANDS.sort_by { |c| c[:command].to_s }.each do |command_config|
       bot.command(command_config[:command], description: command_config[:description], aliases: command_config[:aliases] || []) do |event, *params|
         instance = command_config[:class_name].new(event: event, bot: bot, params: params)
         response = instance.respond
