@@ -10,18 +10,28 @@ module SystemInfo
     ENV["FLY_ALLOC_ID"].present?
   end
 
+  def region
+    (ENV["FLY_REGION"] || "?").upcase if SystemInfo.flyio?
+  end
+
+  def instance
+    ENV["FLY_ALLOC_ID"] if SystemInfo.flyio?
+  end
+
+  def cpu
+    ENV["FLY_VCPU_COUNT"] if SystemInfo.flyio?
+  end
+
+  def memory
+    ENV["FLY_VM_MEMORY_MB"] if SystemInfo.flyio?
+  end
+
   def ip_address
     `hostname -I`.split(" ").first
   end
 
   def hostname
     `hostname`.strip
-  end
-
-  def region
-    if SystemInfo.flyio?
-      (ENV["FLY_REGION"] || "?").upcase
-    end
   end
 
   def git_revision

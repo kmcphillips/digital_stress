@@ -8,7 +8,7 @@ class StatusCommand < BaseCommand
     lines = []
 
     env_info = if SystemInfo.flyio?
-      "**fly.io** `#{ ENV["FLY_ALLOC_ID"] }` in **#{ SystemInfo.region }** region (#{ ENV["FLY_VCPU_COUNT"] } CPU #{ ENV["FLY_VM_MEMORY_MB"] }mb RAM)"
+      "**fly.io** `#{ SystemInfo.instance }` in **#{ SystemInfo.region }** region (#{ SystemInfo.cpu } CPU #{ SystemInfo.memory }mb RAM)"
     elsif SystemInfo.digitalocean?
       "**DigitalOcean** `#{ SystemInfo.hostname }` `(#{ SystemInfo.ip_address })`"
     else
