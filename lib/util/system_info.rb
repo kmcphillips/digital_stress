@@ -29,7 +29,7 @@ module SystemInfo
   end
 
   def recently_deployed?
-    SystemInfo.flyio? && uptime_seconds < 180
+    SystemInfo.flyio? && (uptime_seconds || 180) < 180
   end
 
   def uptime_seconds
