@@ -26,8 +26,8 @@ class NewCommand < BaseSubcommand
 
     begin
       if image_prompt.present? && image_prompt.length > 10
-        file = Dreamstudio.image_file(image_prompt)
-        event.send_file(file, filename: "game.png") if file
+        url = OpenaiClient.image(image_prompt).first
+        result = "#{ result.strip }\n#{ url }" if url.present?
       end
     rescue => e
       result = "#{ result }\n:bangbang: #{ e.message }"
