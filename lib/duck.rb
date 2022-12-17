@@ -47,6 +47,7 @@ class Duck
     { class_name: ComplainCommand, command: :complain, description: "Complain about something with GPT-3" },
     { class_name: SongCommand, command: :song, aliases: [:sing], description: "Compose some lyrics with GPT-3" },
     { class_name: DefineCommand, command: :define, aliases: [:definition, :def], description: "Get the possibly correct definition of something with GPT-3" },
+    { class_name: NewCommand, command: :new, description: "Make a new something with AI" },
   ].freeze
 
   attr_reader :bot
