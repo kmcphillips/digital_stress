@@ -21,5 +21,6 @@ class SimpleResponder < BaseResponder
     respond_match(/safe/i, "https://i.imgur.com/1WReL2h.jpg", channels: MANDATE_CHANNELS, chance: 0.2)
     respond_match(/brain injur|concussion/i, "https://media3.giphy.com/media/NhXhI7kHCwxRC/giphy.gif", channels: MANDATE_CHANNELS, chance: 0.3)
     respond_match(/\Afuck ./i, "You talking to me?", channels: MANDATE_CHANNELS, chance: 0.3)
+    respond_match(/pickle.?surprise/i, "https://cdn.discordapp.com/attachments/250717538063745024/1054566918536843274/Eliot_ultimate_pickle_surprise_8bf66f6a-b3a1-441d-a530-241e7c37d8b5.png")
   end
 end
