@@ -12,7 +12,6 @@ require "httparty"
 require "nokogiri"
 require "google/protobuf"
 require "grpc"
-require "time_difference"
 require "securerandom"
 require "sinatra/base"
 require "systemcall"
@@ -27,6 +26,8 @@ require "aws-sdk-core"
 require "aws-sdk-polly"
 require "fuzzy_match"
 require "timeout"
+
+require_relative "lib/vendor/time_difference"
 
 require_relative "lib/global"
 
