@@ -3,7 +3,7 @@ module SystemInfo
   extend self
 
   def digitalocean?
-    File.exists?("/opt/digitalocean") || ip_address.match?(/app[0-9]/)
+    File.exist?("/opt/digitalocean") || ip_address.match?(/app[0-9]/)
   end
 
   def flyio?
