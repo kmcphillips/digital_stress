@@ -6,6 +6,7 @@ kill_timeout = 5
 
 [env]
   DUCK_LOG_STDOUT = "true"
+  APP_ENV = "production"
 
 [deploy]
   strategy = "immediate"

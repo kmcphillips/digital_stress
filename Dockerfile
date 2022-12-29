@@ -1,17 +1,24 @@
-FROM ruby:3.2.0-alpine AS builder
-
-ARG BUILD_PACKAGES="git build-base sqlite"
-RUN apk add --no-cache ${BUILD_PACKAGES}
-RUN gem install bundler -N -v 2.4.1
-
+FROM ruby:3.2.0-alpine AS base
+ARG BUNDLER_VERSION=2.4.1
+ARG BUNDLE_WITHOUT="development:test"
+ARG BASE_PACKAGES="tz git"
+ARG BUILD_PACKAGES="build-base sqlite"
+ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
+RUN apk add --no-cache ${BASE_PACKAGES}
 RUN mkdir /app
 WORKDIR /app
-COPY . .
+RUN gem install bundler -N -v ${BUNDLER_VERSION}
+RUN git config --global --add safe.directory /app
 
-RUN bundle install --jobs 8 --retry 5
+FROM base AS builder
+RUN apk add --no-cache ${BUILD_PACKAGES}
 
-FROM ruby:3.2.0-alpine AS app
-COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
-COPY --from=builder /app /app
+FROM builder AS gems
+COPY Gemfile* ./
+RUN bundle install
 
+FROM base AS app
 WORKDIR /app
+COPY --from=gems /usr/local/bundle /usr/local/bundle
+COPY --from=gems /app /app
+COPY . .
