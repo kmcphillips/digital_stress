@@ -87,7 +87,7 @@ class TrainCommand < BaseCommand
 
       Tempfile.create(["train_duck", ".png"]) do |temp|
         left_padding = days < 10 ? "106" : "82"
-        response = SystemCall.call("convert \"#{ SIGN_TEMPLATE_PATH }\" -font helvetica -pointsize 100 -draw \"text #{ left_padding },146 '#{ days }'\" \"#{ temp.path }\"")
+        response = SystemCall.call("convert \"#{ SIGN_TEMPLATE_PATH }\" -font \"Liberation-Sans\" -pointsize 100 -draw \"text #{ left_padding },146 '#{ days }'\" \"#{ temp.path }\"")
         if response.success?
           yield(temp)
         else
