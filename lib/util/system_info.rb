@@ -35,7 +35,7 @@ module SystemInfo
   end
 
   def git_revision
-    `git rev-parse --short HEAD`.strip rescue "unknown"
+    `git rev-parse --short HEAD`.strip.presence rescue nil
   end
 
   def recently_deployed?

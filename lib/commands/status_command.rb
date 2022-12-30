@@ -21,7 +21,7 @@ class StatusCommand < BaseCommand
       ""
     end
 
-    lines << "**@duck** at `#{ SystemInfo.git_revision }`#{ flags } running on #{ env_info } using `ruby #{ RUBY_VERSION}`"
+    lines << "**@duck** at `#{ SystemInfo.git_revision || "unknown" }`#{ flags } running on #{ env_info } using `ruby #{ RUBY_VERSION}`"
     lines << "Using:"
     lines << "• #{ Global.kv.to_s }"
 
