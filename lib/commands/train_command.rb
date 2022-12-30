@@ -81,13 +81,14 @@ class TrainCommand < BaseCommand
     extend self
 
     SIGN_TEMPLATE_PATH = Global.root.join("data", "train_accident_template.png")
+    FONT_NAME = "Arial"
 
     def it_has_been_days_file(days)
       raise "Cannot find file '#{ SIGN_TEMPLATE_PATH }'" unless File.exist?(SIGN_TEMPLATE_PATH)
 
       Tempfile.create(["train_duck", ".png"]) do |temp|
         left_padding = days < 10 ? "106" : "82"
-        response = SystemCall.call("convert \"#{ SIGN_TEMPLATE_PATH }\" -font \"Liberation-Sans\" -pointsize 100 -draw \"text #{ left_padding },146 '#{ days }'\" \"#{ temp.path }\"")
+        response = SystemCall.call("convert \"#{ SIGN_TEMPLATE_PATH }\" -font \"#{ FONT_NAME }\" -pointsize 100 -draw \"text #{ left_padding },146 '#{ days }'\" \"#{ temp.path }\"")
         if response.success?
           yield(temp)
         else

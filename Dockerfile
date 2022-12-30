@@ -1,14 +1,15 @@
 FROM ruby:3.2.0-alpine AS base
 ARG BUNDLER_VERSION=2.4.1
 ARG BUNDLE_WITHOUT="development:test"
-ARG BASE_PACKAGES="tz git vim curl imagemagick ttf-liberation"
+ARG BASE_PACKAGES="tz git vim curl imagemagick ttf-liberation msttcorefonts-installer fontconfig"
 ARG BUILD_PACKAGES="build-base sqlite"
 ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
 RUN apk add --no-cache ${BASE_PACKAGES}
 RUN mkdir /app
 WORKDIR /app
-RUN gem install bundler -N -v ${BUNDLER_VERSION}
+RUN update-ms-fonts && fc-cache -f
 RUN git config --global --add safe.directory /app
+RUN gem install bundler -N -v ${BUNDLER_VERSION}
 
 FROM base AS builder
 RUN apk add --no-cache ${BUILD_PACKAGES}
