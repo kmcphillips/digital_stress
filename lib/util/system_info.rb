@@ -27,15 +27,15 @@ module SystemInfo
   end
 
   def ip_address
-    `hostname -I`.split(" ").first
+    system_call("hostname -I").split(" ").first.presence
   end
 
   def hostname
-    `hostname`.strip
+    system_call("hostname").split.first.presence
   end
 
   def git_revision
-    `git rev-parse --short HEAD`.strip.presence rescue nil
+    system_call("git rev-parse --short HEAD").strip.presence rescue nil
   end
 
   def recently_deployed?
@@ -44,9 +44,17 @@ module SystemInfo
 
   def uptime_seconds
     if SystemInfo.flyio?
-      `cat /proc/uptime`.split(" ").first.to_f.to_i
+      system_call("cat /proc/uptime").split(" ").first.to_f.to_i
     else
       nil
     end
+  end
+
+  private
+
+  def system_call(command)
+    result = SystemCall.call(command)
+    raise "`#{ command }` failed: #{ result.result }" unless result.success?
+    result.result
   end
 end
