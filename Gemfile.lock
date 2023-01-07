@@ -22,7 +22,7 @@ GEM
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
     aws-eventstream (1.2.0)
-    aws-partitions (1.684.0)
+    aws-partitions (1.689.0)
     aws-sdk-core (3.168.4)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
@@ -87,7 +87,7 @@ GEM
     games_dice (0.4.0)
       parslet (>= 1.5.0)
     google-protobuf (3.21.12)
-    googleapis-common-protos-types (1.4.0)
+    googleapis-common-protos-types (1.5.0)
       google-protobuf (~> 3.14)
     grpc (1.50.0)
       google-protobuf (~> 3.21)
@@ -106,7 +106,7 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2022.0105)
     mini_portile2 (2.8.1)
-    minitest (5.16.3)
+    minitest (5.17.0)
     multi_xml (0.6.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
@@ -138,10 +138,10 @@ GEM
       rspec-mocks (~> 3.12.0)
     rspec-core (3.12.0)
       rspec-support (~> 3.12.0)
-    rspec-expectations (3.12.1)
+    rspec-expectations (3.12.2)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
-    rspec-mocks (3.12.1)
+    rspec-mocks (3.12.2)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-support (3.12.0)
@@ -149,7 +149,7 @@ GEM
     ruby-openai (3.0.2)
       httparty (>= 0.18.1, < 0.21.0)
     ruby2_keywords (0.0.5)
-    sequel (5.63.0)
+    sequel (5.64.0)
     sinatra (3.0.5)
       mustermann (~> 3.0)
       rack (~> 2.2, >= 2.2.4)
@@ -178,6 +178,7 @@ GEM
     zeitwerk (2.6.6)
 
 PLATFORMS
+  arm64-darwin-22
   x86_64-linux
 
 DEPENDENCIES
@@ -209,4 +210,4 @@ RUBY VERSION
    ruby 3.2.0p0
 
 BUNDLED WITH
-   2.4.1
+   2.4.3
