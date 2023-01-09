@@ -87,7 +87,7 @@ class Announcement
           "#{ Date::MONTHNAMES[month] } #{ day }#{ day.ordinal } every year"
         end
       elsif date
-        date.inspect
+        date.strftime("%a %b %-d %Y")
       else
         ":question: #{ conditions_hash.inspect }"
       end
