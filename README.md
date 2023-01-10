@@ -50,51 +50,9 @@ bundle exec cap production bot:restart
 
 ## Database
 
-Currently using a SQLite database not included with the repo.
+Some static data is stored in SQLite instances, but those are read only, such as D&D data.
 
-```sql
-CREATE TABLE messages (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  timestamp INTEGER,
-  user_id INTEGER,
-  username VARCHAR(255),
-  message TEXT ,
-  server VARCHAR(255),
-  channel VARCHAR(255),
-  message_id INTEGER
-);
-CREATE TABLE learned (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  timestamp INTEGER,
-  user_id INTEGER,
-  message TEXT,
-  server VARCHAR(255),
-  channel VARCHAR(255),
-  message_id INTEGER
-);
-CREATE TABLE absurdity_chats (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id INTEGER,
-  username VARCHAR(255),
-  message TEXT,
-  server VARCHAR(255),
-  consumed_timestamp INTEGER
-);
-CREATE TABLE train_accidents (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  timestamp INTEGER,
-  user_id INTEGER,
-  server VARCHAR(255),
-  channel VARCHAR(255)
-);
-CREATE TABLE redis_0 (
-  key VARCHAR(255),
-  value TEXT,
-  timestamp INTEGER
-);
-```
-
-An in process migration to MySQL uses these similar tables:
+Transactional data uses a MySQL DB with the following:
 
 ```sql
 CREATE DATABASE digital_stress_db CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
