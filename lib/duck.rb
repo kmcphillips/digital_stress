@@ -113,7 +113,7 @@ class Duck
           begin
             message = event.respond(response)
           rescue Discordrb::Errors::InvalidFormBody
-            message = event.respond("Quack!! Error in error. Response looks too long!! #{ response.first(3600) }")
+            message = event.respond("Quack!! Error in error. Response looks too long!! #{ response.first(1800) }")
           end
         end
         instance.after(message: message)
