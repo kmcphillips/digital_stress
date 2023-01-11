@@ -93,6 +93,14 @@ CREATE TABLE train_accidents (
   server VARCHAR(255),
   channel VARCHAR(255)
 ) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE TABLE announcements (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  server VARCHAR(255),
+  channel VARCHAR(255),
+  day INTEGER,
+  month INTEGER,
+  year INTEGER
+) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE TABLE redis_0 (
   `key` VARCHAR(255),
   value TEXT,

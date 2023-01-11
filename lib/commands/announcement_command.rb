@@ -12,7 +12,7 @@ class AnnouncementCommand < BaseSubcommand
     server_name = server
     server_name = params[1] if pm? && params[1].present?
 
-    announcements = Announcement.find(server: server_name).reject(&:expired?)
+    announcements = Announcement.all(server: server_name).reject(&:expired?)
     announcements = announcements.reject(&:secret) unless pm?
 
     if announcements.any?

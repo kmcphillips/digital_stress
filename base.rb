@@ -94,10 +94,8 @@ require_relative "lib/util/dedup"
 require_relative "lib/util/quacker"
 require_relative "lib/util/system_info"
 
-require_relative "lib/models/user"
+Dir.glob("lib/models/*.rb").each { |file| require_relative file }
 require_relative "lib/mandate_user_refinements"
-require_relative "lib/models/announcement"
-require_relative "lib/models/absurdity_chat"
 
 require_relative "lib/protobuf/dreamstudio/generation_pb"
 require_relative "lib/protobuf/dreamstudio/generation_services_pb"

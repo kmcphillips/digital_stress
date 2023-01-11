@@ -17,43 +17,31 @@ class Announcement
   end
 
   class << self
-    def find(server:)
-      results = []
-
-      (Global.config.servers[server]&.tasks&.daily_announcements || []).each do |config|
-        results << from_config(config, server: server)
-      end
-
-      results.sort
+    def all(server: nil)
+      (ConfigAnnouncement.all(server: server) + DbAnnouncement.all(server: server)).sort
     end
 
-    def all
-      results = []
-
-      Global.config.servers.each do |server_name, server_config|
-        if server_config.tasks&.daily_announcements
-          server_config.tasks.daily_announcements.each do |config|
-            results << from_config(config, server: server_name)
-          end
-        end
-      end
-
-      results.sort
+    def build(*)
+      raise NotImplementedError
     end
 
-    def from_config(config, server:)
-      self.new(
-        server: server.presence.to_s.gsub("#", ""),
-        channel: config.channel.presence.to_s.gsub("#", ""),
-        message: config.message,
-        day: config.day,
-        month: config.month,
-        year: config.year,
-        weekdays: config.weekdays,
-        secret: config.secret,
-        source: :config
-      )
+    def coerce_month(str)
+      return nil unless str.present? && str.to_s.present?
+      str = str.to_s.strip.titlecase
+
+      as_int = str.to_i
+      return as_int if as_int > 0 && as_int <= 12
+
+      Date::MONTHNAMES.index(str) || Date::ABBR_MONTHNAMES.index(str)
     end
+  end
+
+  def save
+    raise NotImplementedError
+  end
+
+  def destroy
+    raise NotImplementedError
   end
 
   def date
@@ -129,5 +117,78 @@ class Announcement
     if c = Pinger.find_channel(server: server, channel: channel)
       "<##{ c.id }>"
     end
+  end
+end
+
+class ConfigAnnouncement < Announcement
+  def initialize(**args)
+    super(**args.merge(source: :config))
+  end
+
+  class << self
+    def all(server: nil)
+      results = []
+
+      Global.config.servers.each do |server_name, server_config|
+        next if server.present? && server.to_s.gsub("#", "") != server_name.to_s
+
+        if server_config.tasks&.daily_announcements
+          server_config.tasks.daily_announcements.each do |config|
+            results << build(config, server: server_name)
+          end
+        end
+      end
+
+      results.sort
+    end
+
+    def build(config, server:)
+      new(
+        server: server.presence.to_s.gsub("#", ""),
+        channel: config.channel.presence.to_s.gsub("#", ""),
+        message: config.message,
+        day: config.day,
+        month: config.month,
+        year: config.year,
+        weekdays: config.weekdays,
+        secret: config.secret,
+        source: :config
+      )
+    end
+  end
+end
+
+class DbAnnouncement < Announcement
+  def initialize(**args)
+    super(**args.merge(source: :db))
+  end
+
+  class << self
+    def all(server: nil)
+      relation = Global.db[:announcements]
+      relation = relation.where(server: server.to_s.gsub("#", "")) if server.present?
+      results = relation.map { |record| build(record) }.sort
+    end
+
+    def build(record)
+      new(
+        server: record[:server].presence.to_s.gsub("#", ""),
+        channel: record[:channel].presence.to_s.gsub("#", ""),
+        message: record[:message],
+        day: record[:day],
+        month: record[:month],
+        year: record[:year],
+        weekdays: record[:weekdays],
+        secret: record[:secret]
+      )
+    end
+  end
+
+  def save
+    # TODO
+  end
+
+  def destroy
+    # TODO
   end
 end
