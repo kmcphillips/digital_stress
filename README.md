@@ -99,7 +99,8 @@ CREATE TABLE announcements (
   channel VARCHAR(255),
   day INTEGER,
   month INTEGER,
-  year INTEGER
+  year INTEGER,
+  message TEXT
 ) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE TABLE redis_0 (
   `key` VARCHAR(255),

@@ -25,6 +25,19 @@ class Announcement
       raise NotImplementedError
     end
 
+    def coerce_date(year:, month:, day:)
+      year = year.to_i
+      year = year + 2000 if year < 100
+      month = coerce_month(month)
+      day = day.to_i
+
+      if year < 2023 || year > 2035 || !month || day < 1 || day > 31
+        nil
+      else
+        [year, month, day]
+      end
+    end
+
     def coerce_month(str)
       return nil unless str.present? && str.to_s.present?
       str = str.to_s.strip.titlecase
@@ -185,10 +198,20 @@ class DbAnnouncement < Announcement
   end
 
   def save
-    # TODO
+    result = Global.db[:announcements].insert(
+      server: server,
+      channel: channel,
+      day: day,
+      month: month,
+      year: year,
+      message: message
+    )
+
+    return self if result
   end
 
   def destroy
     # TODO
+    raise NotImplementedError, "Cannot yet delete db announcements"
   end
 end
