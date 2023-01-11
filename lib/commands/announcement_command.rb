@@ -3,7 +3,8 @@ class AnnouncementCommand < BaseSubcommand
   def subcommands
     {
       list: "List all upcoming announcements on this server.",
-      add: "Add a new announcement. Usage: `#{ usage }`",
+      add: "Add a new announcement. Usage: `#{ add_usage }`",
+      delete: "Delete an announcment. Usage: `#{ delete_usage }`",
     }.freeze
   end
 
@@ -25,13 +26,13 @@ class AnnouncementCommand < BaseSubcommand
 
   def add
     if subcommand_params.length < 4
-      "Quack! Usage: `#{ usage }`"
+      "Quack! Usage: `#{ add_usage }`"
     else
       year, month, day = Announcement.coerce_date(year: subcommand_params[0], month: subcommand_params[1], day: subcommand_params[2])
       message = subcommand_params[3..-1].join(" ")
 
       if !year || !month || !day || message.blank?
-        "Quack! Could not parse date. Usage: `#{ usage }`"
+        "Quack! Could not parse date. Usage: `#{ add_usage }`"
       else
         result = DbAnnouncement.new(
           server: server,
@@ -51,8 +52,39 @@ class AnnouncementCommand < BaseSubcommand
     end
   end
 
-  def usage
+  def delete
+    if subcommand_params.length == 0
+      announcements = DbAnnouncement.all(server: server).reject(&:expired?)
+      announcements = announcements.reject(&:secret) unless pm?
+
+      if announcements.any?
+        announcements.map { |a| "**(#{ a.id })** on **#{ a.formatted_conditions }** in **#{ a.channel }**" }.join("\n")
+      else
+        ":outbox_tray: No upcoming announcements."
+      end
+    elsif subcommand_params.length == 1
+      announcement = DbAnnouncement.find(subcommand_params[0])
+
+      if announcement
+        if announcement.destroy
+          "Quack! Announcement deleted.\n#{ format_announcement(announcement) }"
+        else
+          "Quack! Could not delete announcement!"
+        end
+      else
+        "Quack! Could not find announcement by id `#{ subcommand_params[0] }`."
+      end
+    else
+      "Quack! Usage: `#{ delete_usage }`"
+    end
+  end
+
+  def add_usage
     "duck announcement add YEAR MONTH DAY Then the message"
+  end
+
+  def delete_usage
+    "duck announcement delete ID"
   end
 
   def format_announcement(announcement)

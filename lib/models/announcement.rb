@@ -2,9 +2,9 @@
 class Announcement
   include Comparable
 
-  attr_reader :server, :channel, :message, :day, :month, :year, :weekdays, :source, :secret
+  attr_reader :server, :channel, :message, :day, :month, :year, :weekdays, :source, :secret, :id
 
-  def initialize(server:, channel:, message:, day: nil, month: nil, year: nil, weekdays: nil, source:, secret: false)
+  def initialize(server:, channel:, message:, day: nil, month: nil, year: nil, weekdays: nil, source:, secret: false, id: nil)
     @server = server
     @channel = channel
     @message = message
@@ -14,6 +14,7 @@ class Announcement
     @weekdays = Array(weekdays).compact.map(&:downcase)
     @source = source.to_sym
     @secret = !!secret
+    @id = id
   end
 
   class << self
@@ -183,22 +184,28 @@ class DbAnnouncement < Announcement
       results = relation.map { |record| build(record) }.sort
     end
 
+    def find(id)
+      record = Global.db[:announcements].where(id: id).first
+      build(record) if record
+    end
+
     def build(record)
       new(
         server: record[:server].presence.to_s.gsub("#", ""),
         channel: record[:channel].presence.to_s.gsub("#", ""),
-        message: record[:message],
+        message: record[:message].to_s,
         day: record[:day],
         month: record[:month],
         year: record[:year],
         weekdays: record[:weekdays],
-        secret: record[:secret]
+        secret: record[:secret],
+        id: record[:id]
       )
     end
   end
 
   def save
-    result = Global.db[:announcements].insert(
+    id = Global.db[:announcements].insert(
       server: server,
       channel: channel,
       day: day,
@@ -206,12 +213,17 @@ class DbAnnouncement < Announcement
       year: year,
       message: message
     )
+    @id = id
 
-    return self if result
+    return self if id
   end
 
   def destroy
-    # TODO
-    raise NotImplementedError, "Cannot yet delete db announcements"
+    if id.blank?
+      raise ArgumentError, "Cannot delete an announcement without an id"
+    else
+      count = Global.db[:announcements].where(id: id).delete
+      !!(count == 1)
+    end
   end
 end
