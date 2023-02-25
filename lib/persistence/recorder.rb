@@ -120,6 +120,13 @@ module Recorder
       .limit(limit)
   end
 
+  def all_since(server:, channel:, since:)
+    table
+      .where(server: server, channel: channel)
+      .where{ timestamp > since.to_i }
+      .order(Sequel.desc(:timestamp))
+  end
+
   def off_the_record?(server:, channel:)
     !!kv_store.read(otr_key(server: server, channel: channel))
   end
