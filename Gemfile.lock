@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/kmcphillips/ruby-openai
-  revision: 8ab7f9475230fac5307fa7f5f3f19d0868b4b4d1
-  ref: 8ab7f9475230fac5307fa7f5f3f19d0868b4b4d1
-  specs:
-    ruby-openai (3.0.3)
-      httparty (>= 0.18.1, < 0.22.0)
-
-GIT
   remote: https://github.com/shardlab/discordrb
   revision: ad5dd1641f3653ca4e76d44f901adb42018e354e
   specs:
@@ -22,7 +14,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (7.0.4.1)
+    activesupport (7.0.4.2)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -155,6 +147,8 @@ GEM
       rspec-support (~> 3.12.0)
     rspec-support (3.12.0)
     ruby-mysql (4.0.0)
+    ruby-openai (3.3.0)
+      httparty (>= 0.18.1)
     ruby2_keywords (0.0.5)
     sequel (5.64.0)
     sinatra (3.0.5)
@@ -204,7 +198,7 @@ DEPENDENCIES
   redis
   rspec
   ruby-mysql
-  ruby-openai!
+  ruby-openai (>= 3.3.0)
   sequel
   sinatra
   sqlite3
