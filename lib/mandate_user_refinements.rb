@@ -47,6 +47,10 @@ module MandateUserRefinements
   def mandate_name
     User::USERS.dig("mandatemandate", id, :name)
   end
+
+  def mandate_name_capitalized
+    mandate_name&.capitalize
+  end
 end
 
 class User
