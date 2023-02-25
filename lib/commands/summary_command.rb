@@ -27,7 +27,11 @@ class SummaryCommand < BaseCommand
 
         summary = call_open_ai(conversation)
 
-        "Summary of #{ message_count } messages:\n#{ summary }"
+        if message_count == messages.size
+          "#{ summary } _(Summary of all #{ message_count } messages today)_"
+        else
+          "#{ summary } _(Summary of #{ message_count } messages)_"
+        end
       end
     end
   end
