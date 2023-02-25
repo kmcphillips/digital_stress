@@ -1,7 +1,7 @@
 FROM ruby:3.2.0-alpine AS base
 ARG BUNDLER_VERSION=2.4.3
 ARG BUNDLE_WITHOUT="development:test"
-ARG BASE_PACKAGES="tz git vim curl imagemagick ttf-liberation msttcorefonts-installer fontconfig"
+ARG BASE_PACKAGES="tz git vim curl imagemagick ttf-liberation msttcorefonts-installer fontconfig libc6-compat gcompat"
 ARG BUILD_PACKAGES="build-base sqlite"
 ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
 
