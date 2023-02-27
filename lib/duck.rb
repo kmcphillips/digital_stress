@@ -49,6 +49,7 @@ class Duck
     { class_name: DefineCommand, command: :define, aliases: [:definition, :def], description: "Get the possibly correct definition of something with GPT-3" },
     { class_name: NewCommand, command: :new, description: "Make a new something with AI" },
     { class_name: SummaryCommand, command: :summary, aliases: [:summarize, :summarise], description: "Summarise the day of conversation using GPT-3" },
+    { class_name: RedactCommand, command: :redact, description: "Retroactively go off the record for the passed in number of minutes/hours." },
   ].freeze
 
   attr_reader :bot

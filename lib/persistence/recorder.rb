@@ -57,6 +57,16 @@ module Recorder
     end
   end
 
+  def delete_last_minutes(minutes, server:, channel:)
+    table
+      .where(server: server, channel: channel)
+      .where{ timestamp > (Time.now - minutes.minutes).to_i }
+      .map do |r|
+      table.where(id: r[:id]).delete
+      r
+    end
+  end
+
   def delete_matching(&block)
     table.map do |r|
       if yield(r)
