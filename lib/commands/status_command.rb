@@ -52,6 +52,11 @@ class StatusCommand < BaseCommand
       end
     end
 
+    if query.downcase.include?("sweep")
+      count = Recorder.delete_sweep.count
+      lines << "• Performed a `Recorder.delete_sweep` and pruned #{ count } records."
+    end
+
     lines.reject(&:blank?)
   end
 end
