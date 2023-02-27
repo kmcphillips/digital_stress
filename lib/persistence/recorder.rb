@@ -3,6 +3,9 @@ module Recorder
   extend self
 
   MESSAGE_IGNORED_PREFIXES = ["http", "duck ", ">", "`"].freeze
+  IGNORED_USER_IDS = [
+    936929561302675456, # Midjourney Bot
+  ].freeze
   RECORD_CHANNELS = [
     "mandatemandate#general",
     # "duck-bot-test#testing",
@@ -77,7 +80,7 @@ module Recorder
   end
 
   def delete_sweep
-    delete_matching { |r| ignore_message_content?(r[:message]) }
+    delete_matching { |r| ignore_message_content?(r[:message]) || ignore_user?(r[:user_id]) }
   end
 
   def record_event?(event)
@@ -202,6 +205,10 @@ module Recorder
 
     # TODO technically this isn't correct as the AlchemyResponder should also filter on server and channel to know
     text.blank? || MESSAGE_IGNORED_PREFIXES.any? { |prefix| text.starts_with?(prefix) } || AlchemyResponder.element_from_message(text).present?
+  end
+
+  def ignore_user?(user_id)
+    IGNORED_USER_IDS.include?(user_id.to_i)
   end
 
   def otr_key(server:, channel:)
