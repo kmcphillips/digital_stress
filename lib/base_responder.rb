@@ -40,4 +40,8 @@ class BaseResponder
     return true unless channels.any?
     channels.include?("#{ server }##{ channel }")
   end
+
+  def start_typing
+    event.channel&.start_typing
+  end
 end

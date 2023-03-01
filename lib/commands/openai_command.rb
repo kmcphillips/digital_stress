@@ -94,7 +94,7 @@ class OpenaiCommand < BaseSubcommand
 
       name, completion = MandateModels.question(prompt, name: name)
 
-      "> **#{ name.capitalize }**: #{ completion }"
+      "> **#{ name.capitalize }**: #{ completion.gsub("\n", "\n> ") }"
     end
   end
 end
