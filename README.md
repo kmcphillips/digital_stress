@@ -37,15 +37,7 @@ Where `<CLIENT_ID>` is the `client_id` for the application registered in discord
 ## Deploy
 
 ```bash
-bundle exec cap production deploy
-```
-
-Cap can also be used to stop and start the remote service:
-
-```bash
-bundle exec cap production bot:start
-bundle exec cap production bot:stop
-bundle exec cap production bot:restart
+fly deploy
 ```
 
 ## Database
@@ -113,12 +105,6 @@ Some messages are omitted from being recorded based on filters. If those filters
 
 ```ruby
 Recorder.delete_sweep
-```
-
-All recorded messages can be dumped with:
-
-```ruby
-File.open("dump_all.txt", "w"){|f|f.write(DB[:messages].map{|r|r[:message]}.reject(&:blank?).join("\n"))}
 ```
 
 ## Factorio mod

@@ -16,7 +16,7 @@ message_reject_patterns = [
 ]
 
 CSV.open("openai_export.csv", "w") do |csv|
-  csv << ["prompt", "response"]
+  csv << ["prompt", "completion"]
 
   previous_record = nil
   records.each do |record|

@@ -158,14 +158,6 @@ module Recorder
     OFF_THE_RECORD_EMOJI.include?(emoji)
   end
 
-  def dump
-    table.each_with_object({}) do |r, accu|
-      accu[r[:user_id]] ||= { username: r[:username], messages: [] }
-      accu[r[:user_id]][:messages] << r[:message]
-      accu[r[:user_id]][:username] = r[:username]
-    end
-  end
-
   def set_againable(command_class:, query:, query_user_id:, query_message_id:, response_user_id:, response_message_id:, server:, channel:, redaction_action: nil, subcommand: nil)
     data = {
       command_class: command_class,
