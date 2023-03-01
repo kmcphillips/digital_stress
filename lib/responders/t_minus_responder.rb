@@ -11,6 +11,13 @@ class TMinusResponder < BaseResponder
     attr_reader :waiting
   end
 
+  def channels
+    [
+      "mandatemandate",
+      "duck-bot-test#testing",
+    ].freeze
+  end
+
   def respond
     channel_id = event.channel.id
 

@@ -2,6 +2,13 @@
 class AiResponder < BaseResponder
   include ResponderMatcher
 
+  def channels
+    [
+      "mandatemandate",
+      "duck-bot-test#testing",
+    ].freeze
+  end
+
   def respond
     respond_match(/kitchen.?noise/i) do
       completion("Play a popular song using only kitchen noises.")

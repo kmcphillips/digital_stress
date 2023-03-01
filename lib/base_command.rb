@@ -16,7 +16,7 @@ class BaseCommand
     Global.logger.info("command.#{ @event.command.name }(#{ params })")
     @event.channel.start_typing if typing?
 
-    return ":closed_lock_with_key: Quack! Not permitted!" if channels.present? && !channels.include?("#{ server }##{ channel }")
+    return ":closed_lock_with_key: Quack! Not permitted!" if channels.present? && !(channels.include?("#{ server }##{ channel }") || channels.include?("#{ server }"))
 
     begin
       message = response

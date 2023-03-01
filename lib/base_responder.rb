@@ -38,7 +38,7 @@ class BaseResponder
   def permitted?
     return true unless channels
     return true unless channels.any?
-    channels.include?("#{ server }##{ channel }")
+    channels.include?("#{ server }##{ channel }") || channels.include?("#{ server }")
   end
 
   def start_typing
