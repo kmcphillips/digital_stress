@@ -26,10 +26,11 @@ module MandateModels
       frequency_penalty: 0.2,
       presence_penalty: 0.0,
       stop: [ "###" ],
+      n: 2,
     }
 
     result = OpenaiClient.completion(prompt, openai_params)
-    completion = result.first.gsub("###", "").strip
+    completion = result.map { |r| r.gsub("###", "").strip }.find(&:present?)
 
     [ name, completion ]
   end
