@@ -83,34 +83,16 @@ class OpenaiCommand < BaseSubcommand
     elsif !subcommand_query.ends_with?("?")
       "Quack! Is that a question??"
     else
-      models = {
-        "dave" => "davinci:ft-quigital:dave-2023-03-01-02-04-08",
-        "eliot" => "davinci:ft-quigital:eliot-2023-03-01-04-52-36",
-        "kevin" => "davinci:ft-quigital:kevin-2023-03-01-00-22-22",
-        "patrick" => "davinci:ft-quigital:patrick-2023-03-01-03-43-38",
-      }
-
-      name = subcommand_query.strip.split(" ").first.downcase
-      if models[name]
+      if MandateModels.question_model_for(subcommand_query.strip.split(" ").first)
+        name = subcommand_query.strip.split(" ").first
         prompt = subcommand_query.strip.gsub(/\A[a-zA-Z] /, "")
       else
-        name = models.keys.sample
+        name = nil
         prompt = subcommand_query.strip
       end
       prompt = "#{ prompt }\n\n###\n\n"
 
-      openai_params = {
-        model: models[name],
-        max_tokens: 256,
-        temperature: 0.8,
-        top_p: 1.0,
-        frequency_penalty: 0.2,
-        presence_penalty: 0.0,
-        stop: [ "###" ],
-      }
-
-      result = OpenaiClient.completion(prompt, openai_params)
-      completion = result.first.gsub("###", "").strip
+      name, completion = MandateModels.question(prompt, name: name)
 
       "> **#{ name.capitalize }**: #{ completion }"
     end

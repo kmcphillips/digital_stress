@@ -70,14 +70,6 @@ CREATE TABLE learned (
   channel VARCHAR(255),
   message_id BIGINT
 ) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE TABLE absurdity_chats (
-  id INTEGER AUTO_INCREMENT PRIMARY KEY,
-  user_id BIGINT,
-  username VARCHAR(255),
-  message TEXT,
-  server VARCHAR(255),
-  consumed_timestamp BIGINT
-) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE TABLE train_accidents (
   id INTEGER AUTO_INCREMENT PRIMARY KEY,
   timestamp BIGINT,

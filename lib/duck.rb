@@ -20,7 +20,6 @@ class Duck
     { class_name: DeployCommand, command: :deploy, description: "Deploy an application." },
     { class_name: OffTheRecordCommand, command: :off, description: "Go off the record." },
     { class_name: OnTheRecordCommand, command: :on, description: "Go back on the record." },
-    { class_name: ChatCommand, command: :chat, description: "Chat like us. Optionally accept a name to chat like a specific person." },
     { class_name: WolframAlphaCommand, command: :wolfram, aliases: [:wa, :wolframalpha], description: "Query Wolfram|Alpha." },
     { class_name: TrainCommand, command: :train, description: "Train accidents." },
     { class_name: TextCommand, command: :text, description: "Send a text message to a person by name." },

@@ -21,7 +21,6 @@ sqlite = Sequel.sqlite(tmp_db_file)
 tables = {
   messages: true,
   learned: true,
-  absurdity_chats: true,
   train_accidents: true,
   redis: true,
 }
@@ -95,40 +94,6 @@ if tables[:learned]
   raise "Migration failed, source and target counts do not match" if target_count != source_count
 else
   puts "Skipping learned"
-end
-
-if tables[:absurdity_chats]
-  puts "Migrating absurdity_chats..."
-
-  source_count = sqlite[:absurdity_chats].count
-  puts "  Found #{ source_count } absurdity_chats in sqlite"
-
-  mysql.query("drop table if exists absurdity_chats")
-  mysql.query("CREATE TABLE absurdity_chats (
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT,
-    username VARCHAR(255),
-    message TEXT,
-    server VARCHAR(255),
-    consumed_timestamp BIGINT
-  ) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;")
-
-  sqlite[:absurdity_chats].order(:id).each do |source|
-    begin
-      statement = mysql.prepare('insert into absurdity_chats (id, user_id, username, message, server, consumed_timestamp) values (?,?,?,?,?,?)')
-      statement.execute(source[:id], source[:user_id], source[:username], source[:message].to_s, source[:server], source[:consumed_timestamp])
-    rescue => e
-      puts "Error in #{ source } #{ e.message }"
-      raise e
-    end
-  end
-
-  target_count = mysql.query('select count(*) from absurdity_chats').fetch_row.first.to_i
-  puts "  Migrated #{ target_count } absurdity_chats to mysql"
-
-  raise "Migration failed, source and target counts do not match" if target_count != source_count
-else
-  puts "Skipping absurdity_chats"
 end
 
 if tables[:train_accidents]
