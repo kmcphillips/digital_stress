@@ -84,7 +84,7 @@ class OpenaiCommand < BaseSubcommand
       "Quack! Is that a question??"
     else
       if MandateModels.question_model_for(subcommand_query.strip.split(" ").first)
-        name = subcommand_query.strip.split(" ").first
+        name = subcommand_query.strip.split(" ").first.gsub(/[^a-zA-Z]/, "")
         prompt = subcommand_query.strip.gsub(/\A[a-zA-Z] /, "")
       else
         name = nil
