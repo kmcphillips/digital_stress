@@ -125,7 +125,7 @@ GEM
     parslet (2.0.0)
     public_suffix (5.0.1)
     racc (1.6.2)
-    rack (2.2.6.2)
+    rack (2.2.6.3)
     rack-protection (3.0.5)
       rack
     redis (5.0.6)
