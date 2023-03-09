@@ -84,11 +84,10 @@ module Recorder
   end
 
   def record_event?(event)
-    if ignore_message_content?(event.message.text)
+    if ignore_message_content?(event.message.text) || ignore_user?(event.author.id)
       Global.logger.warn("record_event(false) ignoring : #{ event.message.text }")
-      return false
-    end
-    if record_channel?(server: event.server&.name, channel: event.channel&.name)
+      false
+    elsif record_channel?(server: event.server&.name, channel: event.channel&.name)
       if off_the_record?(server: event.server&.name, channel: event.channel&.name)
         Global.logger.warn("record_event(false) because it is off the record #{ event.server&.name || 'nil' }##{ event.channel&.name || 'nil' } : #{ event.message.text }")
         false
