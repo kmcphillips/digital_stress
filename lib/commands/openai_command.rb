@@ -22,6 +22,7 @@ class OpenaiCommand < BaseSubcommand
       sd: "Generate an image with Stability AI Stable Diffusion",
       image: "Generate an image with Stability AI Stable Diffusion",
       question: "Respond to a question with the fine tuned OpenAI GPT-3 model",
+      chat: "Chat with the fine tuned OpenAI GPT-3 model",
     }.freeze
   end
 
@@ -83,18 +84,37 @@ class OpenaiCommand < BaseSubcommand
     elsif !subcommand_query.ends_with?("?")
       "Quack! Is that a question??"
     else
-      if MandateModels.question_model_for(subcommand_query.strip.split(" ").first)
-        name = subcommand_query.strip.split(" ").first.gsub(/[^a-zA-Z]/, "")
+      name = subcommand_query.strip.split(" ").first.gsub(/[^a-zA-Z]/, "")
+
+      if MandateModels.question_model_for(name)
         prompt = subcommand_query.strip.gsub(/\A[a-zA-Z] /, "")
       else
-        name = nil
+        name = MandateModels::QUESTION_MODELS.keys.sample
         prompt = subcommand_query.strip
       end
       prompt = "#{ prompt }\n\n###\n\n"
 
       name, completion = MandateModels.question(prompt, name: name)
 
-      "> **#{ name.capitalize }**: #{ completion.gsub("\n", "\n> ") }"
+      if completion.present?
+        "> **#{ name.capitalize }**: #{ completion.gsub("\n", "\n> ") }"
+      else
+        "Quack! Got a blank result for some reason."
+      end
+    end
+  end
+
+  def chat
+    if subcommand_query.blank?
+      "Quack! Chat as who?"
+    else
+      name, completion = MandateModels.chat("", name: subcommand_query.strip.split(" ").first.gsub(/[^a-zA-Z]/, ""))
+
+      if completion.present?
+        "> **#{ name.capitalize }**: #{ completion.gsub("\n", "\n> ") }"
+      else
+        "Quack! Got a blank result for some reason."
+      end
     end
   end
 end

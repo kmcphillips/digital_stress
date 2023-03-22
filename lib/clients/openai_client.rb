@@ -24,7 +24,7 @@ module OpenaiClient
       result
     else
       error_message = response.parsed_response["error"] rescue nil
-      ":bangbang: OpenAI returned error HTTP #{ response.code } #{ error_message }"
+      raise ":bangbang: OpenAI returned error HTTP #{ response.code } #{ error_message }"
     end
   end
 
@@ -46,7 +46,7 @@ module OpenaiClient
       end
     else
       error_message = response.parsed_response["error"] rescue nil
-      ":bangbang: OpenAI returned error HTTP #{ response.code } #{ error_message }"
+      raise ":bangbang: OpenAI returned error HTTP #{ response.code } #{ error_message }"
     end
   end
 
