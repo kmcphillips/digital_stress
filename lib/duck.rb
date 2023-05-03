@@ -35,7 +35,7 @@ class Duck
     { class_name: ReimagineCommand, command: :reimagine, description: "Imagine something with AI, feeding the text into the image." },
     { class_name: HaikuCommand, command: :haiku, description: "Compose a haiku GPT-3." },
     { class_name: WhatCommand, command: :what, description: "What do you think?" },
-    { class_name: DndCommand, command: :dnd, description: "D&D 5e commands." },
+    { class_name: DndCommand, command: :dnd, aliases: [:DND], description: "D&D 5e commands." },
     { class_name: NotificationsCommand, command: :notifications, aliases: [:notification, :notify], description: "Silence notifications." },
     { class_name: QuigitalCommand, command: :quigital, description: "Engage with Quigital!" },
     { class_name: RecipeCommand, command: :recipe, description: "Create a recipe using GPT-3" },
