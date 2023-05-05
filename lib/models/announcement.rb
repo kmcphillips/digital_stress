@@ -2,9 +2,9 @@
 class Announcement
   include Comparable
 
-  attr_reader :server, :channel, :message, :day, :month, :year, :weekdays, :source, :secret, :id
+  attr_reader :server, :channel, :message, :day, :month, :year, :weekdays, :source, :secret, :id, :guild_scheduled_event_id
 
-  def initialize(server:, channel:, message:, day: nil, month: nil, year: nil, weekdays: nil, source:, secret: false, id: nil)
+  def initialize(server:, channel:, message:, day: nil, month: nil, year: nil, weekdays: nil, source:, secret: false, id: nil, guild_scheduled_event_id: nil)
     @server = server
     @channel = channel
     @message = message
@@ -15,6 +15,7 @@ class Announcement
     @source = source.to_sym
     @secret = !!secret
     @id = id
+    @guild_scheduled_event_id = guild_scheduled_event_id
   end
 
   class << self
@@ -166,6 +167,7 @@ class ConfigAnnouncement < Announcement
         year: config.year,
         weekdays: config.weekdays,
         secret: config.secret,
+        guild_scheduled_event_id: config.guild_scheduled_event_id,
         source: :config
       )
     end
@@ -199,6 +201,7 @@ class DbAnnouncement < Announcement
         year: record[:year],
         weekdays: record[:weekdays],
         secret: record[:secret],
+        guild_scheduled_event_id: record[:guild_scheduled_event_id],
         id: record[:id]
       )
     end
@@ -211,7 +214,8 @@ class DbAnnouncement < Announcement
       day: day,
       month: month,
       year: year,
-      message: message
+      message: message,
+      guild_scheduled_event_id: guild_scheduled_event_id
     )
     @id = id
 
@@ -225,5 +229,9 @@ class DbAnnouncement < Announcement
       count = Global.db[:announcements].where(id: id).delete
       !!(count == 1)
     end
+  end
+
+  def update(**args)
+    Global.db[:announcements].where(id: id).update(args)
   end
 end

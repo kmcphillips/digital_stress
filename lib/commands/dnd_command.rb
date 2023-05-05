@@ -21,18 +21,19 @@ class DndCommand < BaseSubcommand
       if !year || !month || !day
         "Quack! Could not parse date. Usage: `#{ add_usage }`"
       else
-        result = DbAnnouncement.new(
+        announcement = DbAnnouncement.new(
           server: server,
           channel: channel,
           message: add_message,
           day: day,
           month: month,
           year: year
-        ).save
+        )
+        result = announcement.save
 
         if result
           begin
-            DiscordRestApi.create_guild_scheduled_event(
+            guild_scheduled_event_result = DiscordRestApi.create_guild_scheduled_event(
               name: "D&D",
               description: "D&D tonight! Sharp time.",
               location: "https://discord.com/channels/824835225263669258/824835225263669263",
@@ -41,6 +42,8 @@ class DndCommand < BaseSubcommand
               image: Global.root.join("data", "dnd_event_banner.png"),
               server: server
             )
+
+            announcement.update(guild_scheduled_event_id: guild_scheduled_event_result["id"])
 
             "Quack! #{ Pinger.find_emoji("d20", server: server) || ":game_die:" } D&D added on **#{ result.formatted_conditions }**"
           rescue => e

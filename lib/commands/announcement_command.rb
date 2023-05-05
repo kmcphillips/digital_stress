@@ -66,6 +66,14 @@ class AnnouncementCommand < BaseSubcommand
       announcement = DbAnnouncement.find(subcommand_params[0])
 
       if announcement
+        if announcement.guild_scheduled_event_id
+          begin
+            DiscordRestApi.delete_guild_scheduled_event(announcement.guild_scheduled_event_id, server: server)
+          rescue => e
+            Global.logger.error("[AnnouncementCommand] Failed to delete guild scheduled event #{ announcement.guild_scheduled_event_id } for announcement #{ announcement.id } on server #{ server }")
+          end
+        end
+
         if announcement.destroy
           "Quack! Announcement deleted.\n#{ format_announcement(announcement) }"
         else

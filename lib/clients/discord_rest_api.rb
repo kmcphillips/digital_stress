@@ -18,6 +18,10 @@ module DiscordRestApi
     post("/guilds/#{ server_id(server) }/scheduled-events", params: params)
   end
 
+  def delete_guild_scheduled_event(event_id, server:)
+    delete("/guilds/#{ server_id(server) }/scheduled-events/#{ event_id }")
+  end
+
   private
 
   def post(path, params:)
@@ -42,6 +46,30 @@ module DiscordRestApi
       end
     rescue RestClient::Exception => e
       Global.logger.error("[DiscordRestApi] POST #{ path } response error #{ e.inspect }")
+      raise
+    end
+  end
+
+  def delete(path)
+    begin
+      Global.logger.info("[DiscordRestApi] DELETE #{ path }")
+      response = Discordrb::API.raw_request(
+        :delete,
+        [
+          "#{ Discordrb::API.api_base }#{ path }",
+          headers,
+        ],
+      )
+
+      if response.code != 204
+        Global.logger.error("[DiscordRestApi] DELETE #{ path } response error #{ response.inspect }")
+        raise "DiscordRestApi DELETE #{ path } response error #{ response.inspect }"
+      else
+        Global.logger.info("[DiscordRestApi] DELETE #{ path } response success #{ response.inspect }")
+        response
+      end
+    rescue RestClient::Exception => e
+      Global.logger.error("[DiscordRestApi] DELETE #{ path } response error #{ e.inspect }")
       raise
     end
   end
