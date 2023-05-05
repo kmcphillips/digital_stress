@@ -99,6 +99,7 @@ require_relative "lib/mandate_user_refinements"
 require_relative "lib/protobuf/dreamstudio/generation_pb"
 require_relative "lib/protobuf/dreamstudio/generation_services_pb"
 
+require_relative "lib/clients/discord_rest_api"
 require_relative "lib/clients/steam"
 require_relative "lib/clients/azure"
 require_relative "lib/clients/gif"
