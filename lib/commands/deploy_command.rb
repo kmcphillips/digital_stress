@@ -38,9 +38,7 @@ class DeployCommand < BaseCommand
 
   def channels
     [
-      "mandatemandate#general",
-      "mandatemandate#quigital",
-      "mandatemandate#websites",
+      "mandatemandate",
       "duck-bot-test#testing",
     ].freeze
   end

@@ -10,7 +10,7 @@ class GamesCommand < BaseSubcommand
 
   def channels
     [
-      "mandatemandate#general",
+      "mandatemandate",
       "duck-bot-test#testing",
     ]
   end

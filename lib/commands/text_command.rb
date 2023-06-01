@@ -2,7 +2,7 @@
 class TextCommand < BaseCommand
   def channels
     [
-      "mandatemandate#general",
+      "mandatemandate",
       "duck-bot-test#testing",
     ]
   end

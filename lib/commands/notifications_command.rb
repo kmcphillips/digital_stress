@@ -2,6 +2,7 @@
 class NotificationsCommand < BaseSubcommand
   CHANNELS = [
     "mandatemandate#general",
+    "mandatemandate#quigital",
     "duck-bot-test#testing",
   ].freeze
 

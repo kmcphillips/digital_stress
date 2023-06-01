@@ -11,6 +11,7 @@ class QuigitalCommand < BaseSubcommand
     [
       "mandatemandate#general",
       "mandatemandate#quigital",
+      "mandatemandate#websites",
       "duck-bot-test#testing",
     ]
   end

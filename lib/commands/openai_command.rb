@@ -3,10 +3,8 @@ class OpenaiCommand < BaseSubcommand
   include AfterRecorderStrikethroughAgainable
 
   CHANNELS = [
-    "mandatemandate#general",
-    "mandatemandate#quigital",
-    "mandatemandate#apps",
-    "duck-bot-test#testing",
+    "mandatemandate",
+    "duck-bot-test",
   ].freeze
 
   def channels

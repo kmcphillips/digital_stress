@@ -2,8 +2,7 @@
 class TrainCommand < BaseCommand
   def channels
     [
-      "mandatemandate#general",
-      "mandatemandate#quigital",
+      "mandatemandate",
       "duck-bot-test#testing",
     ]
   end
