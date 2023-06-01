@@ -11,14 +11,14 @@ message_reject_patterns = [
 def scrub_discord_formatting(str)
   str
     .strip
-    .gsub("<@!#{ User.dave.id }>", User.dave.mandate_name_capitalized)
-    .gsub("<@!#{ User.eliot.id }>", User.eliot.mandate_name_capitalized)
-    .gsub("<@!#{ User.kevin.id }>", User.kevin.mandate_name_capitalized)
-    .gsub("<@!#{ User.patrick.id }>", User.patrick.mandate_name_capitalized)
-    .gsub("<@#{ User.dave.id }>", User.dave.mandate_name_capitalized)
-    .gsub("<@#{ User.eliot.id }>", User.eliot.mandate_name_capitalized)
-    .gsub("<@#{ User.kevin.id }>", User.kevin.mandate_name_capitalized)
-    .gsub("<@#{ User.patrick.id }>", User.patrick.mandate_name_capitalized)
+    .gsub("<@!#{ User.dave.id }>", User.dave.mandate_display_name)
+    .gsub("<@!#{ User.eliot.id }>", User.eliot.mandate_display_name)
+    .gsub("<@!#{ User.kevin.id }>", User.kevin.mandate_display_name)
+    .gsub("<@!#{ User.patrick.id }>", User.patrick.mandate_display_name)
+    .gsub("<@#{ User.dave.id }>", User.dave.mandate_display_name)
+    .gsub("<@#{ User.eliot.id }>", User.eliot.mandate_display_name)
+    .gsub("<@#{ User.kevin.id }>", User.kevin.mandate_display_name)
+    .gsub("<@#{ User.patrick.id }>", User.patrick.mandate_display_name)
     .gsub("@P-DOG", "Patrick")
     .gsub("@Eliot", "Eliot")
     .gsub("@kmcphillips", "Kevin")
@@ -39,7 +39,7 @@ puts "Processing #{ records.count } records..."
   row_count = 0
   filename = "openai_export_#{ user.mandate_name }.csv"
 
-  puts "  Writing user #{ user.mandate_name_capitalized } to #{ filename }"
+  puts "  Writing user #{ user.mandate_display_name } to #{ filename }"
   records = Global.db[:messages]
     .where(server: "mandatemandate", channel: "general", user_id: user.id)
     .order(Sequel.lit('RAND()'))
@@ -81,8 +81,8 @@ end
 #     end
 
 #     if record[:message].ends_with?("?")
-#       previous_user = User.from_id(previous_record[:user_id], server: "mandatemandate")&.mandate_name_capitalized
-#       user = User.from_id(record[:user_id], server: "mandatemandate")&.mandate_name_capitalized
+#       previous_user = User.from_id(previous_record[:user_id], server: "mandatemandate")&.mandate_display_name
+#       user = User.from_id(record[:user_id], server: "mandatemandate")&.mandate_display_name
 
 #       if previous_user && user && previous_user != user
 #         response = "#{ previous_user }: #{ previous_record[:message] }"

@@ -48,8 +48,8 @@ module MandateUserRefinements
     User::USERS.dig("mandatemandate", id, :name)
   end
 
-  def mandate_name_capitalized
-    mandate_name&.capitalize
+  def mandate_display_name
+    User::USERS.dig("mandatemandate", id, :display_name)
   end
 end
 

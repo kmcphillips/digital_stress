@@ -15,7 +15,7 @@ class SummaryCommand < BaseCommand
         message_count = 0
 
         messages.each do |message|
-          name = User.from_id(message[:user_id], server: server)&.mandate_name_capitalized.presence || message[:username]
+          name = User.from_id(message[:user_id], server: server)&.mandate_display_name.presence || message[:username]
           message_text = "#{ name }: #{ message[:message] }"
 
           if conversation.split.size + message_text.split.size > max_length_in_words
