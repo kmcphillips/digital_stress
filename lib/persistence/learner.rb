@@ -8,6 +8,11 @@ module Learner
     "duckgame_test",
   ].freeze
 
+  ISOLATED_CHANNELS = [
+    "duck-bot-test#restricted",
+    "mandatemandate#wives",
+  ]
+
   def learn_emoji?(emoji)
     LEARN_EMOJI.include?(emoji)
   end
@@ -53,21 +58,34 @@ module Learner
       .last
   end
 
-  def random(server:, prevent_recent: false)
+  def random(server:, channel:, prevent_recent: false)
+    raise "server cannot be blank" unless server.present?
+
     scope = table
       .where(server: server)
       .order(Sequel.lit('RAND()'))
 
-    scope = scope.exclude(id: recent_ids(server: server)) if prevent_recent
+    if channel.present? && ISOLATED_CHANNELS.include?("#{ server }##{ channel }")
+      scope = scope.exclude(id: recent_ids(server: server, channel: channel)) if prevent_recent
+
+      scope = scope.where(channel: channel)
+    else
+      scope = scope.exclude(id: recent_ids(server: server, channel: nil)) if prevent_recent
+
+      ISOLATED_CHANNELS.each do |isolated_server_channel|
+        isolated_server, isolated_channel = isolated_server_channel.split("#")
+        scope = scope.exclude(channel: isolated_channel) if server == isolated_server
+      end
+    end
 
     record = scope.first
-    record_recent(record, server: server) if record
+    record_recent(record, server: server, channel: channel) if record
 
     record
   end
 
-  def random_message(server:, prevent_recent: false)
-    result = random(server: server, prevent_recent: prevent_recent)
+  def random_message(server:, channel:, prevent_recent: false)
+    result = random(server: server, channel: channel, prevent_recent: prevent_recent)
     result[:message] if result
   end
 
@@ -96,26 +114,30 @@ module Learner
     Global.kv
   end
 
-  def recent_ids(server:)
-    ids = JSON.parse(kv_store.read(recent_key(server: server))) rescue []
+  def recent_ids(server:, channel:)
+    ids = JSON.parse(kv_store.read(recent_key(server: server, channel: channel))) rescue []
     ids
   end
 
-  def record_recent(record, server:)
-    ids = recent_ids(server: server)
+  def record_recent(record, server:, channel:)
+    ids = recent_ids(server: server, channel: channel)
     ids = ids.unshift(record[:id])
-    ids = ids[0...recent_max_length(server: server)]
+    ids = ids[0...recent_max_length(server: server, channel: channel)]
 
-    kv_store.write(recent_key(server: server), ids.to_json)
+    kv_store.write(recent_key(server: server, channel: channel), ids.to_json)
 
     true
   end
 
-  def recent_max_length(server:)
+  def recent_max_length(server:, channel:)
     [ (count(server: server) / 3), 1 ].max
   end
 
-  def recent_key(server:)
-    "learner-recent-ids-#{ server }"
+  def recent_key(server:, channel:)
+    if channel.present?
+      "learner-recent-ids-isolated-#{ server }-#{ channel }"
+    else
+      "learner-recent-ids-#{ server }"
+    end
   end
 end
