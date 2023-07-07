@@ -52,7 +52,3 @@ module MandateUserRefinements
     User::USERS.dig("mandatemandate", id, :display_name)
   end
 end
-
-class User
-  include MandateUserRefinements
-end
