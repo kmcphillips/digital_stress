@@ -1,42 +1,45 @@
-# fly.toml file generated for kmcphillips-duck on 2022-11-06T19:12:38-05:00
+# fly.toml app configuration file generated for kmcphillips-duck on 2023-07-17T10:43:58-04:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
 app = "kmcphillips-duck"
 kill_signal = "SIGINT"
-kill_timeout = 5
+kill_timeout = "5s"
 
-[env]
-  DUCK_LOG_STDOUT = "true"
-  APP_ENV = "production"
+[experimental]
+  auto_rollback = true
 
 [deploy]
   strategy = "immediate"
   # release_command = "bundle exec ruby db_migration.rb"
 
-[experimental]
-  allowed_public_ports = []
-  auto_rollback = true
+[env]
+  APP_ENV = "production"
+  DUCK_LOG_STDOUT = "true"
 
 [processes]
   bot = "bundle exec ruby bot.rb"
   clockwork = "bundle exec clockwork clock.rb"
 
 [[services]]
-  processes = ["bot"]
-  internal_port = 4444
   protocol = "tcp"
+  internal_port = 4444
+  processes = ["bot"]
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
   [services.concurrency]
     hard_limit = 25
     soft_limit = 20
 
-  [[services.ports]]
-    force_https = true
-    handlers = ["http"]
-    port = "80"
-
-  [[services.ports]]
-    handlers = ["tls", "http"]
-    port = "443"
-
   [[services.tcp_checks]]
-    interval = 10000
-    timeout = 2000
+    interval = "10s"
+    timeout = "2s"
+    restart_limit = 0
