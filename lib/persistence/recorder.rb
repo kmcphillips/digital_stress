@@ -13,7 +13,6 @@ module Recorder
   OFF_THE_RECORD_SECONDS = 2.hours
   OFF_THE_RECORD_EMOJI = [
     "⏸️",
-    "🚫",
     "❎",
   ].freeze
   AGAIN_COMMAND_SECONDS = 1.hour
