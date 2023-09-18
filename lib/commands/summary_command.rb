@@ -57,7 +57,7 @@ class SummaryCommand < BaseCommand
 
   def call_open_ai(conversation)
     openai_params = {
-      model: "text-davinci-003",
+      model: "gpt-3.5-turbo-instruct",
       temperature: 0.7,
       max_tokens: 200,
       top_p: 1.0,

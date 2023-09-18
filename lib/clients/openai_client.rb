@@ -5,7 +5,7 @@ module OpenaiClient
   class Error < StandardError; end
 
   def default_model
-    "text-davinci-003"
+    "gpt-3.5-turbo-instruct"
   end
 
   def models
