@@ -44,7 +44,12 @@ class StatusCommand < BaseCommand
         counts = Recorder.counts(server: server)
         last = Recorder.last(server: server)
         lines << "• Last message by **#{ User.from_id(last[:user_id], server: server)&.username || last[:user_id] }** #{ TimeDifference.between(Time.at(last[:timestamp]), Time.now).humanize.downcase || 'a second' } ago."
-        counts.each{ |r| lines << "  **#{ User.from_id(r[:user_id], server: server)&.username || r[:user_id] }**: #{ Formatter.number(r[:count]) } messages (#{ Formatter.number(r[:words]) } words)" }
+        counts.each do |r|
+          word_count = r[:words]
+          message_count = r[:count]
+          words_average = (word_count / message_count).to_i
+          lines << "  **#{ User.from_id(r[:user_id], server: server)&.username || r[:user_id] }**: #{ Formatter.number(message_count) } messages (#{ Formatter.number(word_count) } words, average #{words_average} words per message)"
+        end
       end
 
       if !event.channel.pm?
