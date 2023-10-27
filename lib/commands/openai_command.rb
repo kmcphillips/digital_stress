@@ -55,7 +55,7 @@ class OpenaiCommand < BaseSubcommand
     if subcommand_query.blank?
       "Quack! What do you want an image of?"
     else
-      OpenaiClient.image(subcommand_query.strip).first
+      OpenaiClient.image(subcommand_query.strip).first || "Quack! Failed to get a response from DALL-E."
     end
   end
 
