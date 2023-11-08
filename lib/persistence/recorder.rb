@@ -8,6 +8,7 @@ module Recorder
   ].freeze
   RECORD_CHANNELS = [
     "mandatemandate#general",
+    "mandatemandate#dnd",
     # "duck-bot-test#testing",
   ].freeze
   OFF_THE_RECORD_SECONDS = 2.hours

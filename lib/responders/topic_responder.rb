@@ -5,6 +5,7 @@ class TopicResponder < BaseResponder
   def channels
     [
       "mandatemandate#general",
+      "mandatemandate#dnd",
       "duck-bot-test#testing",
     ].freeze
   end

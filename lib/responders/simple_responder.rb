@@ -5,6 +5,7 @@ class SimpleResponder < BaseResponder
   MANDATE_CHANNELS = [
     "mandatemandate#general",
     "mandatemandate#wives",
+    "mandatemandate#dnd",
     "duck-bot-test#testing",
   ].freeze
 

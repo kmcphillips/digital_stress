@@ -3,6 +3,7 @@ class AlchemyCommand < BaseCommand
   def channels
     [
       "mandatemandate#general",
+      "mandatemandate#dnd",
       "duck-bot-test#testing",
     ]
   end
