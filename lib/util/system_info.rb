@@ -18,10 +18,6 @@ module SystemInfo
     ENV["FLY_ALLOC_ID"] if SystemInfo.flyio?
   end
 
-  def cpu
-    ENV["FLY_VCPU_COUNT"] if SystemInfo.flyio?
-  end
-
   def memory
     ENV["FLY_VM_MEMORY_MB"] if SystemInfo.flyio?
   end

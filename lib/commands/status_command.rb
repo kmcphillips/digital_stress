@@ -8,7 +8,7 @@ class StatusCommand < BaseCommand
     lines = []
 
     env_info = if SystemInfo.flyio?
-      "**fly.io** `#{ SystemInfo.instance }` in **#{ SystemInfo.region }** region (#{ SystemInfo.cpu } CPU #{ SystemInfo.memory }mb RAM)"
+      "**fly.io** `#{ SystemInfo.instance }` in **#{ SystemInfo.region }** region (#{ SystemInfo.memory }mb RAM)"
     elsif SystemInfo.digitalocean?
       "**DigitalOcean** `#{ SystemInfo.hostname }` `(#{ SystemInfo.ip_address })`"
     else
@@ -21,8 +21,7 @@ class StatusCommand < BaseCommand
       ""
     end
 
-    lines << "**@duck** at `#{ SystemInfo.git_revision || "unknown" }`#{ flags } running on #{ env_info } using `ruby #{ RUBY_VERSION}`"
-    lines << "Using:"
+    lines << "**@duck** `#{ SystemInfo.git_revision || "unknown" }`#{ flags } running on #{ env_info } using `ruby #{ RUBY_VERSION}`"
     lines << "• #{ Global.kv.to_s }"
 
     if Global.db.class.to_s == "Sequel::SQLite::Database"
