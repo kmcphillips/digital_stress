@@ -20,7 +20,7 @@ gem "systemcall"
 gem "twilio-ruby"
 gem "wikipedia-client"
 gem "games_dice"
-gem "ruby-openai", ">= 3.3.0", require: "openai"
+gem "ruby-openai", "5.1.0", require: "openai" # At 6.0 it removes the completions API and requires a refactor.
 gem "google-protobuf"
 gem "grpc"
 gem "aws-sdk-polly"
