@@ -2,10 +2,6 @@
 module SystemInfo
   extend self
 
-  def digitalocean?
-    File.exist?("/opt/digitalocean") || ip_address.match?(/app[0-9]/)
-  end
-
   def flyio?
     ENV["FLY_ALLOC_ID"].present?
   end

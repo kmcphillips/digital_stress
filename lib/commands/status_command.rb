@@ -9,8 +9,6 @@ class StatusCommand < BaseCommand
 
     env_info = if SystemInfo.flyio?
       "**fly.io** `#{ SystemInfo.instance }` in **#{ SystemInfo.region }** region (#{ SystemInfo.memory }mb RAM)"
-    elsif SystemInfo.digitalocean?
-      "**DigitalOcean** `#{ SystemInfo.hostname }` `(#{ SystemInfo.ip_address })`"
     else
       "`#{ SystemInfo.hostname }` `(#{ SystemInfo.ip_address })`"
     end

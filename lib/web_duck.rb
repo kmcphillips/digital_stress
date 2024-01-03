@@ -105,8 +105,6 @@ class WebDuck < Sinatra::Application
     def server_info
       if SystemInfo.flyio?
         "fly.io #{ SystemInfo.region }"
-      elsif SystemInfo.digitalocean?
-        "DigitalOcean #{ SystemInfo.hostname }"
       else
         "#{ SystemInfo.hostname }"
       end
