@@ -19,7 +19,7 @@ kill_timeout = "5s"
 
 [processes]
   bot = "bin/bot"
-  clockwork = "bundle exec clockwork clock.rb"
+  clockwork = "bin/clock"
 
 [[services]]
   protocol = "tcp"
