@@ -23,7 +23,7 @@ A config file is commited to the repo and written to disk in plain text. The `co
 
 The decryption key is either loaded from `config/config_key` or from the ENV var `DUCK_CONFIG_KEY`. The ENV var takes precedence.
 
-To write the plain text config files to the encrypted ones, edit `config/config.yml` or `config/config.*.yml` etc. and run `bundle exec ruby encrypt_config_files.rb`. The changes can then be commited to the repo. To revert at anytime, delete the plain text config and it will be loaded from the encrypted version on run. Decrypting all config files can be forced by running `bundle exec ruby decrypt_config_files.rb`.
+To write the plain text config files to the encrypted ones, edit `config/config.yml` or `config/config.*.yml` etc. and run `bin/encrypt_config`. The changes can then be commited to the repo. To revert at anytime, delete the plain text config and it will be loaded from the encrypted version on run. Decrypting all config files can be forced by running `bin/decrypt_config`.
 
 
 ## Install to a Discord
