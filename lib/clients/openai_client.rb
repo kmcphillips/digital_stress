@@ -5,7 +5,7 @@ module OpenaiClient
   class Error < StandardError; end
 
   def default_model
-    "gpt-3.5-turbo-instruct"
+    "gpt-3.5-turbo"
   end
 
   def models
@@ -13,16 +13,21 @@ module OpenaiClient
   end
 
   def completion(prompt, openai_params={})
+    Global.logger.info("[OpenaiClient][completion] deprecated method proxied to chat() openai_params=#{ openai_params } prompt:\n#{ prompt }") 
+    chat(prompt, openai_params)
+  end
+
+  def chat(prompt, openai_params={})
     parameters = openai_params.symbolize_keys
-    Global.logger.info("[OpenaiClient][completion] request #{ parameters } prompt:\n#{ prompt }")
-    raise Error, "[OpenaiClient][completion] passed in `engine` param, use `model` instead" if parameters.key?(:engine)
+    Global.logger.info("[OpenaiClient][chat] request #{ parameters } prompt:\n#{ prompt }")
+    raise Error, "[OpenaiClient][chat] passed in `engine` param, use `model` instead" if parameters.key?(:engine)
     parameters[:model] ||= OpenaiClient.default_model
-    parameters[:prompt] = prompt
-    response = Global.openai_client.completions(parameters: parameters)
-    Global.logger.info("[OpenaiClient][completion] response #{ response.inspect }")
+    parameters[:messages] = [{ role: "user", content: prompt}]
+    response = Global.openai_client.chat(parameters: parameters)
+    Global.logger.info("[OpenaiClient][chat] response #{ response.inspect }")
     if !response.key?("error")
-      result = response["choices"].map{ |c| c["text"] }
-      raise Error, "[OpenaiClient][completion] request #{ parameters } prompt:\n#{ prompt } gave a blank result: #{ response }" if result.blank?
+      result = response["choices"].map{ |c| c.dig("message", "content") }
+      raise Error, "[OpenaiClient][chat] request #{ parameters } prompt:\n#{ prompt } gave a blank result: #{ response }" if result.blank?
       result
     else
       error_message = response["error"] rescue nil
