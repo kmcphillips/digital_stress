@@ -8,12 +8,16 @@ module OpenaiClient
     "gpt-4"
   end
 
+  def default_image_model
+    "dall-e-3"
+  end
+
   def models
     Global.openai_client.models.list["data"].map { |m| m["id"] }
   end
 
   def completion(prompt, openai_params={})
-    Global.logger.info("[OpenaiClient][completion] deprecated method proxied to chat() openai_params=#{ openai_params } prompt:\n#{ prompt }") 
+    Global.logger.info("[OpenaiClient][completion] deprecated method proxied to chat() openai_params=#{ openai_params } prompt:\n#{ prompt }")
     chat(prompt, openai_params)
   end
 
@@ -38,7 +42,9 @@ module OpenaiClient
   def image(prompt, openai_params={})
     parameters = openai_params.symbolize_keys
     Global.logger.info("[OpenaiClient][image] request #{ parameters } prompt:\n#{ prompt }")
+    parameters[:model] ||= OpenaiClient.default_image_model
     parameters[:prompt] = prompt
+    parameters[:size] ||= "1792x1024"
     response = Global.openai_client.images.generate(parameters: parameters)
     Global.logger.info("[OpenaiClient][image] response #{ response.inspect }")
     if !response.key?("error")
