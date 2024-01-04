@@ -1,5 +1,5 @@
-FROM ruby:3.2.2-alpine3.18 AS base
-ARG BUNDLER_VERSION=2.4.3
+FROM ruby:3.3.0-alpine3.18 AS base
+ARG BUNDLER_VERSION=2.5.4
 ARG BUNDLE_WITHOUT="development:test"
 ARG BASE_PACKAGES="tz git vim curl imagemagick ttf-liberation msttcorefonts-installer fontconfig libc6-compat gcompat"
 ARG BUILD_PACKAGES="build-base sqlite"
