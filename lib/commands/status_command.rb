@@ -45,7 +45,7 @@ class StatusCommand < BaseCommand
           word_count = r[:words]
           message_count = r[:count]
           words_average = (word_count / message_count).to_i
-          lines << "  **#{ User.from_id(r[:user_id], server: server)&.username || r[:user_id] }**: #{ Formatter.number(message_count) } messages (#{ Formatter.number(word_count) } words, average #{words_average} words per message)"
+          lines << "  **#{ User.from_id(r[:user_id], server: server)&.username || r[:user_id] }**: #{ Formatter.number(message_count) } messages, #{ Formatter.number(word_count) } words (#{words_average} words/message)"
         end
       end
 
