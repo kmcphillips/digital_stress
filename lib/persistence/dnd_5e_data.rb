@@ -2,7 +2,7 @@
 module Dnd5eData
   extend self
 
-  DB_FILE = Global.root.join("dnd5e.sqlite3")
+  DB_FILE = Global.root.join("data/dnd5e.sqlite3")
 
   def load
     return false if defined?(@loaded)
