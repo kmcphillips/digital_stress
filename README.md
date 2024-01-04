@@ -8,10 +8,10 @@ To run the bot:
 bundle exec ruby bot.rb
 ```
 
-A REPL is available with:
+A console is available with:
 
 ```bash
-bundle exec ruby repl.rb
+bin/console
 ```
 
 From there you can call `run_bot` to connect to Discord, and `test_channel` to get a handle on a channel for testing.
