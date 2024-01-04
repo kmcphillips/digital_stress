@@ -5,7 +5,7 @@
 To run the bot:
 
 ```bash
-bundle exec ruby bot.rb
+bin/bot
 ```
 
 A console is available with:

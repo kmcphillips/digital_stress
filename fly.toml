@@ -18,7 +18,7 @@ kill_timeout = "5s"
   DUCK_LOG_STDOUT = "true"
 
 [processes]
-  bot = "bundle exec ruby bot.rb"
+  bot = "bin/bot"
   clockwork = "bundle exec clockwork clock.rb"
 
 [[services]]

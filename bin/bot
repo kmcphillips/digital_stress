@@ -1,5 +1,7 @@
+#!/usr/bin/env ruby
 # frozen_string_literal: true
-require_relative "base"
+require "bundler/setup"
+require_relative "../base"
 
 raise "discord token not set in config file" unless Global.config.discord.token.present?
 
