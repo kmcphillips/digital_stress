@@ -51,8 +51,7 @@ build-iPhoneSimulator/
 
 .DS_Store
 
-/bot.log
-/bot.spec.log
+/log/*.log
 /.env
 /chat.sqlite3
 /chat.spec.sqlite3
@@ -61,7 +60,6 @@ build-iPhoneSimulator/
 *.csv
 nohup.out
 /dedup.json
-/log
 /factorio_mod/duck_*.zip
 
 /data/output/*.txt

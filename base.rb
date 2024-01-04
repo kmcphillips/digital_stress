@@ -31,7 +31,7 @@ require_relative "lib/vendor/time_difference"
 
 require_relative "lib/global"
 
-Global.environment[:log] ||= ENV["DUCK_LOG_FILE"].presence || Global.root.join("bot.log")
+Global.environment[:log] ||= ENV["DUCK_LOG_FILE"].presence || Global.root.join("log/bot.log")
 Global.environment[:config] ||= ENV["DUCK_CONFIG_FILE"].presence || Global.root.join("config/config.yml.enc")
 Global.environment[:config_key] ||= ENV["DUCK_CONFIG_KEY"].presence
 

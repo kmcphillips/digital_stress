@@ -52,8 +52,7 @@ lib/bundler/man
 
 **/.DS_Store
 
-bot.log
-bot.spec.log
+log
 .env
 chat.sqlite3
 chat.spec.sqlite3

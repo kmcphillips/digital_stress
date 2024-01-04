@@ -98,7 +98,7 @@ end
 require_relative "../lib/global"
 
 Global.environment[:config] ||= Global.root.join("spec/support/config_spec.yml")
-Global.environment[:log] ||=  Global.root.join("bot.spec.log")
+Global.environment[:log] ||=  Global.root.join("log/bot.spec.log")
 Global.environment[:db] ||= Global.root.join("chat.spec.sqlite3")
 Global.environment[:kv] ||= Global.root.join("chat.spec.sqlite3")
 
