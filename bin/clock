@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 require "bundler/setup"
 require "clockwork"
-require_relative "../base"
+require_relative "../lib/base"
 
 Global.bot = Discordrb::Bot.new(token: Global.config.discord.token)
 Global.bot.run(true)

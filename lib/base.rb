@@ -27,15 +27,15 @@ require "aws-sdk-polly"
 require "fuzzy_match"
 require "timeout"
 
-require_relative "lib/vendor/time_difference"
+require_relative "vendor/time_difference"
 
-require_relative "lib/global"
+require_relative "global"
 
 Global.environment[:log] ||= ENV["DUCK_LOG_FILE"].presence || Global.root.join("log/bot.log")
 Global.environment[:config] ||= ENV["DUCK_CONFIG_FILE"].presence || Global.root.join("config/config.yml.enc")
 Global.environment[:config_key] ||= ENV["DUCK_CONFIG_KEY"].presence
 
-require_relative "lib/configuration"
+require_relative "configuration"
 Global.config = Configuration.new(key: Global.environment[:config_key], file: Global.environment[:config]).read
 
 logger_file = if ENV["DUCK_LOG_STDOUT"]
@@ -61,7 +61,7 @@ if Global.environment[:db] != false
   end
 end
 
-require_relative "lib/persistence/key_value_store"
+require_relative "persistence/key_value_store"
 if Global.environment[:kv] != false
   datastore_url = Global.environment[:kv].presence || ENV["DUCK_KV"].presence || Global.config.kv.url.presence
   Global.logger.info("Selecting kv: Global.environment[:kv]: #{ Global.environment[:kv].inspect } || ENV['DUCK_KV']: #{ ENV['DUCK_KV'].inspect } || Global.config.kv.url: #{ Global.config.kv.url.inspect }")
@@ -81,50 +81,50 @@ Aws.config.update(
   )
 )
 
-require_relative "lib/persistence/recorder"
-require_relative "lib/persistence/learner"
-require_relative "lib/persistence/flags"
-require_relative "lib/persistence/dnd_5e_data"
-require_relative "lib/persistence/dnd_5e_parser"
+require_relative "persistence/recorder"
+require_relative "persistence/learner"
+require_relative "persistence/flags"
+require_relative "persistence/dnd_5e_data"
+require_relative "persistence/dnd_5e_parser"
 
-require_relative "lib/util/pinger"
-require_relative "lib/util/formatter"
-require_relative "lib/util/dedup"
-require_relative "lib/util/quacker"
-require_relative "lib/util/system_info"
+require_relative "util/pinger"
+require_relative "util/formatter"
+require_relative "util/dedup"
+require_relative "util/quacker"
+require_relative "util/system_info"
 
-Dir.glob("lib/models/*.rb").each { |file| require_relative file }
-require_relative "lib/mandate_user_refinements"
+Dir.glob(Global.root.join("lib/models/*.rb")).each { |file| require_relative file }
+require_relative "mandate_user_refinements"
 User.include(MandateUserRefinements)
 
-require_relative "lib/protobuf/dreamstudio/generation_pb"
-require_relative "lib/protobuf/dreamstudio/generation_services_pb"
+require_relative "protobuf/dreamstudio/generation_pb"
+require_relative "protobuf/dreamstudio/generation_services_pb"
 
-require_relative "lib/clients/discord_rest_api"
-require_relative "lib/clients/steam"
-require_relative "lib/clients/azure"
-require_relative "lib/clients/gif"
-require_relative "lib/clients/wolfram_alpha"
-require_relative "lib/clients/texter"
-require_relative "lib/clients/wikipedia_client"
-require_relative "lib/clients/openai_client"
-require_relative "lib/clients/dreamstudio"
-require_relative "lib/clients/aws_client"
-require_relative "lib/clients/mandate_models"
+require_relative "clients/discord_rest_api"
+require_relative "clients/steam"
+require_relative "clients/azure"
+require_relative "clients/gif"
+require_relative "clients/wolfram_alpha"
+require_relative "clients/texter"
+require_relative "clients/wikipedia_client"
+require_relative "clients/openai_client"
+require_relative "clients/dreamstudio"
+require_relative "clients/aws_client"
+require_relative "clients/mandate_models"
 
-require_relative "lib/base_command"
-require_relative "lib/base_subcommand"
-Dir.glob("lib/commands/concerns/*.rb").each { |file| require_relative file }
-Dir.glob("lib/commands/*_command.rb").each { |file| require_relative file }
+require_relative "base_command"
+require_relative "base_subcommand"
+Dir.glob(Global.root.join("lib/commands/concerns/*.rb")).each { |file| require_relative file }
+Dir.glob(Global.root.join("lib/commands/*_command.rb")).each { |file| require_relative file }
 
-require_relative "lib/base_responder"
-Dir.glob("lib/responders/concerns/*.rb").each { |file| require_relative file }
-Dir.glob("lib/responders/*_responder.rb").each { |file| require_relative file }
+require_relative "base_responder"
+Dir.glob(Global.root.join("lib/responders/concerns/*.rb")).each { |file| require_relative file }
+Dir.glob(Global.root.join("lib/responders/*_responder.rb")).each { |file| require_relative file }
 
-require_relative "lib/tasks/task_base"
-require_relative "lib/tasks/daily_announcements"
+require_relative "tasks/task_base"
+require_relative "tasks/daily_announcements"
 
-require_relative "lib/web_duck"
-require_relative "lib/duck"
+require_relative "web_duck"
+require_relative "duck"
 
 Dnd5eData.load

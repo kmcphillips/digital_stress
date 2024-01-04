@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require_relative "base"
+require_relative "../lib/base"
 
 loader = Dnd5eData.loader
 parser = Dnd5eParser.new

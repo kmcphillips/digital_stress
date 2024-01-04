@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require_relative "base"
+require_relative "../lib/base"
 require "csv"
 
 source_filename = "openai_export_culled.csv"

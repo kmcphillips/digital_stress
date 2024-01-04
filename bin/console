@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 require "bundler/setup"
-require_relative "../base"
+require_relative "../lib/base"
 
 def run_bot
   if !Global.bot
