@@ -16,9 +16,7 @@ class OpenaiCommand < BaseSubcommand
       imagine: "Tell it to imagine something",
       reimagine: "Tell it to imagine an image of something",
       instruct: "Instruct it to return something",
-      dalle: "Generate an image with OpenAI Dall-E 2",
-      sd: "Generate an image with Stability AI Stable Diffusion",
-      image: "Generate an image with Stability AI Stable Diffusion",
+      image: "Generate an image with OpenAI Dall-E 2",
       question: "Respond to a question with the fine tuned OpenAI GPT-3 model",
       chat: "Chat with the fine tuned OpenAI GPT-3 model",
     }.freeze
@@ -51,29 +49,12 @@ class OpenaiCommand < BaseSubcommand
     end
   end
 
-  def dalle
+  def image
     if subcommand_query.blank?
       "Quack! What do you want an image of?"
     else
       OpenaiClient.image(subcommand_query.strip).first || "Quack! Failed to get a response from DALL-E."
     end
-  end
-
-  def sd
-    if subcommand_query.blank?
-      "Quack! What do you want an image of?"
-    else
-      if file = Dreamstudio.image_file(subcommand_query)
-        event.send_file(file, filename: "ai.png")
-        nil
-      else
-        "Quack! Got no image back??"
-      end
-    end
-  end
-
-  def image
-    sd
   end
 
   def question

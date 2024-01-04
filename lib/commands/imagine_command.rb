@@ -9,7 +9,7 @@ class ImagineCommand < BaseCommand
       file = nil
 
       thread = Thread.new do
-        file = Dreamstudio.image_file("#{ scrubbed_query } #{ style }")
+        file = OpenaiClient.image_file("#{ scrubbed_query } #{ style }").first
       end
 
       text = OpenaiClient.completion(prompt, openai_params)

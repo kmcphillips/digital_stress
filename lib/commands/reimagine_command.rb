@@ -7,7 +7,7 @@ class ReimagineCommand < BaseCommand
       "Quacking-imagine something"
     else
       text = OpenaiClient.completion(text_prompt, openai_params).first.strip
-      file = Dreamstudio.image_file(text)
+      file = OpenaiClient.image_file(text).first
       event.send_file(file, filename: "reimagine.png") if file
       text
     end

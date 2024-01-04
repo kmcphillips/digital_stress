@@ -26,7 +26,7 @@ class NewCommand < BaseSubcommand
 
     begin
       if image_prompt.present? && image_prompt.length > 10
-        file = OpenaiClient.image_file(image_prompt).first # Dreamstudio.image_file(image_prompt)
+        file = OpenaiClient.image_file(image_prompt).first
         event.send_file(file, filename: "new_game.png") if file
       end
     rescue => e

@@ -10,7 +10,7 @@ class RecipeCommand < BaseCommand
       publication = publications.sample
 
       thread = Thread.new do
-        file = Dreamstudio.image_file(image_prompt(query, publication: publication))
+        file = OpenaiClient.image_file(image_prompt(query, publication: publication)).first
       end
 
       text = OpenaiClient.completion(text_prompt(query, publication: publication), openai_params).first.strip

@@ -10,8 +10,6 @@ require "mysql"
 require "sequel"
 require "httparty"
 require "nokogiri"
-require "google/protobuf"
-require "grpc"
 require "securerandom"
 require "sinatra/base"
 require "systemcall"
@@ -97,9 +95,6 @@ Dir.glob(Global.root.join("lib/models/*.rb")).each { |file| require_relative fil
 require_relative "mandate_user_refinements"
 User.include(MandateUserRefinements)
 
-require_relative "protobuf/dreamstudio/generation_pb"
-require_relative "protobuf/dreamstudio/generation_services_pb"
-
 require_relative "clients/discord_rest_api"
 require_relative "clients/steam"
 require_relative "clients/azure"
@@ -108,7 +103,6 @@ require_relative "clients/wolfram_alpha"
 require_relative "clients/texter"
 require_relative "clients/wikipedia_client"
 require_relative "clients/openai_client"
-require_relative "clients/dreamstudio"
 require_relative "clients/aws_client"
 require_relative "clients/mandate_models"
 

@@ -29,9 +29,6 @@ twilio:
 openai:
   access_token: xxxxx
 
-dreamstudio:
-  key: xxxxx
-
 aws:
   access_key_id: xxx
   secret_access_key: xxx
