@@ -5,7 +5,7 @@ module OpenaiClient
   class Error < StandardError; end
 
   def default_model
-    "gpt-3.5-turbo"
+    "gpt-4"
   end
 
   def models
