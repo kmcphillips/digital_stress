@@ -16,7 +16,6 @@ class Duck
     { class_name: GifCommand, command: :gif, description: "Search for a gif." },
     { class_name: StatusCommand, command: :status, description: "Check on status of the duck bot." },
     { class_name: LearnCommand, command: :learn, description: "Learn something." },
-    { class_name: DeployCommand, command: :deploy, description: "Deploy an application." },
     { class_name: OffTheRecordCommand, command: :off, description: "Go off the record." },
     { class_name: OnTheRecordCommand, command: :on, description: "Go back on the record." },
     { class_name: WolframAlphaCommand, command: :wolfram, aliases: [:wa, :wolframalpha], description: "Query Wolfram|Alpha." },

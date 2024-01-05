@@ -23,7 +23,6 @@ gem "games_dice"
 gem "ruby-openai"
 gem "aws-sdk-polly"
 gem "fuzzy_match"
-gem "open3"
 gem "csv"
 gem "clockwork", require: false
 
