@@ -124,7 +124,6 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.0-x86_64-linux)
       racc (~> 1.4)
-    open3 (0.2.1)
     opus-ruby (1.0.1)
       ffi
     parslet (2.0.0)
@@ -203,7 +202,6 @@ DEPENDENCIES
   games_dice
   httparty
   nokogiri
-  open3
   redis
   rspec
   ruby-mysql
