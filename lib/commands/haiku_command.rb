@@ -6,14 +6,21 @@ class HaikuCommand < BaseCommand
     if query.blank?
       "*Your input is blank\nI can't compose from nothing\nTry again quack quack*"
     else
-      "*#{ OpenaiClient.completion(prompt(query), openai_params).first.strip }*"
+      text = OpenaiClient.completion(text_prompt(query), openai_params).first.strip
+      file = OpenaiClient.image_file(image_prompt(text)).first
+      event.send_file(file, filename: "haiku.png") if file
+      "*#{ text }*"
     end
   end
 
   private
 
-  def prompt(text)
+  def text_prompt(text)
     "Compose a haiku about #{ text.strip.gsub(/[.!?:;]\Z/, "") }."
+  end
+
+  def image_prompt(text)
+    "A traditional style Japanese painting depicting the following haiku:\n#{ text }"
   end
 
   def openai_params
