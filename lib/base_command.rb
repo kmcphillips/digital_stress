@@ -10,11 +10,20 @@ class BaseCommand
     @query = params.join(" ")
     @event = event
     @user = User.from_discord(event.author, server: server)
+    @typing_thread = nil
   end
 
   def respond
     Global.logger.info("command.#{ @event.command.name }(#{ params })")
-    @event.channel.start_typing if typing?
+    if typing?
+      @event.channel.start_typing
+      @typing_thread = Thread.new do
+        6.times do
+          sleep 4
+          @event.channel.start_typing
+        end
+      end
+    end
 
     return ":closed_lock_with_key: Quack! Not permitted!" if channels.present? && !(channels.include?("#{ server }##{ channel }") || channels.include?("#{ server }"))
 
@@ -34,6 +43,8 @@ class BaseCommand
       message = ":bangbang: Quack error: #{ e.message }"
     end
     message
+  ensure
+    @typing_thread&.kill
   end
 
   def after(message:)
