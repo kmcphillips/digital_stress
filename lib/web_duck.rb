@@ -7,7 +7,7 @@ class WebDuck < Sinatra::Application
   end
 
   get "/ping" do
-    "PONG (#{ server_info })"
+    "PONG (#{ SystemInfo.short_summary })"
   end
 
   post "/message/:server/:channel" do
@@ -100,14 +100,6 @@ class WebDuck < Sinatra::Application
 
     def web_auth_credentials
       [Global.config.web_auth.username, Global.config.web_auth.password]
-    end
-
-    def server_info
-      if SystemInfo.flyio?
-        "fly.io #{ SystemInfo.region }"
-      else
-        "#{ SystemInfo.hostname }"
-      end
     end
   end
 end

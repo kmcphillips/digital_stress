@@ -7,15 +7,15 @@ module SystemInfo
   end
 
   def region
-    (ENV["FLY_REGION"] || "?").upcase if SystemInfo.flyio?
+    (ENV["FLY_REGION"] || "?").upcase if flyio?
   end
 
   def instance
-    ENV["FLY_ALLOC_ID"] if SystemInfo.flyio?
+    ENV["FLY_ALLOC_ID"] if flyio?
   end
 
   def memory
-    ENV["FLY_VM_MEMORY_MB"] if SystemInfo.flyio?
+    ENV["FLY_VM_MEMORY_MB"] if flyio?
   end
 
   def ip_address
@@ -31,15 +31,19 @@ module SystemInfo
   end
 
   def recently_deployed?
-    SystemInfo.flyio? && (uptime_seconds || 180) < 180
+    flyio? && uptime_seconds < 180
+  end
+
+  def short_summary
+    if flyio?
+      "fly.io #{ region }"
+    else
+      "#{ hostname }"
+    end
   end
 
   def uptime_seconds
-    if SystemInfo.flyio?
-      system_call("cat /proc/uptime").split(" ").first.to_f.to_i
-    else
-      nil
-    end
+    system_call("cat /proc/uptime").split(" ").first.to_f.to_i
   end
 
   private
