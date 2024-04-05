@@ -11,6 +11,7 @@ module Learner
   ISOLATED_CHANNELS = [
     "duck-bot-test#restricted",
     "mandatemandate#wives",
+    "mandatemandate#mandate_totality",
   ]
 
   def learn_emoji?(emoji)
