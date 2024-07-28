@@ -30,6 +30,9 @@ twilio:
 openai:
   access_token: "XXXX"
 
+perplexity:
+  key: XXX
+
 aws:
   access_key_id: xxx
   secret_access_key: xxx
