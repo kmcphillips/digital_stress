@@ -47,6 +47,7 @@ class Duck
     { class_name: DefineCommand, command: :define, aliases: [:definition, :def], description: "Get the possibly correct definition of something with GPT-4" },
     { class_name: NewCommand, command: :new, description: "Make a new something with GPT-4" },
     { class_name: SummaryCommand, command: :summary, aliases: [:summarize, :summarise], description: "Summarise the day of conversation using GPT-4" },
+    { class_name: AskCommand, command: :ask, aliases: [:perplexity, :question, :query], description: "Ask a question with Perplexity" },
   ].freeze
 
   attr_reader :bot
