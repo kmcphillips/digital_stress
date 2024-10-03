@@ -12,7 +12,7 @@ class AgainCommand < BaseCommand
       server_channel = bot.servers.values.find {|s| s.name == server }.channels.find { |c| c.name == channel }
       message = server_channel.message(previous_data[:response_message_id])
 
-      if previous_data[:redaction_action].present?
+      if redact? && previous_data[:redaction_action].present?
         redacted_message = case previous_data[:redaction_action].intern
         when :strikethrough
           "~~#{ message.content }~~"
@@ -48,5 +48,9 @@ class AgainCommand < BaseCommand
         redaction_action: previous_data[:redaction_action]
       )
     end
+  end
+
+  def redact?
+    true
   end
 end
