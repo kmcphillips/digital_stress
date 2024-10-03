@@ -57,7 +57,6 @@ class SummaryCommand < BaseCommand
 
   def call_open_ai(conversation)
     openai_params = {
-      model: "gpt-3.5-turbo-instruct",
       temperature: 0.7,
       max_tokens: 200,
       top_p: 1.0,
@@ -66,6 +65,6 @@ class SummaryCommand < BaseCommand
     }
     prompt = "Provide a summary of this chat conversation:\n\n#{ conversation }\n\n"
 
-    OpenaiClient.completion(prompt, openai_params).first
+    OpenaiClient.chat(prompt, openai_params).first
   end
 end
