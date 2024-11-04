@@ -24,6 +24,7 @@ class AlchemyResponder < BaseResponder
     "That's ✅✅✅✅ / 4",
     "Full strength.",
   ].freeze
+  CHARS_INTO_MESSAGE = 6
 
   @parties = {}
 
@@ -34,7 +35,7 @@ class AlchemyResponder < BaseResponder
       message = message || ""
       message = message.gsub(/\s+/, "")
 
-      chars = message[0, 6].chars
+      chars = message[0, CHARS_INTO_MESSAGE].chars
       return nil unless chars.find { |c| EMOJI[:check].include?(c) }
 
       elements = [:earth, :fire, :wind, :water].select { |e| (chars & EMOJI[e]).any? }
