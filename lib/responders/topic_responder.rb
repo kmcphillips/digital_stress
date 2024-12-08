@@ -30,7 +30,7 @@ class TopicResponder < BaseResponder
         event.respond("💬 Current topic: **##{ topic_name }**")
         event.channel.start_typing
         thread.join
-        event.send_file(file, filename: "new_game.png") if file
+        event.send_file(file, filename: "topic.png") if file
       end
 
       nil
