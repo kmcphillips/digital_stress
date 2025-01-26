@@ -128,7 +128,7 @@ class Announcement
   end
 
   def channel_link
-    if c = Pinger.find_channel(server: server, channel: channel)
+    if (c = Pinger.find_channel(server: server, channel: channel))
       "<##{c.id}>"
     end
   end

@@ -61,7 +61,7 @@ module MandateModels
       n: 1
     }
 
-    prompt = "This is a chat message from #{name}:"
+    prompt = prompt.presence || "This is a chat message from #{name}:"
 
     result = OpenaiClient.completion(prompt, openai_params)
     completion = result.map { |r| r.gsub("###", "").strip }.find(&:present?)

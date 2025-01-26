@@ -22,7 +22,7 @@ class TMinusResponder < BaseResponder
   def respond
     channel_id = event.channel.id
 
-    if match = T_MINUS_NUMBER_REGEX.match(event.message.content)
+    if (match = T_MINUS_NUMBER_REGEX.match(event.message.content))
       minutes = match[1].to_i
       nonce = SecureRandom.hex
       Global.logger.info("handle T-#{minutes} from: #{event.message.content}")
@@ -61,14 +61,14 @@ class TMinusResponder < BaseResponder
           end
         end
       end
-    elsif match = T_MINUS_CANCEL_REGEX.match(event.message.content)
+    elsif (match = T_MINUS_CANCEL_REGEX.match(event.message.content))
       event.channel.start_typing
       self.class.waiting[event.user.id] = nil
       event.respond("Ok fine #{mention} see you another time then")
-    elsif match = T_MINUS_AROUND_REGEX.match(event.message.content)
+    elsif (match = T_MINUS_AROUND_REGEX.match(event.message.content))
       event.channel.start_typing
       event.respond("Hi #{mention}, thanks for hanging around")
-    elsif match = T_MINUS_WHATEVER_REGEX.match(event.message.content)
+    elsif (match = T_MINUS_WHATEVER_REGEX.match(event.message.content))
       thing = match[1]
       event.channel.start_typing
       event.respond("Ok #{mention} see you after #{thing}")

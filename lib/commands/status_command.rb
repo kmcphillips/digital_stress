@@ -34,7 +34,7 @@ class StatusCommand < BaseCommand
     if server
       lines << "For server **#{server}**:"
 
-      if last_learned = Learner.last(server: server)
+      if (last_learned = Learner.last(server: server))
         lines << "• Learned **#{Learner.count(server: server)}** things. Last learn was #{TimeDifference.between(Time.at(last_learned[:timestamp]), Time.now).humanize.downcase || "a second"} ago."
       end
 

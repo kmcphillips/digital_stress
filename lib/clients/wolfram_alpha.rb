@@ -104,11 +104,11 @@ module WolframAlpha
       lines = []
       images = []
 
-      if pod = data["queryresult"]["pod"].find { |p| p["id"] == "Input" }
+      if (pod = data["queryresult"]["pod"].find { |p| p["id"] == "Input" })
         lines << (pod["subpod"]["plaintext"]).to_s
       end
 
-      if pod = data["queryresult"]["pod"].find { |p| p["primary"] }
+      if (pod = data["queryresult"]["pod"].find { |p| p["primary"] })
         lines << if pod["subpod"].is_a?(Array)
           pod["subpod"].map { |s| s["plaintext"] }.join("\n").to_s
         else
@@ -138,7 +138,7 @@ module WolframAlpha
       lines = []
       images = []
 
-      if pod = data["queryresult"]["pod"].find { |p| p["id"] == "Input" }
+      if (pod = data["queryresult"]["pod"].find { |p| p["id"] == "Input" })
         prefix << (pod["subpod"]["plaintext"]).to_s
       end
 

@@ -12,7 +12,7 @@ class TopicResponder < BaseResponder
   end
 
   def respond
-    if match = TOPIC_REGEX.match(event.message.content)
+    if (match = TOPIC_REGEX.match(event.message.content))
       topic_name = match[1]
       file = nil
 

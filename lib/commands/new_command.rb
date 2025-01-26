@@ -15,7 +15,7 @@ class NewCommand < BaseSubcommand
     image_prompt = nil
 
     result = result.lines.map do |line|
-      if matches = line.match(/\{(.+)\}/)
+      if (matches = line.match(/\{(.+)\}/))
         image_prompt = matches[1].gsub(/ai image prompt:/i, "").strip
 
         nil

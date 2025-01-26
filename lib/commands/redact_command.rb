@@ -20,9 +20,9 @@ class RedactCommand < BaseCommand
     else
       minutes = if redact_time.blank?
         DEFAULT_MINUTES
-      elsif matches = redact_time.match(/(\d+\s?m)/)
+      elsif (matches = redact_time.match(/(\d+\s?m)/))
         matches[1].to_i
-      elsif matches = redact_time.match(/(\d+\s?h)/)
+      elsif (matches = redact_time.match(/(\d+\s?h)/))
         matches[1].to_i * 60
       end
 
