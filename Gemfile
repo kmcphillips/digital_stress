@@ -4,7 +4,7 @@ source "https://rubygems.org"
 
 ruby file: ".ruby-version"
 
-git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 gem "activesupport"
 gem "discordrb", github: "shardlab/discordrb"
@@ -32,4 +32,5 @@ gem "clockwork", require: false
 
 group :development, :test do
   gem "rspec"
+  gem "standardrb"
 end

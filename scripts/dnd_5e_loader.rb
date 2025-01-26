@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative "../lib/base"
 
 loader = Dnd5eData.loader
@@ -19,4 +20,4 @@ spell_urls.each do |spell_url|
 end
 
 puts ""
-puts "Added #{ count } spells"
+puts "Added #{count} spells"

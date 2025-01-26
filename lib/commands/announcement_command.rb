@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 class AnnouncementCommand < BaseSubcommand
   def subcommands
     {
       list: "List all upcoming announcements on this server.",
-      add: "Add a new announcement. Usage: `#{ add_usage }`",
-      delete: "Delete an announcment. Usage: `#{ delete_usage }`",
+      add: "Add a new announcement. Usage: `#{add_usage}`",
+      delete: "Delete an announcment. Usage: `#{delete_usage}`"
     }.freeze
   end
 
@@ -18,7 +19,7 @@ class AnnouncementCommand < BaseSubcommand
     announcements = announcements.reject(&:secret) unless pm?
 
     if announcements.any?
-      announcements.map { |a| "* #{ format_announcement(a) }" }.join("\n")
+      announcements.map { |a| "* #{format_announcement(a)}" }.join("\n")
     else
       ":outbox_tray: No upcoming announcements."
     end
@@ -26,13 +27,13 @@ class AnnouncementCommand < BaseSubcommand
 
   def add
     if subcommand_params.length < 4
-      "Quack! Usage: `#{ add_usage }`"
+      "Quack! Usage: `#{add_usage}`"
     else
       year, month, day = Announcement.coerce_date(year: subcommand_params[0], month: subcommand_params[1], day: subcommand_params[2])
       message = subcommand_params[3..-1].join(" ")
 
       if !year || !month || !day || message.blank?
-        "Quack! Could not parse date. Usage: `#{ add_usage }`"
+        "Quack! Could not parse date. Usage: `#{add_usage}`"
       else
         result = DbAnnouncement.new(
           server: server,
@@ -44,7 +45,7 @@ class AnnouncementCommand < BaseSubcommand
         ).save
 
         if result
-          "Quack! Announcement added.\n#{ format_announcement(result) }"
+          "Quack! Announcement added.\n#{format_announcement(result)}"
         else
           "Quack! Could not add announcement!"
         end
@@ -58,7 +59,7 @@ class AnnouncementCommand < BaseSubcommand
       announcements = announcements.reject(&:secret) unless pm?
 
       if announcements.any?
-        announcements.map { |a| "**(#{ a.id })** on **#{ a.formatted_conditions }** in **#{ a.channel }**" }.join("\n")
+        announcements.map { |a| "**(#{a.id})** on **#{a.formatted_conditions}** in **#{a.channel}**" }.join("\n")
       else
         ":outbox_tray: No upcoming announcements."
       end
@@ -69,21 +70,21 @@ class AnnouncementCommand < BaseSubcommand
         if announcement.guild_scheduled_event_id
           begin
             DiscordRestApi.delete_guild_scheduled_event(announcement.guild_scheduled_event_id, server: server)
-          rescue => e
-            Global.logger.error("[AnnouncementCommand] Failed to delete guild scheduled event #{ announcement.guild_scheduled_event_id } for announcement #{ announcement.id } on server #{ server }")
+          rescue
+            Global.logger.error("[AnnouncementCommand] Failed to delete guild scheduled event #{announcement.guild_scheduled_event_id} for announcement #{announcement.id} on server #{server}")
           end
         end
 
         if announcement.destroy
-          "Quack! Announcement deleted.\n#{ format_announcement(announcement) }"
+          "Quack! Announcement deleted.\n#{format_announcement(announcement)}"
         else
           "Quack! Could not delete announcement!"
         end
       else
-        "Quack! Could not find announcement by id `#{ subcommand_params[0] }`."
+        "Quack! Could not find announcement by id `#{subcommand_params[0]}`."
       end
     else
-      "Quack! Usage: `#{ delete_usage }`"
+      "Quack! Usage: `#{delete_usage}`"
     end
   end
 
@@ -96,6 +97,6 @@ class AnnouncementCommand < BaseSubcommand
   end
 
   def format_announcement(announcement)
-    "**#{ announcement.formatted_conditions }** in **#{ announcement.channel }**#{ announcement.secret ? " (secret)" : "" }: `#{ announcement.message }`"
+    "**#{announcement.formatted_conditions}** in **#{announcement.channel}**#{announcement.secret ? " (secret)" : ""}: `#{announcement.message}`"
   end
 end

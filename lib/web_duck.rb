@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class WebDuck < Sinatra::Application
   set :port, Global.config.web_auth.port
 
@@ -7,7 +8,7 @@ class WebDuck < Sinatra::Application
   end
 
   get "/ping" do
-    "PONG (#{ SystemInfo.short_summary })"
+    "PONG (#{SystemInfo.short_summary})"
   end
 
   post "/message/:server/:channel" do
@@ -18,7 +19,7 @@ class WebDuck < Sinatra::Application
     message = params["message"]
     channels = Global.bot.find_channel(channel_name, server)
 
-    Global.logger.warn("No channels found for #{ server }##{ channel_name }") if channels.empty?
+    Global.logger.warn("No channels found for #{server}##{channel_name}") if channels.empty?
 
     if !Flags.active?("silence_notifications", server: server)
       channels.each { |channel| channel.send_message(message) }
@@ -36,7 +37,7 @@ class WebDuck < Sinatra::Application
     username = params["username"]
 
     channels = Global.bot.find_channel(channel_name, server)
-    Global.logger.warn("No channels found for #{ server }##{ channel_name }") if channels.empty?
+    Global.logger.warn("No channels found for #{server}##{channel_name}") if channels.empty?
 
     channels.each do |channel|
       db = TrainCommand::Datastore.new(server: server, channel: channel_name)
@@ -44,12 +45,12 @@ class WebDuck < Sinatra::Application
       db.create_accident(user_id: user&.id)
 
       begin
-        channel.send_message(":steam_locomotive: :boom: #{ user.mention }") if user
+        channel.send_message(":steam_locomotive: :boom: #{user.mention}") if user
         TrainCommand::ImageGenerator.it_has_been_days_file(0) { |file| channel.send_file(file) }
       rescue => exception
         Global.logger.error(exception.message)
         Global.logger.error(exception)
-        channel.send_message(":bangbang: Quack there was a train accident in the duck bot too: #{ exception.message }")
+        channel.send_message(":bangbang: Quack there was a train accident in the duck bot too: #{exception.message}")
       end
     end
 
@@ -60,10 +61,10 @@ class WebDuck < Sinatra::Application
     server = params["server"]
     channel_name = params["channel"]
 
-    Global.logger.error("Received Twilio server=#{ server } channel=#{ channel_name }: #{ params }")
+    Global.logger.error("Received Twilio server=#{server} channel=#{channel_name}: #{params}")
 
     channels = Global.bot.find_channel(channel_name, server)
-    Global.logger.warn("No channels found for #{ server }##{ channel_name }") if channels.empty?
+    Global.logger.warn("No channels found for #{server}##{channel_name}") if channels.empty?
 
     if Flags.active?("silence_notifications", server: server)
       "Quack, silenced."
@@ -73,9 +74,9 @@ class WebDuck < Sinatra::Application
 
         channels.each do |channel|
           message = if user
-            "> 📲 **#{ user.username }**: #{ params["Body"] }"
+            "> 📲 **#{user.username}**: #{params["Body"]}"
           else
-            "> 📲 **#{ params["From"].presence || "(unknown number)" }**: #{ params["Body"] }"
+            "> 📲 **#{params["From"].presence || "(unknown number)"}**: #{params["Body"]}"
           end
 
           channel.send_message(message)

@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 module Pinger
   extend self
 
-  PING_REGEX = /\A<@\!?([0-9]+)>/
+  PING_REGEX = /\A<@!?([0-9]+)>/
 
   def extract_user_id(input)
     ping = PING_REGEX.match(input)
@@ -12,7 +13,7 @@ module Pinger
   def find_channel(server:, channel:)
     found_server = Global.bot.servers.values.find { |s| s.name == server.to_s }
     return nil unless found_server
-    found_server.channels.find { |c| c.name == channel.to_s.gsub("#", "") }
+    found_server.channels.find { |c| c.name == channel.to_s.delete("#") }
   end
 
   def find_emoji(emoji, server:)

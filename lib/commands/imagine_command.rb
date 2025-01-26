@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ImagineCommand < BaseCommand
   include AfterRecorderStrikethroughAgainable
 
@@ -9,7 +10,7 @@ class ImagineCommand < BaseCommand
       file = nil
 
       thread = Thread.new do
-        file = OpenaiClient.image_file("#{ scrubbed_query } #{ style }").first
+        file = OpenaiClient.image_file("#{scrubbed_query} #{style}").first
       end
 
       text = OpenaiClient.completion(prompt, openai_params)
@@ -24,7 +25,7 @@ class ImagineCommand < BaseCommand
   private
 
   def prompt
-    "In a couple sentences, describe #{ tone } what #{ scrubbed_query } would be like."
+    "In a couple sentences, describe #{tone} what #{scrubbed_query} would be like."
   end
 
   def scrubbed_query
@@ -38,7 +39,7 @@ class ImagineCommand < BaseCommand
       temperature: 0.8,
       top_p: 1.0,
       frequency_penalty: 1.8,
-      presence_penalty: 0.4,
+      presence_penalty: 0.4
     }
   end
 
@@ -50,7 +51,7 @@ class ImagineCommand < BaseCommand
       "using big words",
       "in an excited way",
       "enthusiastically",
-      "critically",
+      "critically"
     ].sample
   end
 
@@ -69,7 +70,7 @@ class ImagineCommand < BaseCommand
       "3D rendering",
       "product shot",
       "retro style",
-      "new yorker cartoon",
+      "new yorker cartoon"
     ].sample
   end
 end

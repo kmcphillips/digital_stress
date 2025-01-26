@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 class Announcement
   include Comparable
 
   attr_reader :server, :channel, :message, :day, :month, :year, :weekdays, :source, :secret, :id, :guild_scheduled_event_id
 
-  def initialize(server:, channel:, message:, day: nil, month: nil, year: nil, weekdays: nil, source:, secret: false, id: nil, guild_scheduled_event_id: nil)
+  def initialize(server:, channel:, message:, source:, day: nil, month: nil, year: nil, weekdays: nil, secret: false, id: nil, guild_scheduled_event_id: nil)
     @server = server
     @channel = channel
     @message = message
@@ -29,7 +30,7 @@ class Announcement
 
     def coerce_date(year:, month:, day:)
       year = year.to_i
-      year = year + 2000 if year < 100
+      year += 2000 if year < 100
       month = coerce_month(month)
       day = day.to_i
 
@@ -71,29 +72,27 @@ class Announcement
     [
       server,
       channel,
-      date || Date.new(1970,1,1),
+      date || Date.new(1970, 1, 1),
       year || "",
       month || "",
       day || "",
-      weekdays,
+      weekdays
     ]
   end
 
   def formatted_conditions
     if weekdays.any?
-      "Every #{ weekdays.map(&:titleize).to_sentence }"
-    else
-      if year.blank?
-        if month.blank?
-          "The #{ day }#{ day.ordinal } of every month"
-        else
-          "#{ Date::MONTHNAMES[month] } #{ day }#{ day.ordinal } every year"
-        end
-      elsif date
-        date.strftime("%a %b %-d %Y")
+      "Every #{weekdays.map(&:titleize).to_sentence}"
+    elsif year.blank?
+      if month.blank?
+        "The #{day}#{day.ordinal} of every month"
       else
-        ":question: #{ conditions_hash.inspect }"
+        "#{Date::MONTHNAMES[month]} #{day}#{day.ordinal} every year"
       end
+    elsif date
+      date.strftime("%a %b %-d %Y")
+    else
+      ":question: #{conditions_hash.inspect}"
     end
   end
 
@@ -102,7 +101,7 @@ class Announcement
       day: day,
       month: month,
       year: year,
-      weekdays: weekdays,
+      weekdays: weekdays
     }
   end
 
@@ -130,7 +129,7 @@ class Announcement
 
   def channel_link
     if c = Pinger.find_channel(server: server, channel: channel)
-      "<##{ c.id }>"
+      "<##{c.id}>"
     end
   end
 end
@@ -145,7 +144,7 @@ class ConfigAnnouncement < Announcement
       results = []
 
       Global.config.servers.each do |server_name, server_config|
-        next if server.present? && server.to_s.gsub("#", "") != server_name.to_s
+        next if server.present? && server.to_s.delete("#") != server_name.to_s
 
         if server_config.tasks&.daily_announcements
           server_config.tasks.daily_announcements.each do |config|
@@ -159,8 +158,8 @@ class ConfigAnnouncement < Announcement
 
     def build(config, server:)
       new(
-        server: server.presence.to_s.gsub("#", ""),
-        channel: config.channel.presence.to_s.gsub("#", ""),
+        server: server.presence.to_s.delete("#"),
+        channel: config.channel.presence.to_s.delete("#"),
         message: config.message,
         day: config.day,
         month: config.month,
@@ -182,8 +181,8 @@ class DbAnnouncement < Announcement
   class << self
     def all(server: nil)
       relation = Global.db[:announcements]
-      relation = relation.where(server: server.to_s.gsub("#", "")) if server.present?
-      results = relation.map { |record| build(record) }.sort
+      relation = relation.where(server: server.to_s.delete("#")) if server.present?
+      relation.map { |record| build(record) }.sort
     end
 
     def find(id)
@@ -193,8 +192,8 @@ class DbAnnouncement < Announcement
 
     def build(record)
       new(
-        server: record[:server].presence.to_s.gsub("#", ""),
-        channel: record[:channel].presence.to_s.gsub("#", ""),
+        server: record[:server].presence.to_s.delete("#"),
+        channel: record[:channel].presence.to_s.delete("#"),
         message: record[:message].to_s,
         day: record[:day],
         month: record[:month],
@@ -219,7 +218,7 @@ class DbAnnouncement < Announcement
     )
     @id = id
 
-    return self if id
+    self if id
   end
 
   def destroy

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # You can't tell rubyconfig to not export a `const_name` so just call it something dumb and never reference it
-CONFIG_CONST_NAME = 'IgnoreMeGlobalConfiguration'
+CONFIG_CONST_NAME = "IgnoreMeGlobalConfiguration"
 
 Config.setup do |config|
   config.const_name = CONFIG_CONST_NAME
@@ -17,7 +17,7 @@ class Configuration
     @key_file = key_file
     @file = file
     @key = key.presence || load_key_from_file
-    @encryptor = ActiveSupport::MessageEncryptor.new([@key].pack('H*'), cipher: CYPHER)
+    @encryptor = ActiveSupport::MessageEncryptor.new([@key].pack("H*"), cipher: CYPHER)
     load_file_paths
   end
 
@@ -32,7 +32,7 @@ class Configuration
         Global.root.join("#{file}.enc")
       end
 
-      (files + [ Global.environment[:config] ]).compact.sort.uniq
+      (files + [Global.environment[:config]]).compact.sort.uniq
     end
 
     def all_config_encrypted_files
@@ -40,17 +40,17 @@ class Configuration
         Global.root.join(file)
       end
 
-      (files + [ Global.environment[:config] ]).compact.sort.uniq
+      (files + [Global.environment[:config]]).compact.sort.uniq
     end
   end
 
   def read(force: false)
     if force || !File.exist?(decrypted_file_path)
-      raise "Encrypted file #{ encrypted_file_path } does not exist" unless File.exist?(encrypted_file_path)
+      raise "Encrypted file #{encrypted_file_path} does not exist" unless File.exist?(encrypted_file_path)
 
       encrypted_yaml = File.read(encrypted_file_path)
       decrypted_yaml = @encryptor.decrypt_and_verify(encrypted_yaml)
-      yaml = YAML.safe_load(decrypted_yaml) # Unused but raises if invalid
+      YAML.safe_load(decrypted_yaml) # Unused but raises if invalid
       File.write(decrypted_file_path, decrypted_yaml)
     end
 
@@ -60,7 +60,7 @@ class Configuration
   end
 
   def write(force: false)
-    raise "Decrypted file `#{ decrypted_file_path }` did not exist to write" unless File.exist?(decrypted_file_path)
+    raise "Decrypted file `#{decrypted_file_path}` did not exist to write" unless File.exist?(decrypted_file_path)
 
     decrypted_yaml = File.read(decrypted_file_path)
     yaml = YAML.safe_load(decrypted_yaml) # raises if invalid
@@ -80,10 +80,10 @@ class Configuration
   private
 
   def load_file_paths
-    raise "Expected `#{ @file }` to end with `.enc`" unless @file.to_s.ends_with?('.enc')
+    raise "Expected `#{@file}` to end with `.enc`" unless @file.to_s.ends_with?(".enc")
 
     @encrypted_file_path = Global.root.join(@file.to_s)
-    @decrypted_file_path = Global.root.join(@file.to_s.gsub(/\.enc\Z/, ''))
+    @decrypted_file_path = Global.root.join(@file.to_s.gsub(/\.enc\Z/, ""))
 
     nil
   end
@@ -98,10 +98,10 @@ class Configuration
         if key_file_contents.present?
           key_file_contents
         else
-          raise "Config key in `#{ @key_file }` file is blank."
+          raise "Config key in `#{@key_file}` file is blank."
         end
       else
-        raise "No config key present. Provide `DUCK_CONFIG_KEY` env var or create a `#{ @key_file }` file."
+        raise "No config key present. Provide `DUCK_CONFIG_KEY` env var or create a `#{@key_file}` file."
       end
     end
   end

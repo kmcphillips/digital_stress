@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 class AlchemyCommand < BaseCommand
   def channels
     [
       "mandatemandate#general",
       "mandatemandate#dnd",
-      "duck-bot-test#testing",
+      "duck-bot-test#testing"
     ]
   end
 
@@ -46,10 +47,9 @@ class AlchemyCommand < BaseCommand
       present.shuffle!
       missing.shuffle!
 
-      "✅ #{ present.join(" ") } ... But no word yet from #{ missing.map(&:mention).to_sentence }"
+      "✅ #{present.join(" ")} ... But no word yet from #{missing.map(&:mention).to_sentence}"
     end
   end
 
   private
-
 end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class WolframAlphaCommand < BaseCommand
   def response
     if query.blank?

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CatCommand < BaseCommand
   include AfterRecorderStrikethroughAgainable
 
@@ -15,7 +16,7 @@ class CatCommand < BaseCommand
       temperature: 1.0,
       top_p: 1.0,
       frequency_penalty: 0.0,
-      presence_penalty: 0.0,
+      presence_penalty: 0.0
     }
   end
 end

@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 class QuigitalCommand < BaseSubcommand
   def subcommands
     {
       stats: "Show some stats from quigital.com.",
-      say: "Say something with Quigital's voice.",
+      say: "Say something with Quigital's voice."
     }.freeze
   end
 
@@ -13,7 +14,7 @@ class QuigitalCommand < BaseSubcommand
       "mandatemandate#quigital",
       "mandatemandate#websites",
       "mandatemandate#dnd",
-      "duck-bot-test#testing",
+      "duck-bot-test#testing"
     ]
   end
 
@@ -33,18 +34,18 @@ class QuigitalCommand < BaseSubcommand
     response = HTTParty.get(stats_url)
 
     if !response.success?
-      Global.logger.error("Qugital stats returned HTTP #{ response.code }")
+      Global.logger.error("Qugital stats returned HTTP #{response.code}")
       Global.logger.error(response.body)
 
       ":bangbang: Quack failed to reach Quigital!"
     else
       emoji = Pinger.find_emoji("quigital", server: server)
       lines = [
-        "#{ emoji || '' } Stats!",
+        "#{emoji || ""} Stats!"
       ]
 
       response.each do |key, value|
-        lines << "* #{ key.titleize }: **#{ value }**"
+        lines << "* #{key.titleize}: **#{value}**"
       end
 
       lines.join("\n")
@@ -52,7 +53,7 @@ class QuigitalCommand < BaseSubcommand
   end
 
   def stats_url
-    "https://quigital.com/api/stats.json?api_key=#{ api_key }"
+    "https://quigital.com/api/stats.json?api_key=#{api_key}"
   end
 
   def api_key

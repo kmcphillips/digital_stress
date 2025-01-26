@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Dedup
   CACHE_LENGTH_SECONDS = 1.day.to_i
 
@@ -11,13 +12,13 @@ class Dedup
   def found?(value)
     k = key(value)
     v = !!kv_store.read(k)
-    Global.logger.info("[Dedup] found?=#{ v } '#{ k }'")
+    Global.logger.info("[Dedup] found?=#{v} '#{k}'")
     v
   end
 
   def register(value)
     k = key(value)
-    Global.logger.info("[Dedup] register '#{ k }'")
+    Global.logger.info("[Dedup] register '#{k}'")
     !!kv_store.write(key(value), value, ttl: CACHE_LENGTH_SECONDS)
   end
 

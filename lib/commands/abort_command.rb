@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AbortCommand < BaseCommand
   attr_reader :previous_data
 
@@ -9,13 +10,13 @@ class AbortCommand < BaseCommand
 
   def response
     if previous_data
-      server_channel = bot.servers.values.find {|s| s.name == server }.channels.find { |c| c.name == channel }
+      server_channel = bot.servers.values.find { |s| s.name == server }.channels.find { |c| c.name == channel }
       message = server_channel.message(previous_data[:response_message_id])
 
       if previous_data[:redaction_action].present?
         redacted_message = case previous_data[:redaction_action].intern
         when :strikethrough
-          "~~#{ message.content }~~"
+          "~~#{message.content}~~"
         when :redact
           ":negative_squared_cross_mark:"
         else
@@ -27,7 +28,7 @@ class AbortCommand < BaseCommand
 
       nil
     else
-      "#{ Quacker.quack } :no_entry_sign: Nothing recent to abort."
+      "#{Quacker.quack} :no_entry_sign: Nothing recent to abort."
     end
   end
 

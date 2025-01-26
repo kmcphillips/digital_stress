@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 class DndCommand < BaseSubcommand
   def subcommands
     {
       dates: "Show the upcoming announcement dates.",
       spell: "Search for a spell by name.",
-      add: "Add a D&D announcement date. Usage: `#{ add_usage }`"
+      add: "Add a D&D announcement date. Usage: `#{add_usage}`"
     }.freeze
   end
 
@@ -14,12 +15,12 @@ class DndCommand < BaseSubcommand
 
   def add
     if subcommand_params.length != 3
-      "Quack! Usage: `#{ add_usage }`"
+      "Quack! Usage: `#{add_usage}`"
     else
       year, month, day = Announcement.coerce_date(year: subcommand_params[0], month: subcommand_params[1], day: subcommand_params[2])
 
       if !year || !month || !day
-        "Quack! Could not parse date. Usage: `#{ add_usage }`"
+        "Quack! Could not parse date. Usage: `#{add_usage}`"
       else
         announcement = DbAnnouncement.new(
           server: server,
@@ -45,9 +46,9 @@ class DndCommand < BaseSubcommand
 
             announcement.update(guild_scheduled_event_id: guild_scheduled_event_result["id"])
 
-            "Quack! #{ Pinger.find_emoji("d20", server: server) || ":game_die:" } D&D added on **#{ result.formatted_conditions }**"
+            "Quack! #{Pinger.find_emoji("d20", server: server) || ":game_die:"} D&D added on **#{result.formatted_conditions}**"
           rescue => e
-            "Quack! #{ Pinger.find_emoji("d20", server: server) || ":game_die:" } D&D added on **#{ result.formatted_conditions }** but failed to create server event! #{ e.inspect }"
+            "Quack! #{Pinger.find_emoji("d20", server: server) || ":game_die:"} D&D added on **#{result.formatted_conditions}** but failed to create server event! #{e.inspect}"
           end
         else
           "Quack! Rolled a nat-1 on that and could not add the date."

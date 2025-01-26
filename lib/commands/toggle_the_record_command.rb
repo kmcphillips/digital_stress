@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ToggleTheRecordCommand < BaseCommand
   def response
     if Recorder.record_channel?(channel: channel, server: server)
@@ -7,7 +8,7 @@ class ToggleTheRecordCommand < BaseCommand
         ":record_button: This channel is on the record"
       else
         seconds = Recorder.off_the_record(server: server, channel: channel)
-        ":pause_button: This channel is off the record for #{ distance_in_words(seconds) }"
+        ":pause_button: This channel is off the record for #{distance_in_words(seconds)}"
       end
     else
       ":bangbang: This channel is not set to record."

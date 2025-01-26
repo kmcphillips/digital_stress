@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 class OpenaiCommand < BaseSubcommand
   include AfterRecorderStrikethroughAgainable
 
   CHANNELS = [
     "mandatemandate",
-    "duck-bot-test",
+    "duck-bot-test"
   ].freeze
 
   def channels
@@ -18,7 +19,7 @@ class OpenaiCommand < BaseSubcommand
       instruct: "Instruct it to return something",
       image: "Generate an image with OpenAI Dall-E 2",
       question: "Respond to a question with the fine tuned OpenAI GPT-3 model",
-      chat: "Chat with the fine tuned OpenAI GPT-3 model",
+      chat: "Chat with the fine tuned OpenAI GPT-3 model"
     }.freeze
   end
 
@@ -42,7 +43,7 @@ class OpenaiCommand < BaseSubcommand
         temperature: 0.8,
         top_p: 1.0,
         frequency_penalty: 0.4,
-        presence_penalty: 0.4,
+        presence_penalty: 0.4
       }
 
       OpenaiClient.completion(subcommand_query.strip, openai_params)
@@ -71,12 +72,12 @@ class OpenaiCommand < BaseSubcommand
         name = MandateModels::QUESTION_MODELS.keys.sample
         prompt = subcommand_query.strip
       end
-      prompt = "#{ prompt }\n\n###\n\n"
+      prompt = "#{prompt}\n\n###\n\n"
 
       name, completion = MandateModels.question(prompt, name: name)
 
       if completion.present?
-        "> **#{ name.capitalize }**: #{ completion.gsub("\n", "\n> ") }"
+        "> **#{name.capitalize}**: #{completion.gsub("\n", "\n> ")}"
       else
         "Quack! Got a blank result for some reason."
       end
@@ -90,7 +91,7 @@ class OpenaiCommand < BaseSubcommand
       name, completion = MandateModels.chat("", name: subcommand_query.strip.split(" ").first.gsub(/[^a-zA-Z]/, ""))
 
       if completion.present?
-        "> **#{ name.capitalize }**: #{ completion.gsub("\n", "\n> ") }"
+        "> **#{name.capitalize}**: #{completion.gsub("\n", "\n> ")}"
       else
         "Quack! Got a blank result for some reason."
       end

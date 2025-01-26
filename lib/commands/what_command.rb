@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class WhatCommand < BaseCommand
   include AfterRecorderStrikethroughAgainable
 
@@ -21,12 +22,12 @@ class WhatCommand < BaseCommand
   def recent_conversation
     Recorder.recent(server: server, channel: channel, time_offset: 2.hours)
       .to_a.reverse
-      .map { |r| "#{ r[:username] }: #{ r[:message] }" }
+      .map { |r| "#{r[:username]}: #{r[:message]}" }
       .join("\n")
   end
 
   def prompt
-    "In two or three detailed sentences sentences, give #{ tone } opinion on the following conversation:\n#{ recent_conversation.strip }"
+    "In two or three detailed sentences sentences, give #{tone} opinion on the following conversation:\n#{recent_conversation.strip}"
   end
 
   def tone
@@ -39,7 +40,7 @@ class WhatCommand < BaseCommand
       "a highly critical",
       "a sarcastic and negative",
       "a confused",
-      "a sarcastic and excited",
+      "a sarcastic and excited"
     ].sample
   end
 
@@ -50,7 +51,7 @@ class WhatCommand < BaseCommand
       temperature: 0.8,
       top_p: 1.0,
       frequency_penalty: 1.8,
-      presence_penalty: 0.4,
+      presence_penalty: 0.4
     }
   end
 end

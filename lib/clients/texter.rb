@@ -1,17 +1,18 @@
 # frozen_string_literal: true
+
 module Texter
   extend self
 
   def send_text(phone_number:, message:)
-    Global.logger.info("[Texter][send_text] phone_number: #{ phone_number } message: #{ message }")
+    Global.logger.info("[Texter][send_text] phone_number: #{phone_number} message: #{message}")
 
     response = twilio_client.messages.create(
       from: outgoing_phone_number,
       to: phone_number,
-      body: message,
+      body: message
     )
 
-    Global.logger.info("[Texter][send_text] sid: #{ response.sid }")
+    Global.logger.info("[Texter][send_text] sid: #{response.sid}")
 
     response.sid
   end

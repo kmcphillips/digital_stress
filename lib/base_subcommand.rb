@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class BaseSubcommand < BaseCommand
   def subcommands
     raise NotImplementedError
@@ -7,7 +8,7 @@ class BaseSubcommand < BaseCommand
   private
 
   def response
-    if subcommand && subcommand != "help" && subcommands.keys.map{|k| k.to_s.downcase}.include?(subcommand)
+    if subcommand && subcommand != "help" && subcommands.keys.map { |k| k.to_s.downcase }.include?(subcommand)
       send(params.first.to_s.downcase)
     else
       help
@@ -31,6 +32,6 @@ class BaseSubcommand < BaseCommand
   end
 
   def help
-    ["**List of `#{ @event.command.name }` subcommands:**"] + subcommands.map{|k,v| "`#{ k }`: #{ v }" }
+    ["**List of `#{@event.command.name}` subcommands:**"] + subcommands.map { |k, v| "`#{k}`: #{v}" }
   end
 end

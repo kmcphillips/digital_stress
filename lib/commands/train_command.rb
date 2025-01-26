@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 class TrainCommand < BaseCommand
   def channels
     [
       "mandatemandate",
-      "duck-bot-test#testing",
+      "duck-bot-test#testing"
     ]
   end
 
@@ -35,7 +36,7 @@ class TrainCommand < BaseCommand
     rescue => exception
       Global.logger.error(exception.message)
       Global.logger.error(exception)
-      ":bangbang: Quack error with file: #{ exception.message }"
+      ":bangbang: Quack error with file: #{exception.message}"
     end
   end
 
@@ -54,7 +55,7 @@ class TrainCommand < BaseCommand
     def days_since_last_accident
       l = last_accident
       return 0 unless l
-      ( ( ( Time.now.to_i - l[:timestamp] ) / 60 / 60 / 24 ).to_f ).to_i
+      ((Time.now.to_i - l[:timestamp]) / 60 / 60 / 24).to_f.to_i
     end
 
     def create_accident(user_id: nil)
@@ -62,10 +63,10 @@ class TrainCommand < BaseCommand
         timestamp: Time.now.to_i,
         user_id: user_id,
         server: server,
-        channel:channel,
+        channel: channel
       }
 
-      Global.logger.info("create_accident(#{ args }")
+      Global.logger.info("create_accident(#{args}")
       table.insert(args)
     end
 
@@ -83,15 +84,15 @@ class TrainCommand < BaseCommand
     FONT_NAME = "Arial"
 
     def it_has_been_days_file(days)
-      raise "Cannot find file '#{ SIGN_TEMPLATE_PATH }'" unless File.exist?(SIGN_TEMPLATE_PATH)
+      raise "Cannot find file '#{SIGN_TEMPLATE_PATH}'" unless File.exist?(SIGN_TEMPLATE_PATH)
 
       Tempfile.create(["train_duck", ".png"]) do |temp|
-        left_padding = days < 10 ? "106" : "82"
-        response = SystemCall.call("convert \"#{ SIGN_TEMPLATE_PATH }\" -font \"#{ FONT_NAME }\" -pointsize 100 -draw \"text #{ left_padding },146 '#{ days }'\" \"#{ temp.path }\"")
+        left_padding = (days < 10) ? "106" : "82"
+        response = SystemCall.call("convert \"#{SIGN_TEMPLATE_PATH}\" -font \"#{FONT_NAME}\" -pointsize 100 -draw \"text #{left_padding},146 '#{days}'\" \"#{temp.path}\"")
         if response.success?
           yield(temp)
         else
-          raise "'convert' did not exit success: #{ response.result }"
+          raise "'convert' did not exit success: #{response.result}"
         end
       end
       nil

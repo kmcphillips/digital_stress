@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class BaseCommand
   attr_reader :params, :event, :bot, :user, :query
 
@@ -14,7 +15,7 @@ class BaseCommand
   end
 
   def respond
-    Global.logger.info("command.#{ @event.command.name }(#{ params })")
+    Global.logger.info("command.#{@event.command.name}(#{params})")
     if typing?
       @event.channel.start_typing
       @typing_thread = Thread.new do
@@ -25,7 +26,7 @@ class BaseCommand
       end
     end
 
-    if channels.present? && !(channels.include?("#{ server }##{ channel }") || channels.include?("#{ server }"))
+    if channels.present? && !(channels.include?("#{server}##{channel}") || channels.include?("#{server}"))
       ":closed_lock_with_key: Quack! Not permitted!"
     else
       begin
@@ -33,15 +34,15 @@ class BaseCommand
         message = message.join("\n") if message.is_a?(Array)
 
         if message && message.is_a?(String) && message.length >= MAX_MESSAGE_LENGTH
-          Global.logger.warn("response of length #{ message.length } is too long #{ message }")
-          message = "#{ message.slice(0..(MAX_MESSAGE_LENGTH - 5))} ..."
+          Global.logger.warn("response of length #{message.length} is too long #{message}")
+          message = "#{message.slice(0..(MAX_MESSAGE_LENGTH - 5))} ..."
         end
 
-        Global.logger.info("response: #{ message }")
+        Global.logger.info("response: #{message}")
       rescue => e
-        Global.logger.error("#{ self.class.name }#response returned error #{ e.message }")
+        Global.logger.error("#{self.class.name}#response returned error #{e.message}")
         Global.logger.error(e)
-        message = ":bangbang: Quack error: #{ e.message }"
+        message = ":bangbang: Quack error: #{e.message}"
       end
       message
     end

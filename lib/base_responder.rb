@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class BaseResponder
   attr_reader :event, :bot
 
@@ -38,7 +39,7 @@ class BaseResponder
   def permitted?
     return true unless channels
     return true unless channels.any?
-    channels.include?("#{ server }##{ channel }") || channels.include?("#{ server }")
+    channels.include?("#{server}##{channel}") || channels.include?("#{server}")
   end
 
   def start_typing

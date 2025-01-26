@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AgainCommand < BaseCommand
   attr_reader :previous_data
 
@@ -9,13 +10,13 @@ class AgainCommand < BaseCommand
 
   def response
     if previous_data
-      server_channel = bot.servers.values.find {|s| s.name == server }.channels.find { |c| c.name == channel }
+      server_channel = bot.servers.values.find { |s| s.name == server }.channels.find { |c| c.name == channel }
       message = server_channel.message(previous_data[:response_message_id])
 
       if redact? && previous_data[:redaction_action].present?
         redacted_message = case previous_data[:redaction_action].intern
         when :strikethrough
-          "~~#{ message.content }~~"
+          "~~#{message.content}~~"
         when :redact
           ":repeat:"
         else
@@ -29,7 +30,7 @@ class AgainCommand < BaseCommand
       command_class.new(event: event, bot: bot, params: previous_data[:query].split(" "))
         .send(previous_data[:subcommand].presence || :response)
     else
-      "#{ Quacker.quack } :no_entry_sign: Nothing recent to try again."
+      "#{Quacker.quack} :no_entry_sign: Nothing recent to try again."
     end
   end
 

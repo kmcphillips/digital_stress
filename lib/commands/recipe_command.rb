@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RecipeCommand < BaseCommand
   include AfterRecorderStrikethroughAgainable
 
@@ -25,11 +26,11 @@ class RecipeCommand < BaseCommand
   private
 
   def text_prompt(text, publication:)
-    "Write a recipe for \"#{ text.strip }\" appearing in #{ publication }"
+    "Write a recipe for \"#{text.strip}\" appearing in #{publication}"
   end
 
   def image_prompt(text, publication:)
-    "Recipe book photo of \"#{ text.strip }\" as it would appear in #{ publication }"
+    "Recipe book photo of \"#{text.strip}\" as it would appear in #{publication}"
   end
 
   def publications
@@ -37,7 +38,7 @@ class RecipeCommand < BaseCommand
       "Bon Appetit",
       "Cook's Illustrated",
       "Modernist Cuisine",
-      "Betty Crocker’s Cookbook",
+      "Betty Crocker’s Cookbook"
     ]
   end
 
@@ -48,7 +49,7 @@ class RecipeCommand < BaseCommand
       temperature: 1.0,
       top_p: 1.0,
       frequency_penalty: 0.0,
-      presence_penalty: 0.0,
+      presence_penalty: 0.0
     }
   end
 end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class SimpleResponder < BaseResponder
   include ResponderMatcher
 
@@ -7,7 +8,7 @@ class SimpleResponder < BaseResponder
     "mandatemandate#wives",
     "mandatemandate#mandate_totality",
     "mandatemandate#dnd",
-    "duck-bot-test#testing",
+    "duck-bot-test#testing"
   ].freeze
 
   def respond

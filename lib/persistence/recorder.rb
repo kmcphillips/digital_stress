@@ -1,20 +1,21 @@
 # frozen_string_literal: true
+
 module Recorder
   extend self
 
   MESSAGE_IGNORED_PREFIXES = ["http", "duck ", ">", "`"].freeze
   IGNORED_USER_IDS = [
-    936929561302675456, # Midjourney Bot
+    936929561302675456 # Midjourney Bot
   ].freeze
   RECORD_CHANNELS = [
     "mandatemandate#general",
-    "mandatemandate#dnd",
+    "mandatemandate#dnd"
     # "duck-bot-test#testing",
   ].freeze
   OFF_THE_RECORD_SECONDS = 2.hours
   OFF_THE_RECORD_EMOJI = [
     "⏸️",
-    "❎",
+    "❎"
   ].freeze
   AGAIN_COMMAND_SECONDS = 1.hour
 
@@ -27,10 +28,10 @@ module Recorder
         message_id: event.message.id,
         timestamp: Formatter.parse_timestamp(event.timestamp),
         server: event.server.name,
-        channel: event.channel.name,
+        channel: event.channel.name
       }
 
-      Global.logger.info("record(#{ args }")
+      Global.logger.info("record(#{args}")
       table.insert(args)
 
       true
@@ -63,7 +64,7 @@ module Recorder
   def delete_last_minutes(minutes, server:, channel:)
     table
       .where(server: server, channel: channel)
-      .where{ timestamp > (Time.now - minutes.minutes).to_i }
+      .where { timestamp > (Time.now - minutes.minutes).to_i }
       .map do |r|
       table.where(id: r[:id]).delete
       r
@@ -85,17 +86,17 @@ module Recorder
 
   def record_event?(event)
     if ignore_message_content?(event.message.text) || ignore_user?(event.author.id)
-      Global.logger.warn("record_event(false) ignoring : #{ event.message.text }")
+      Global.logger.warn("record_event(false) ignoring : #{event.message.text}")
       false
     elsif record_channel?(server: event.server&.name, channel: event.channel&.name)
       if off_the_record?(server: event.server&.name, channel: event.channel&.name)
-        Global.logger.warn("record_event(false) because it is off the record #{ event.server&.name || 'nil' }##{ event.channel&.name || 'nil' } : #{ event.message.text }")
+        Global.logger.warn("record_event(false) because it is off the record #{event.server&.name || "nil"}##{event.channel&.name || "nil"} : #{event.message.text}")
         false
       else
         true
       end
     else
-      Global.logger.warn("record_event(false) #{ event.server&.name || 'nil' }##{ event.channel&.name || 'nil' } : #{ event.message.text }")
+      Global.logger.warn("record_event(false) #{event.server&.name || "nil"}##{event.channel&.name || "nil"} : #{event.message.text}")
       false
     end
   end
@@ -110,7 +111,7 @@ module Recorder
 
   def record_server?(server:)
     RECORD_CHANNELS.each do |pair|
-      record_server, record_channel = pair.split("#")
+      record_server, _ = pair.split("#")
       return true if server == record_server
     end
     false
@@ -127,7 +128,7 @@ module Recorder
   def recent(server:, channel:, limit: 15, time_offset: 30.minutes)
     table
       .where(server: server, channel: channel)
-      .where{ timestamp > (Time.now - time_offset).to_i }
+      .where { timestamp > (Time.now - time_offset).to_i }
       .order(Sequel.desc(:timestamp))
       .limit(limit)
   end
@@ -135,7 +136,7 @@ module Recorder
   def all_since(server:, channel:, since:)
     table
       .where(server: server, channel: channel)
-      .where{ timestamp > since.to_i }
+      .where { timestamp > since.to_i }
       .order(Sequel.desc(:timestamp))
   end
 
@@ -168,7 +169,7 @@ module Recorder
       server: server,
       channel: channel,
       subcommand: subcommand,
-      redaction_action: redaction_action,
+      redaction_action: redaction_action
     }
     key = againable_key(server: server, channel: channel, user_id: query_user_id)
 
@@ -178,7 +179,11 @@ module Recorder
 
   def get_againable(server:, channel:, user_id:)
     data = kv_store.read(againable_key(server: server, channel: channel, user_id: user_id))
-    JSON.parse(data).symbolize_keys rescue nil
+    begin
+      JSON.parse(data).symbolize_keys
+    rescue
+      nil
+    end
   end
 
   private
@@ -203,11 +208,11 @@ module Recorder
   end
 
   def otr_key(server:, channel:)
-    "off_the_record:#{ server }:#{ channel }"
+    "off_the_record:#{server}:#{channel}"
   end
 
   def againable_key(server:, channel:, user_id:)
-    raise "invalid againable_key #{ server } / #{ channel } / #{ user_id }" if [server, channel, user_id].any?(&:blank?)
-    "againable:#{ server }:#{ channel }:#{ user_id }"
+    raise "invalid againable_key #{server} / #{channel} / #{user_id}" if [server, channel, user_id].any?(&:blank?)
+    "againable:#{server}:#{channel}:#{user_id}"
   end
 end

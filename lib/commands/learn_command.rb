@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class LearnCommand < BaseCommand
   def response
     if event.channel.pm?
@@ -10,12 +11,12 @@ class LearnCommand < BaseCommand
         params.shift
         message = formatted_message(params)
 
-        Global.logger.info("learning for user##{ user_id }: #{ message }")
+        Global.logger.info("learning for user##{user_id}: #{message}")
       else
         user_id = event.user.id
         message = formatted_message(params)
 
-        Global.logger.info("learning for author: #{ message }")
+        Global.logger.info("learning for author: #{message}")
       end
 
       server = event.server&.name
@@ -40,7 +41,6 @@ class LearnCommand < BaseCommand
 
   def formatted_message(params)
     message = params.join(" ").strip
-    message = message.gsub(/^\"/, "").gsub(/\"$/, "")
-    message
+    message.gsub(/^"/, "").gsub(/"$/, "")
   end
 end

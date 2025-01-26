@@ -1,21 +1,22 @@
 # frozen_string_literal: true
+
 module WolframAlpha
   extend self
 
   MAX_VALUE_LENGTH = 500
 
   def query(search, location: nil)
-    url = "http://api.wolframalpha.com/v2/query?input=#{ CGI.escape(search.strip) }&appid=#{ appid }"
-    url = "#{ url }&location=#{ CGI.escape(location.strip) }" if location.present?
-    url = "#{ url }&format=plaintext" #,image
+    url = "http://api.wolframalpha.com/v2/query?input=#{CGI.escape(search.strip)}&appid=#{appid}"
+    url = "#{url}&location=#{CGI.escape(location.strip)}" if location.present?
+    url = "#{url}&format=plaintext" # ,image
 
     response = HTTParty.get(url)
 
     if !response.success?
-      Global.logger.error("WolframAlpha#query returned HTTP #{ response.code }")
+      Global.logger.error("WolframAlpha#query returned HTTP #{response.code}")
       Global.logger.error(response.body)
 
-      ":bangbang: Quack failure HTTP#{ response.code }"
+      ":bangbang: Quack failure HTTP#{response.code}"
     else
       Global.logger.info("WolframAlpha#query success")
       Global.logger.info(response.body)
@@ -51,7 +52,7 @@ module WolframAlpha
       elsif futuretopic?
         parse_futuretopic
       else
-        [ ":interrobang: Don't know what to make of this response." ]
+        [":interrobang: Don't know what to make of this response."]
       end
     end
 
@@ -66,7 +67,7 @@ module WolframAlpha
     end
 
     def parse_error
-      ":bangbang: #{ data["queryresult"]["error"] }"
+      ":bangbang: #{data["queryresult"]["error"]}"
     end
 
     def didyoumean?
@@ -76,9 +77,9 @@ module WolframAlpha
     def parse_didyoumean
       array = [":thinking: Did you mean?"]
       dyms = data["queryresult"]["didyoumeans"]["didyoumean"]
-      dyms = [ dyms ] unless dyms.is_a?(Array)
+      dyms = [dyms] unless dyms.is_a?(Array)
       dyms.each do |dym|
-        array << "    #{ dym["__content__"] } (#{ dym["score"].to_f.round(1) * 100 }%)"
+        array << "    #{dym["__content__"]} (#{dym["score"].to_f.round(1) * 100}%)"
       end
       array
     end
@@ -89,36 +90,36 @@ module WolframAlpha
 
     def parse_tips
       tips = data["queryresult"]["tips"]["tip"]
-      tips = [ tips ] unless tips.is_a?(Array)
+      tips = [tips] unless tips.is_a?(Array)
       tips.map do |tip|
-        ":information_source: #{ tip["text"] }"
+        ":information_source: #{tip["text"]}"
       end
     end
 
     def primary_pod?
-      data["queryresult"]["pod"] && data["queryresult"]["pod"].any? {|p| p["primary"] }
+      data["queryresult"]["pod"] && data["queryresult"]["pod"].any? { |p| p["primary"] }
     end
 
     def parse_primary_pod
       lines = []
       images = []
 
-      if pod = data["queryresult"]["pod"].find {|p| p["id"] == "Input" }
-        lines << "#{ pod["subpod"]["plaintext"] }"
+      if pod = data["queryresult"]["pod"].find { |p| p["id"] == "Input" }
+        lines << "#{pod["subpod"]["plaintext"]}"
       end
 
-      if pod = data["queryresult"]["pod"].find {|p| p["primary"] }
-        if pod["subpod"].is_a?(Array)
-          lines << "#{ pod["subpod"].map {|s| s["plaintext"] }.join("\n") }"
+      if pod = data["queryresult"]["pod"].find { |p| p["primary"] }
+        lines << if pod["subpod"].is_a?(Array)
+          "#{pod["subpod"].map { |s| s["plaintext"] }.join("\n")}"
         else
-          lines << "**#{ pod["subpod"]["plaintext"] }**"
+          "**#{pod["subpod"]["plaintext"]}**"
         end
       end
 
       data["queryresult"]["pod"].each do |pod|
         if pod["id"] != "Input"
           subpods = pod["subpod"]
-          subpods = [ subpods ] if subpods.is_a?(Hash)
+          subpods = [subpods] if subpods.is_a?(Hash)
           subpods.each do |subpod|
             images << subpod["imagesource"] if subpod["imagesource"]
           end
@@ -137,14 +138,14 @@ module WolframAlpha
       lines = []
       images = []
 
-      if pod = data["queryresult"]["pod"].find {|p| p["id"] == "Input" }
-        prefix << "#{ pod["subpod"]["plaintext"] }"
+      if pod = data["queryresult"]["pod"].find { |p| p["id"] == "Input" }
+        prefix << "#{pod["subpod"]["plaintext"]}"
       end
 
       data["queryresult"]["pod"].each do |pod|
         if pod["id"] != "Input"
           subpods = pod["subpod"]
-          subpods = [ subpods ] if subpods.is_a?(Hash)
+          subpods = [subpods] if subpods.is_a?(Hash)
           values = subpods.map do |subpod|
             if subpod["imagesource"]
               images << subpod["imagesource"]
@@ -155,8 +156,8 @@ module WolframAlpha
           end.compact
           if !values.blank?
             str = values.join("\n")
-            str = "#{ str.slice(0..MAX_VALUE_LENGTH) } [snip]" if str.length >= MAX_VALUE_LENGTH
-            lines << "**#{ pod["title"]}** : #{ str }"
+            str = "#{str.slice(0..MAX_VALUE_LENGTH)} [snip]" if str.length >= MAX_VALUE_LENGTH
+            lines << "**#{pod["title"]}** : #{str}"
           end
         end
       end
@@ -170,7 +171,7 @@ module WolframAlpha
 
     def parse_futuretopic
       lines = []
-      lines << ":woman_scientist: **#{ data["queryresult"]["futuretopic"]["topic"] }** : #{ data["queryresult"]["futuretopic"]["msg"] }"
+      lines << ":woman_scientist: **#{data["queryresult"]["futuretopic"]["topic"]}** : #{data["queryresult"]["futuretopic"]["msg"]}"
       lines
     end
   end

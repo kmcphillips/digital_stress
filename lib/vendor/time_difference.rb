@@ -4,7 +4,6 @@
 # it into the project instead of maintaining a fork.
 
 class TimeDifference
-
   private_class_method :new
 
   TIME_COMPONENTS = [:years, :months, :weeks, :days, :hours, :minutes, :seconds]
@@ -43,7 +42,7 @@ class TimeDifference
 
   def in_each_component
     Hash[TIME_COMPONENTS.map do |time_component|
-      [time_component, public_send("in_#{time_component}")]
+      [time_component, public_send(:"in_#{time_component}")]
     end]
   end
 
@@ -62,7 +61,7 @@ class TimeDifference
 
   def humanize
     diff_parts = []
-    in_general.each do |part,quantity|
+    in_general.each do |part, quantity|
       next if quantity <= 0
       part = part.to_s.humanize
 
@@ -75,9 +74,9 @@ class TimeDifference
 
     last_part = diff_parts.pop
     if diff_parts.empty?
-      return last_part
+      last_part
     else
-      return [diff_parts.join(', '), last_part].join(' and ')
+      [diff_parts.join(", "), last_part].join(" and ")
     end
   end
 
@@ -97,5 +96,4 @@ class TimeDifference
   def in_component(component)
     (@time_diff / 1.send(component)).round(2)
   end
-
 end

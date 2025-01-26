@@ -1,21 +1,22 @@
 # frozen_string_literal: true
+
 class Dnd5eParser
   ROOT_URL = "http://dnd5e.wikidot.com"
 
   def fetch_urls_from_index
     spell_urls = []
 
-    spells_html = HTTParty.get("#{ ROOT_URL }/spells")
-    raise "#{ spells_html } was not success" unless spells_html.success?
+    spells_html = HTTParty.get("#{ROOT_URL}/spells")
+    raise "#{spells_html} was not success" unless spells_html.success?
     spells_doc = Nokogiri.HTML5(spells_html)
 
     spells_doc.css("div.list-pages-box table.wiki-content-table").each do |table|
       links = table.css("a")
       links.each do |link|
         spell_urls << {
-          url: "#{ ROOT_URL }#{ link.attributes["href"].value }",
+          url: "#{ROOT_URL}#{link.attributes["href"].value}",
           name: link.children.first.text,
-          slug: slug = link.attributes["href"].value.gsub("/spell:", ""),
+          slug: link.attributes["href"].value.gsub("/spell:", "")
         }
       end
     end
@@ -25,30 +26,30 @@ class Dnd5eParser
 
   def fetch_spell_from_url(spell_url)
     spell_html = HTTParty.get(spell_url[:url])
-    raise "#{ spell_html } was not success" unless spell_html.success?
+    raise "#{spell_html} was not success" unless spell_html.success?
     spell_doc = Nokogiri.HTML5(spell_html)
 
     lines = spell_doc.css("#page-content p, #page-content ul, #page-content table").map do |tag|
       if tag.name == "p"
         tag.text
       elsif tag.name == "ul"
-        tag.css("li").map { |li| "* #{ li.text }" }
+        tag.css("li").map { |li| "* #{li.text}" }
       elsif tag.name == "table"
         "[table]"
       else
-        raise "unknown tag #{ tag }"
+        raise "unknown tag #{tag}"
       end
     end.flatten.join("\n").split("\n")
 
     unknown_tags = spell_doc.css("#page-content").children.map(&:name).uniq - ["text", "div", "p", "ul", "table"]
     if unknown_tags.any?
-      raise "Unknown tag encountered: #{ unknown_tags } in #{ spell_url }"
+      raise "Unknown tag encountered: #{unknown_tags} in #{spell_url}"
     end
 
     spell = {
       name: spell_url[:name],
       url: spell_url[:url],
-      slug: spell_url[:slug],
+      slug: spell_url[:slug]
     }
 
     spell[:description] = lines.select do |line|

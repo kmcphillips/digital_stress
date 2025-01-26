@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class HaikuCommand < BaseCommand
   include AfterRecorderStrikethroughAgainable
 
@@ -9,18 +10,18 @@ class HaikuCommand < BaseCommand
       text = OpenaiClient.completion(text_prompt(query), openai_params).first.strip
       file = OpenaiClient.image_file(image_prompt(text)).first
       event.send_file(file, filename: "haiku.png") if file
-      "*#{ text }*"
+      "*#{text}*"
     end
   end
 
   private
 
   def text_prompt(text)
-    "Compose a haiku about #{ text.strip.gsub(/[.!?:;]\Z/, "") }."
+    "Compose a haiku about #{text.strip.gsub(/[.!?:;]\Z/, "")}."
   end
 
   def image_prompt(text)
-    "A traditional style Japanese painting depicting the following haiku:\n#{ text }"
+    "A traditional style Japanese painting depicting the following haiku:\n#{text}"
   end
 
   def openai_params
@@ -30,7 +31,7 @@ class HaikuCommand < BaseCommand
       temperature: 0.9,
       top_p: 1.0,
       frequency_penalty: 0.5,
-      presence_penalty: 0.5,
+      presence_penalty: 0.5
     }
   end
 end

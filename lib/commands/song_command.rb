@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class SongCommand < BaseCommand
   include AfterRecorderStrikethroughAgainable
 
@@ -13,8 +14,8 @@ class SongCommand < BaseCommand
   private
 
   def prompt(text)
-    text = "about #{ text.strip }" unless text.strip.downcase.start_with?("about")
-    "Write the lyrics to the chorus of a hit song #{ text.strip }."
+    text = "about #{text.strip}" unless text.strip.downcase.start_with?("about")
+    "Write the lyrics to the chorus of a hit song #{text.strip}."
   end
 
   def openai_params
@@ -24,7 +25,7 @@ class SongCommand < BaseCommand
       temperature: 1.0,
       top_p: 1.0,
       frequency_penalty: 0.0,
-      presence_penalty: 0.0,
+      presence_penalty: 0.0
     }
   end
 end

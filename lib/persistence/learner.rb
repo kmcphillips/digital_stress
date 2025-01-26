@@ -1,17 +1,18 @@
 # frozen_string_literal: true
+
 module Learner
   extend self
 
   LEARN_EMOJI = [
     "🦆",
     "duckgame",
-    "duckgame_test",
+    "duckgame_test"
   ].freeze
 
   ISOLATED_CHANNELS = [
     "duck-bot-test#restricted",
     "mandatemandate#wives",
-    "mandatemandate#mandate_totality",
+    "mandatemandate#mandate_totality"
   ]
 
   def learn_emoji?(emoji)
@@ -26,7 +27,7 @@ module Learner
         server: server,
         channel: channel,
         message_id: message_id,
-        timestamp: Formatter.parse_timestamp(time),
+        timestamp: Formatter.parse_timestamp(time)
       )
 
       true
@@ -64,9 +65,9 @@ module Learner
 
     scope = table
       .where(server: server)
-      .order(Sequel.lit('RAND()'))
+      .order(Sequel.lit("RAND()"))
 
-    if channel.present? && ISOLATED_CHANNELS.include?("#{ server }##{ channel }")
+    if channel.present? && ISOLATED_CHANNELS.include?("#{server}##{channel}")
       scope = scope.exclude(id: recent_ids(server: server, channel: channel)) if prevent_recent
 
       scope = scope.where(channel: channel)
@@ -116,8 +117,9 @@ module Learner
   end
 
   def recent_ids(server:, channel:)
-    ids = JSON.parse(kv_store.read(recent_key(server: server, channel: channel))) rescue []
-    ids
+    JSON.parse(kv_store.read(recent_key(server: server, channel: channel)))
+  rescue
+    []
   end
 
   def record_recent(record, server:, channel:)
@@ -131,14 +133,14 @@ module Learner
   end
 
   def recent_max_length(server:, channel:)
-    [ (count(server: server) / 3), 1 ].max
+    [(count(server: server) / 3), 1].max
   end
 
   def recent_key(server:, channel:)
     if channel.present?
-      "learner-recent-ids-isolated-#{ server }-#{ channel }"
+      "learner-recent-ids-isolated-#{server}-#{channel}"
     else
-      "learner-recent-ids-#{ server }"
+      "learner-recent-ids-#{server}"
     end
   end
 end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ReimagineCommand < BaseCommand
   include AfterRecorderStrikethroughAgainable
 
@@ -16,7 +17,7 @@ class ReimagineCommand < BaseCommand
   private
 
   def text_prompt
-    "In a couple of sentences, describe in visual detail an image of #{ scrubbed_query }."
+    "In a couple of sentences, describe in visual detail an image of #{scrubbed_query}."
   end
 
   def scrubbed_query
@@ -30,7 +31,7 @@ class ReimagineCommand < BaseCommand
       temperature: 0.8,
       top_p: 1.0,
       frequency_penalty: 1.8,
-      presence_penalty: 0.4,
+      presence_penalty: 0.4
     }
   end
 end

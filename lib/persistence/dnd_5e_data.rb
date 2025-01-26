@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Dnd5eData
   extend self
 
@@ -43,14 +44,14 @@ module Dnd5eData
 
     def to_discord_s
       [
-        "**#{ name }**",
+        "**#{name}**",
         url,
-        "> #{ level } (#{ school })",
-        "> Casting time: _#{ casting_time }_",
-        "> Components: _#{ components }_",
-        "> Duration: _#{ duration }_",
-        "> Range: _#{ range }_",
-        "> \n> #{ description.gsub("\n", "\n> \n> ") }",
+        "> #{level} (#{school})",
+        "> Casting time: _#{casting_time}_",
+        "> Components: _#{components}_",
+        "> Duration: _#{duration}_",
+        "> Range: _#{range}_",
+        "> \n> #{description.gsub("\n", "\n> \n> ")}"
       ].join("\n")
     end
   end

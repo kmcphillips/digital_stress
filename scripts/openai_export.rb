@@ -1,24 +1,25 @@
 # frozen_string_literal: true
+
 require_relative "../lib/base"
 require "csv"
 require "set"
 
 message_reject_patterns = [
-  /<\@\!?[0-9]+>/,
-  /\Aduck /i,
+  /<@!?[0-9]+>/,
+  /\Aduck /i
 ]
 
 def scrub_discord_formatting(str)
   str
     .strip
-    .gsub("<@!#{ User.dave.id }>", User.dave.mandate_display_name)
-    .gsub("<@!#{ User.eliot.id }>", User.eliot.mandate_display_name)
-    .gsub("<@!#{ User.kevin.id }>", User.kevin.mandate_display_name)
-    .gsub("<@!#{ User.patrick.id }>", User.patrick.mandate_display_name)
-    .gsub("<@#{ User.dave.id }>", User.dave.mandate_display_name)
-    .gsub("<@#{ User.eliot.id }>", User.eliot.mandate_display_name)
-    .gsub("<@#{ User.kevin.id }>", User.kevin.mandate_display_name)
-    .gsub("<@#{ User.patrick.id }>", User.patrick.mandate_display_name)
+    .gsub("<@!#{User.dave.id}>", User.dave.mandate_display_name)
+    .gsub("<@!#{User.eliot.id}>", User.eliot.mandate_display_name)
+    .gsub("<@!#{User.kevin.id}>", User.kevin.mandate_display_name)
+    .gsub("<@!#{User.patrick.id}>", User.patrick.mandate_display_name)
+    .gsub("<@#{User.dave.id}>", User.dave.mandate_display_name)
+    .gsub("<@#{User.eliot.id}>", User.eliot.mandate_display_name)
+    .gsub("<@#{User.kevin.id}>", User.kevin.mandate_display_name)
+    .gsub("<@#{User.patrick.id}>", User.patrick.mandate_display_name)
     .gsub("@P-DOG", "Patrick")
     .gsub("@Eliot", "Eliot")
     .gsub("@kmcphillips", "Kevin")
@@ -30,19 +31,19 @@ row_count = 0
 # export chats
 records = Global.db[:messages]
   .where(server: "mandatemandate", channel: "general")
-  .order(Sequel.lit('RANDOM()'))
+  .order(Sequel.lit("RANDOM()"))
 
-puts "Processing #{ records.count } records..."
+puts "Processing #{records.count} records..."
 
 [User.kevin, User.dave, User.patrick, User.eliot].each do |user|
   text_set = Set.new
   row_count = 0
-  filename = "openai_export_#{ user.mandate_name }.csv"
+  filename = "openai_export_#{user.mandate_name}.csv"
 
-  puts "  Writing user #{ user.mandate_display_name } to #{ filename }"
+  puts "  Writing user #{user.mandate_display_name} to #{filename}"
   records = Global.db[:messages]
     .where(server: "mandatemandate", channel: "general", user_id: user.id)
-    .order(Sequel.lit('RAND()'))
+    .order(Sequel.lit("RAND()"))
     .limit(1100)
 
   CSV.open(filename, "w") do |csv|
@@ -53,14 +54,14 @@ puts "Processing #{ records.count } records..."
       text = scrub_discord_formatting(record[:message])
 
       if !text_set.include?(text) && message_reject_patterns.none? { |pattern| text.match?(pattern) }
-        csv << ["", " #{ text } ###"]
+        csv << ["", " #{text} ###"]
         text_set.add(text)
         row_count += 1
       end
     end
   end
 
-  puts "  Done. #{ row_count } rows written."
+  puts "  Done. #{row_count} rows written."
 end
 
 # # export questions

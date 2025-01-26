@@ -1,17 +1,18 @@
 # frozen_string_literal: true
+
 class NotificationsCommand < BaseSubcommand
   CHANNELS = [
     "mandatemandate#general",
     "mandatemandate#quigital",
     "mandatemandate#dnd",
-    "duck-bot-test#testing",
+    "duck-bot-test#testing"
   ].freeze
 
   def subcommands
     {
       mute: "Temporarily silence notifications.",
       off: "Turn off notifications.",
-      on: "Turn on notifications.",
+      on: "Turn on notifications."
     }.freeze
   end
 

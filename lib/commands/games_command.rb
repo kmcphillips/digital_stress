@@ -1,17 +1,18 @@
 # frozen_string_literal: true
+
 class GamesCommand < BaseSubcommand
   def subcommands
     {
       list: "What games should we play?",
       add: "Add a game by name and with a Steam URL",
-      retire: "Retire a game by name or Steam URL",
+      retire: "Retire a game by name or Steam URL"
     }.freeze
   end
 
   def channels
     [
       "mandatemandate",
-      "duck-bot-test#testing",
+      "duck-bot-test#testing"
     ]
   end
 

@@ -1,11 +1,12 @@
 # frozen_string_literal: true
+
 class AiResponder < BaseResponder
   include ResponderMatcher
 
   def channels
     [
       "mandatemandate",
-      "duck-bot-test#testing",
+      "duck-bot-test#testing"
     ].freeze
   end
 
@@ -47,13 +48,11 @@ class AiResponder < BaseResponder
       temperature: 1.0,
       top_p: 1.0,
       frequency_penalty: 0.0,
-      presence_penalty: 0.0,
+      presence_penalty: 0.0
     }
   end
 
   def guess_names_from_text(input)
-    MandateModels::QUESTION_MODELS.keys.map do |name|
-      name if input.downcase.include?(name)
-    end.compact
+    MandateModels::QUESTION_MODELS.keys.select { |name| input.downcase.include?(name) }
   end
 end

@@ -1,14 +1,15 @@
 # frozen_string_literal: true
+
 class AlchemyResponder < BaseResponder
   EMOJI = {
-    check:   ["✅", "☑", "✔", "👻",].freeze,
-    earth:   ["🏔", "⛰", "🗻", "🌋", "🌍", "🌎", "🌏", "🪨", "🥌", "🌐", "🦬", "🛢️"].freeze,
-    fire:    ["🔥", "🧨", "🎆", "🚒", "🧨", "❤️‍🔥", "🧑‍🚒", "👨‍🚒", "👩‍🚒", "❤️‍🔥", "🧯"].freeze,
-    wind:    ["🌬", "🎐", "☁", "🌩", "🌪", "💨", "🍃", "🪈"].freeze,
-    water:   ["🌊", "🚰", "💧", "💦", "🚿", "🛀", "🛁", "⛈", "🌧", "🌦",].freeze,
-    count:   ["1️⃣", "2️⃣", "3️⃣", "4️⃣",].freeze,
-    wrong:   "🚫",
-    repeat:  "🔁",
+    check: ["✅", "☑", "✔", "👻"].freeze,
+    earth: ["🏔", "⛰", "🗻", "🌋", "🌍", "🌎", "🌏", "🪨", "🥌", "🌐", "🦬", "🛢️"].freeze,
+    fire: ["🔥", "🧨", "🎆", "🚒", "🧨", "❤️‍🔥", "🧑‍🚒", "👨‍🚒", "👩‍🚒", "❤️‍🔥", "🧯"].freeze,
+    wind: ["🌬", "🎐", "☁", "🌩", "🌪", "💨", "🍃", "🪈"].freeze,
+    water: ["🌊", "🚰", "💧", "💦", "🚿", "🛀", "🛁", "⛈", "🌧", "🌦"].freeze,
+    count: ["1️⃣", "2️⃣", "3️⃣", "4️⃣"].freeze,
+    wrong: "🚫",
+    repeat: "🔁"
   }.freeze
 
   RESPONSES = [
@@ -22,7 +23,7 @@ class AlchemyResponder < BaseResponder
     "Quack! 🔥🌊🌬️🏔️",
     "Full strength. Keep it light, keep it tight.",
     "That's ✅✅✅✅ / 4",
-    "Full strength.",
+    "Full strength."
   ].freeze
   CHARS_INTO_MESSAGE = 30
 
@@ -32,7 +33,7 @@ class AlchemyResponder < BaseResponder
     attr_reader :parties
 
     def element_from_message(message)
-      message = message || ""
+      message ||= ""
       message = message.gsub(/\s+/, "")
 
       chars = message[0, CHARS_INTO_MESSAGE].chars
@@ -47,7 +48,7 @@ class AlchemyResponder < BaseResponder
     [
       "mandatemandate#general",
       "mandatemandate#dnd",
-      "duck-bot-test#testing",
+      "duck-bot-test#testing"
     ].freeze
   end
 
@@ -101,7 +102,7 @@ class AlchemyResponder < BaseResponder
         !!kv_store.read(key(:fire)),
         !!kv_store.read(key(:earth)),
         !!kv_store.read(key(:water)),
-        !!kv_store.read(key(:wind)),
+        !!kv_store.read(key(:wind))
       ].count(true)
     end
 
@@ -127,14 +128,14 @@ class AlchemyResponder < BaseResponder
       when :water then user.dave?
       when :wind then user.patrick?
       else
-        raise "Unknown element '#{ element }'"
+        raise "Unknown element '#{element}'"
       end
     end
 
     private
 
     def key(element)
-      "#{ server }##{ channel }-#{ element.to_s }"
+      "#{server}##{channel}-#{element}"
     end
 
     def kv_store

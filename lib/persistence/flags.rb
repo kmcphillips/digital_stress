@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Flags
   extend self
 
@@ -6,7 +7,7 @@ module Flags
     !!kv_store.read(key(server: server, flag: flag))
   end
 
-  def activate(flag, seconds: nil, server:)
+  def activate(flag, server:, seconds: nil)
     kv_store.write(key(server: server, flag: flag), "1", ttl: seconds)
     true
   end
@@ -19,7 +20,7 @@ module Flags
   private
 
   def key(flag:, server:)
-    "flag:#{ flag }:#{ server }"
+    "flag:#{flag}:#{server}"
   end
 
   def kv_store

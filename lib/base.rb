@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "active_support/all"
 require "config"
 require "discordrb"
@@ -48,22 +49,22 @@ Discordrb::LOGGER.streams << logger_file if Global.config.discord.debug_log
 
 if Global.environment[:db] != false
   datastore_url = Global.environment[:db].presence || ENV["DUCK_DB"].presence || Global.config.db.url.presence
-  Global.logger.info("Selecting db: Global.environment[:db]: #{ Global.environment[:db].inspect } || ENV['DUCK_DB']: #{ ENV['DUCK_DB'].inspect } || Global.config.db.url: #{ Global.config.db.url.inspect }")
-  Global.logger.info("Using db: #{ datastore_url }")
+  Global.logger.info("Selecting db: Global.environment[:db]: #{Global.environment[:db].inspect} || ENV['DUCK_DB']: #{ENV["DUCK_DB"].inspect} || Global.config.db.url: #{Global.config.db.url.inspect}")
+  Global.logger.info("Using db: #{datastore_url}")
   raise "Database URL must be set or explicitly be set to false. Set it in `Global.environment[:db] or DUCK_DB or `db:` in config file." unless datastore_url.present?
 
-  if datastore_url.to_s.start_with?("sqlite://") || datastore_url.to_s.start_with?("mysql://")
+  if datastore_url.to_s.start_with?("sqlite://", "mysql://")
     Global.db = Sequel.connect(datastore_url.to_s)
   else
-    raise "Do not know how to connect to db: #{ datastore_url }"
+    raise "Do not know how to connect to db: #{datastore_url}"
   end
 end
 
 require_relative "persistence/key_value_store"
 if Global.environment[:kv] != false
   datastore_url = Global.environment[:kv].presence || ENV["DUCK_KV"].presence || Global.config.kv.url.presence
-  Global.logger.info("Selecting kv: Global.environment[:kv]: #{ Global.environment[:kv].inspect } || ENV['DUCK_KV']: #{ ENV['DUCK_KV'].inspect } || Global.config.kv.url: #{ Global.config.kv.url.inspect }")
-  Global.logger.info("Using kv: #{ datastore_url }")
+  Global.logger.info("Selecting kv: Global.environment[:kv]: #{Global.environment[:kv].inspect} || ENV['DUCK_KV']: #{ENV["DUCK_KV"].inspect} || Global.config.kv.url: #{Global.config.kv.url.inspect}")
+  Global.logger.info("Using kv: #{datastore_url}")
   raise "Key value store URL must be set or must explicitly be set to false. Set it in `Global.environment[:kv] or DUCK_KV or `kv:` in config file." unless datastore_url.present?
 
   Global.kv = KeyValueStore.new(datastore_url.to_s)
@@ -72,7 +73,7 @@ end
 Global.openai_client = OpenAI::Client.new(access_token: Global.config.openai.access_token)
 
 Aws.config.update(
-  region: 'us-west-2',
+  region: "us-west-2",
   credentials: Aws::Credentials.new(
     Global.config.aws.access_key_id,
     Global.config.aws.secret_access_key

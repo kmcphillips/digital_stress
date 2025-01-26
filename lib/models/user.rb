@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 class User
   USERS = Global.config.servers.each_with_object({}) do |(server_name, cfg), obj|
-    obj[server_name.to_s] = cfg.users.map(&:to_h).map{ |u| [u[:id], u] }.to_h
+    obj[server_name.to_s] = cfg.users.map(&:to_h).map { |u| [u[:id], u] }.to_h
   end
 
   attr_reader :username, :id, :server, :discriminator, :location, :phone_number
@@ -23,7 +24,7 @@ class User
   class << self
     def from_discord(user, server:)
       return nil unless user
-      self.new(username: user.username, id: user.id, discriminator: user.discriminator, server: server)
+      new(username: user.username, id: user.id, discriminator: user.discriminator, server: server)
     end
 
     def from_id(user_id, server:)
@@ -49,7 +50,7 @@ class User
 
     def from_config(config:, server:)
       return nil unless config
-      self.new(**config.slice(:username, :id, :discriminator).merge(server: server))
+      new(**config.slice(:username, :id, :discriminator).merge(server: server))
     end
 
     def from_phone(phone_number, server: nil)
@@ -94,6 +95,6 @@ class User
   end
 
   def mention
-    "<@#{ id }>"
+    "<@#{id}>"
   end
 end

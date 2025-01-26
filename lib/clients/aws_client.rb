@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module AwsClient
   extend self
 
@@ -9,7 +10,7 @@ module AwsClient
       output_format: "mp3",
       text: text,
       voice_id: voice,
-      engine: "neural",
+      engine: "neural"
     )
 
     file = Tempfile.create(["polly", ".mp3"], binmode: true)

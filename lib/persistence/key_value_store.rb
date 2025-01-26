@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class KeyValueStore
   attr_reader :redis
 
@@ -14,10 +15,10 @@ class KeyValueStore
       Global.logger.error("Could not parse redis string. Falling back to FakeRedis.")
     end
 
-    Global.logger.info("KeyValueStore Connected to #{ @redis.inspect } (#{ datastore_url })")
+    Global.logger.info("KeyValueStore Connected to #{@redis.inspect} (#{datastore_url})")
   end
 
-  def write(key, value, ttl:nil)
+  def write(key, value, ttl: nil)
     result = @redis.set(format_key(key), value)
     @redis.expire(format_key(key), ttl.to_i) if ttl
     result == "OK"
@@ -33,7 +34,7 @@ class KeyValueStore
 
   def to_s
     if @redis.is_a?(::Redis)
-      "Redis client v#{ ::Redis::VERSION } `#{ @redis.id }`"
+      "Redis client v#{::Redis::VERSION} `#{@redis.id}`"
     else
       @redis.to_s
     end
@@ -43,7 +44,7 @@ class KeyValueStore
 
   def format_key(key)
     raise "key cannot be blank" if key.blank?
-    "digital_stress_#{ key }"
+    "digital_stress_#{key}"
   end
 end
 
@@ -53,7 +54,7 @@ class FakeRedis
   end
 
   def inspect
-    "<FakeRedis:#{ object_id } in memory size=#{ @db.size }>"
+    "<FakeRedis:#{object_id} in memory size=#{@db.size}>"
   end
 
   def to_s
@@ -61,7 +62,7 @@ class FakeRedis
   end
 
   def set(key, val)
-    @db[key.to_s] = { value: val.to_s }
+    @db[key.to_s] = {value: val.to_s}
     "OK"
   end
 
@@ -70,8 +71,6 @@ class FakeRedis
 
     if obj && (!obj[:expires_at] || (obj[:expires_at] >= Time.now))
       obj[:value]
-    else
-      nil
     end
   end
 
@@ -107,7 +106,7 @@ class AbstractSqlRedis
   end
 
   def get(key)
-    @dataset.where{ timestamp < Time.now.to_i }.delete
+    @dataset.where { timestamp < Time.now.to_i }.delete
     result = @dataset.where(key: key).first
     result[:value] if result
   end
@@ -122,9 +121,9 @@ class AbstractSqlRedis
 end
 
 class SqliteRedis < AbstractSqlRedis
-  def initialize(sqlite_url, name=nil)
+  def initialize(sqlite_url, name = nil)
     @db = Sequel.connect(sqlite_url)
-    @db_name = "redis_#{ name || '0' }"
+    @db_name = "redis_#{name || "0"}"
     @db.create_table?(@db_name) do
       String :key
       String :value
@@ -134,26 +133,26 @@ class SqliteRedis < AbstractSqlRedis
   end
 
   def inspect
-    "<SqliteRedis:#{ object_id } db_name=#{ @db_name } #{ @db }>"
+    "<SqliteRedis:#{object_id} db_name=#{@db_name} #{@db}>"
   end
 
   def to_s
-    "SqliteRedis in `#{ File.basename(@db.opts[:database]) }`"
+    "SqliteRedis in `#{File.basename(@db.opts[:database])}`"
   end
 end
 
 class MysqlRedis < AbstractSqlRedis
-  def initialize(connection_string, name=nil)
+  def initialize(connection_string, name = nil)
     @db = Sequel.connect(connection_string)
-    @db_name = "redis_#{ name || '0' }"
+    @db_name = "redis_#{name || "0"}"
     @dataset = @db.from(@db_name)
   end
 
   def inspect
-    "<MysqlRedis:#{ object_id } db_name=#{ @db_name } #{ @db }>"
+    "<MysqlRedis:#{object_id} db_name=#{@db_name} #{@db}>"
   end
 
   def to_s
-    "MysqlRedis `#{ @db.opts[:database] }` at `#{ @db.opts[:host] }:#{ @db.opts[:port] }`"
+    "MysqlRedis `#{@db.opts[:database]}` at `#{@db.opts[:host]}:#{@db.opts[:port]}`"
   end
 end

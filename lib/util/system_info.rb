@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module SystemInfo
   extend self
 
@@ -27,7 +28,9 @@ module SystemInfo
   end
 
   def git_revision
-    system_call("git rev-parse --short HEAD").strip.presence rescue nil
+    system_call("git rev-parse --short HEAD").strip.presence
+  rescue
+    nil
   end
 
   def recently_deployed?
@@ -36,9 +39,9 @@ module SystemInfo
 
   def short_summary
     if flyio?
-      "fly.io #{ region }"
+      "fly.io #{region}"
     else
-      "#{ hostname }"
+      "#{hostname}"
     end
   end
 
@@ -50,7 +53,7 @@ module SystemInfo
 
   def system_call(command)
     result = SystemCall.call(command)
-    raise "`#{ command }` failed: #{ result.result }" unless result.success?
+    raise "`#{command}` failed: #{result.result}" unless result.success?
     result.result
   end
 end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module AfterRecorderStrikethroughAgainable
   def after(message:)
     if message
