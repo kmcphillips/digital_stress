@@ -41,14 +41,14 @@ class TimeDifference
   end
 
   def in_each_component
-    Hash[TIME_COMPONENTS.map do |time_component|
+    TIME_COMPONENTS.map do |time_component|
       [time_component, public_send(:"in_#{time_component}")]
-    end]
+    end.to_h
   end
 
   def in_general
     remaining = @time_diff
-    Hash[TIME_COMPONENTS.map do |time_component|
+    TIME_COMPONENTS.map do |time_component|
       if remaining > 0
         rounded_time_component = (remaining / 1.send(time_component).seconds).round(2).floor
         remaining -= rounded_time_component.send(time_component)
@@ -56,7 +56,7 @@ class TimeDifference
       else
         [time_component, 0]
       end
-    end]
+    end.to_h
   end
 
   def humanize

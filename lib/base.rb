@@ -38,7 +38,7 @@ require_relative "configuration"
 Global.config = Configuration.new(key: Global.environment[:config_key], file: Global.environment[:config]).read
 
 logger_file = if ENV["DUCK_LOG_STDOUT"]
-  STDOUT
+  $stdout
 else
   File.open(Global.environment[:log], File::WRONLY | File::APPEND | File::CREAT)
 end

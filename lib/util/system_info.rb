@@ -41,7 +41,7 @@ module SystemInfo
     if flyio?
       "fly.io #{region}"
     else
-      "#{hostname}"
+      hostname.to_s
     end
   end
 

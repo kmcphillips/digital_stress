@@ -23,9 +23,9 @@ class StatusCommand < BaseCommand
     lines << "**@duck** `#{SystemInfo.git_revision || "unknown"}`#{flags} running on #{env_info} using `ruby #{RUBY_VERSION}`"
     lines << "• #{Global.kv}"
 
-    lines << if Global.db.class.to_s == "Sequel::SQLite::Database"
+    lines << if Global.db.instance_of?(::Sequel::SQLite::Database)
       "• SQLite in `#{File.basename(Global.db.opts[:database])}`"
-    elsif Global.db.class.to_s == "Sequel::MySQL::Database"
+    elsif Global.db.instance_of?(::Sequel::MySQL::Database)
       "• MySQL `#{Global.db.opts[:database]}` at `#{Global.db.opts[:host]}:#{Global.db.opts[:port]}`"
     else
       "• #{Global.db}"

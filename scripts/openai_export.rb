@@ -2,7 +2,6 @@
 
 require_relative "../lib/base"
 require "csv"
-require "set"
 
 message_reject_patterns = [
   /<@!?[0-9]+>/,

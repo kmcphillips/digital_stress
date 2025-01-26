@@ -55,13 +55,16 @@ module OpenaiClient
     if !response.key?("error")
       if parameters[:response_format] == "b64_json"
         result = response["data"].map { |c| c["b64_json"] }
-        raise Error, "[OpenaiClient][image] request #{parameters} prompt:\n#{prompt} gave a blank b64_json result: #{response}" if result.blank?
-        result
+        if result.blank?
+          raise Error, "[OpenaiClient][image] request #{parameters} prompt:\n#{prompt} gave a blank b64_json result: #{response}"
+        end
       else
         result = response["data"].map { |c| c["url"] }
-        raise Error, "[OpenaiClient][image] request #{parameters} prompt:\n#{prompt} gave a blank url result: #{response}" if result.blank?
-        result
+        if result.blank?
+          raise Error, "[OpenaiClient][image] request #{parameters} prompt:\n#{prompt} gave a blank url result: #{response}"
+        end
       end
+      result
     else
       error_message = begin
         response["error"]

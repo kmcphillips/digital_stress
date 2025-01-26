@@ -30,7 +30,7 @@ class AnnouncementCommand < BaseSubcommand
       "Quack! Usage: `#{add_usage}`"
     else
       year, month, day = Announcement.coerce_date(year: subcommand_params[0], month: subcommand_params[1], day: subcommand_params[2])
-      message = subcommand_params[3..-1].join(" ")
+      message = subcommand_params[3..].join(" ")
 
       if !year || !month || !day || message.blank?
         "Quack! Could not parse date. Usage: `#{add_usage}`"

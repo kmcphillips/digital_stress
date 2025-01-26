@@ -8,7 +8,7 @@ class DailyAnnouncements < TaskBase
       results << process_daily_announcement(announcement)
     end
 
-    results.select(&:present?).count
+    results.count(&:present?)
   end
 
   private

@@ -29,13 +29,13 @@ class User
 
     def from_id(user_id, server:)
       return nil unless user_id.present?
-      return nil unless server.present? && USERS.keys.include?(server.to_s)
+      return nil unless server.present? && USERS.key?(server.to_s)
       from_config(config: USERS[server.to_s][user_id.to_i], server: server)
     end
 
     def from_fuzzy_match(string, server:)
       return nil unless string.present?
-      return nil unless server.present? && USERS.keys.include?(server.to_s)
+      return nil unless server.present? && USERS.key?(server.to_s)
       fuzzy_match = string.to_s.strip.downcase
       cfg = USERS[server.to_s].values.find do |value|
         value[:name].downcase == fuzzy_match || value[:username].downcase == fuzzy_match

@@ -26,14 +26,14 @@ class BaseCommand
       end
     end
 
-    if channels.present? && !(channels.include?("#{server}##{channel}") || channels.include?("#{server}"))
+    if channels.present? && !(channels.include?("#{server}##{channel}") || channels.include?(server.to_s))
       ":closed_lock_with_key: Quack! Not permitted!"
     else
       begin
         message = response
         message = message.join("\n") if message.is_a?(Array)
 
-        if message && message.is_a?(String) && message.length >= MAX_MESSAGE_LENGTH
+        if message&.is_a?(String) && message.length >= MAX_MESSAGE_LENGTH
           Global.logger.warn("response of length #{message.length} is too long #{message}")
           message = "#{message.slice(0..(MAX_MESSAGE_LENGTH - 5))} ..."
         end

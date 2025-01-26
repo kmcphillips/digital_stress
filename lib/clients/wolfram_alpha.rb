@@ -97,7 +97,7 @@ module WolframAlpha
     end
 
     def primary_pod?
-      data["queryresult"]["pod"] && data["queryresult"]["pod"].any? { |p| p["primary"] }
+      data["queryresult"]["pod"]&.any? { |p| p["primary"] }
     end
 
     def parse_primary_pod
@@ -105,12 +105,12 @@ module WolframAlpha
       images = []
 
       if pod = data["queryresult"]["pod"].find { |p| p["id"] == "Input" }
-        lines << "#{pod["subpod"]["plaintext"]}"
+        lines << (pod["subpod"]["plaintext"]).to_s
       end
 
       if pod = data["queryresult"]["pod"].find { |p| p["primary"] }
         lines << if pod["subpod"].is_a?(Array)
-          "#{pod["subpod"].map { |s| s["plaintext"] }.join("\n")}"
+          pod["subpod"].map { |s| s["plaintext"] }.join("\n").to_s
         else
           "**#{pod["subpod"]["plaintext"]}**"
         end
@@ -139,7 +139,7 @@ module WolframAlpha
       images = []
 
       if pod = data["queryresult"]["pod"].find { |p| p["id"] == "Input" }
-        prefix << "#{pod["subpod"]["plaintext"]}"
+        prefix << (pod["subpod"]["plaintext"]).to_s
       end
 
       data["queryresult"]["pod"].each do |pod|
