@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 class GoogleImageSearchResponder < BaseResponder
   def respond
-    if match_data = text.match(/(https:\/\/images\.app\.goo\.gl\/[a-zA-Z0-9]+)/)
+    if (match_data = text.match(/(https:\/\/images\.app\.goo\.gl\/[a-zA-Z0-9]+)/))
       url = match_data[0]
       response = HTTParty.head(url, follow_redirects: false)
 
@@ -13,15 +14,15 @@ class GoogleImageSearchResponder < BaseResponder
           if image_url.present?
             event.respond([sass, image_url].reject(&:blank?).join("\n"))
           else
-            Global.logger.warn("[GoogleImageSearchResponder] for #{ url } #{ redirect_url } did does not have an imgurl part")
+            Global.logger.warn("[GoogleImageSearchResponder] for #{url} #{redirect_url} did does not have an imgurl part")
             event.message.react("❔")
           end
         else
-          Global.logger.warn("[GoogleImageSearchResponder] for #{ url } does not have a location header")
+          Global.logger.warn("[GoogleImageSearchResponder] for #{url} does not have a location header")
           event.message.react("❔")
         end
       else
-        Global.logger.warn("[GoogleImageSearchResponder] for #{ url } did not return a 302")
+        Global.logger.warn("[GoogleImageSearchResponder] for #{url} did not return a 302")
         event.message.react("❔")
       end
     end
