@@ -2,6 +2,7 @@
 
 class RedactCommand < BaseCommand
   DEFAULT_MINUTES = 15
+  MAX_MINUTES = (3 * 24 * 60) + 1
 
   def response
     if event.channel.pm?
@@ -20,16 +21,16 @@ class RedactCommand < BaseCommand
     else
       minutes = if redact_time.blank?
         DEFAULT_MINUTES
-      elsif (matches = redact_time.match(/(\d+\s?m)/))
-        matches[1].to_i
-      elsif (matches = redact_time.match(/(\d+\s?h)/))
-        matches[1].to_i * 60
+      else
+        Formatter.parse_minutes_from(redact_time)
       end
 
       if !minutes
         "Quack, I don't know what you mean. Redact the default #{DEFAULT_MINUTES} or specify a number of minutes/hours."
       elsif minutes <= 0
         "Quack, I can't redact #{minutes} minutes."
+      elsif minutes > MAX_MINUTES
+        "Quack, #{minutes} minutes is too long to redact."
       else
         deleted = Recorder.delete_last_minutes(minutes, server: redact_server, channel: redact_channel)
 

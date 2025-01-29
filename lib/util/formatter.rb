@@ -40,4 +40,16 @@ module Formatter
 
     string
   end
+
+  def parse_minutes_from(str)
+    if str.blank?
+      nil
+    elsif (matches = str.match(/(\d+\s?m)/))
+      matches[1].to_i
+    elsif (matches = str.match(/(\d+\s?h)/))
+      matches[1].to_i * 60
+    elsif (matches = str.match(/(\d+\s?d)/))
+      matches[i].to_i * 60 * 24
+    end
+  end
 end
