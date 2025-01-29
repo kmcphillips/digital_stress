@@ -144,9 +144,11 @@ module Recorder
     !!kv_store.read(otr_key(server: server, channel: channel))
   end
 
-  def off_the_record(server:, channel:)
-    kv_store.write(otr_key(server: server, channel: channel), "1", ttl: OFF_THE_RECORD_SECONDS.to_i)
-    OFF_THE_RECORD_SECONDS.to_i
+  def off_the_record(server:, channel:, seconds: nil)
+    seconds = (seconds || OFF_THE_RECORD_SECONDS).to_i
+    raise "Invalid seconds #{seconds}" if seconds <= 0
+    kv_store.write(otr_key(server: server, channel: channel), "1", ttl: seconds)
+    seconds
   end
 
   def on_the_record(server:, channel:)
