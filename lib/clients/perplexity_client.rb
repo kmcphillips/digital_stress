@@ -10,7 +10,7 @@ module PerplexityClient
   end
 
   def default_guidance
-    "Be very brief and concise. Response will be used in a Discord chat so aim for quick responses. Use a casual friendly tone, like friends having a conversation. Sparsely include a \"Quack!\" at the end of messages or between sentences."
+    "Be very brief and concise. The maximum character limit is 2000 characters so stay under that. Response will be used in a Discord chat so aim for quick responses. Use a casual friendly tone, like friends having a conversation. Sparsely include a \"Quack!\" at the end of messages or between sentences."
   end
 
   def chat(prompt, params = {})
