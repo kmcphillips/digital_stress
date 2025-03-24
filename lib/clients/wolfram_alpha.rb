@@ -105,7 +105,7 @@ module WolframAlpha
       images = []
 
       if (pod = data["queryresult"]["pod"].find { |p| p["id"] == "Input" })
-        lines << (pod["subpod"]["plaintext"]).to_s
+        lines << pod["subpod"]["plaintext"].to_s
       end
 
       if (pod = data["queryresult"]["pod"].find { |p| p["primary"] })
@@ -139,7 +139,7 @@ module WolframAlpha
       images = []
 
       if (pod = data["queryresult"]["pod"].find { |p| p["id"] == "Input" })
-        prefix << (pod["subpod"]["plaintext"]).to_s
+        prefix << pod["subpod"]["plaintext"].to_s
       end
 
       data["queryresult"]["pod"].each do |pod|
