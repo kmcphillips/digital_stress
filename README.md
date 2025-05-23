@@ -17,6 +17,11 @@ bin/console
 From there you can call `run_bot` to connect to Discord, and `test_channel` to get a handle on a channel for testing.
 
 
+## Installing
+
+Install the ruby version with `mise`. There is no longer a `.ruby-version` file.
+
+
 ## Config
 
 A config file is commited to the repo and written to disk in plain text. The `config/config.yml` is decrypted from `config/config.yml.enc` on run if it does not already exist. In production or other envs override the config file with the ENV var `DUCK_CONFIG_FILE` to something like `config/config.production.yml`.

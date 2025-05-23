@@ -2,11 +2,12 @@
 
 source "https://rubygems.org"
 
-ruby file: ".ruby-version"
+ruby "3.4.4"
 
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 gem "activesupport"
+gem "irb"
 gem "discordrb", github: "shardlab/discordrb"
 gem "config", ">= 3.1.0"
 gem "sqlite3"

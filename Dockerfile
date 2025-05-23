@@ -1,7 +1,7 @@
-FROM ruby:3.3.6-alpine AS base
-ARG BUNDLER_VERSION=2.5.23
+FROM ruby:3.4.4-alpine AS base
+ARG BUNDLER_VERSION=2.6.9
 ARG BUNDLE_WITHOUT="development:test"
-ARG BASE_PACKAGES="tz git vim curl imagemagick ttf-liberation msttcorefonts-installer fontconfig libc6-compat gcompat"
+ARG BASE_PACKAGES="tz git vim curl imagemagick ttf-liberation msttcorefonts-installer fontconfig libc6-compat gcompat yaml-dev"
 ARG BUILD_PACKAGES="build-base sqlite"
 ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
 
@@ -17,10 +17,11 @@ FROM base AS builder
 RUN apk add --no-cache ${BUILD_PACKAGES}
 
 FROM builder AS gems
-COPY Gemfile Gemfile.lock .ruby-version /app/
+COPY Gemfile Gemfile.lock /app/
 RUN bundle install
 
 FROM base AS app
 WORKDIR /app
 COPY --from=gems /usr/local/bundle /usr/local/bundle
 COPY . .
+
