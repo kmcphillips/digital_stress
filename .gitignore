@@ -68,3 +68,6 @@ nohup.out
 /config/config.yml
 /config/config.*.yml
 /config/config_key
+
+# mise
+/mise.local.toml
