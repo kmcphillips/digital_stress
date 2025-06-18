@@ -8,37 +8,37 @@ kill_signal = "SIGINT"
 kill_timeout = "5s"
 
 [experimental]
-  auto_rollback = true
+auto_rollback = true
 
 [deploy]
-  strategy = "immediate"
+strategy = "immediate"
 
 [env]
-  APP_ENV = "production"
-  DUCK_LOG_STDOUT = "true"
+APP_ENV = "production"
+DUCK_LOG_STDOUT = "true"
 
 [processes]
-  bot = "bin/bot"
-  clockwork = "bin/clock"
+bot = "bin/bot"
+clockwork = "bin/clock"
 
 [[services]]
-  protocol = "tcp"
-  internal_port = 4444
-  processes = ["bot"]
+protocol = "tcp"
+internal_port = 4444
+processes = ["bot"]
 
-  [[services.ports]]
-    port = 80
-    handlers = ["http"]
-    force_https = true
+[[services.ports]]
+port = 80
+handlers = ["http"]
+force_https = true
 
-  [[services.ports]]
-    port = 443
-    handlers = ["tls", "http"]
-  [services.concurrency]
-    hard_limit = 25
-    soft_limit = 20
+[[services.ports]]
+port = 443
+handlers = ["tls", "http"]
+[services.concurrency]
+hard_limit = 25
+soft_limit = 20
 
-  [[services.tcp_checks]]
-    interval = "10s"
-    timeout = "2s"
-    restart_limit = 0
+[[services.tcp_checks]]
+interval = "10s"
+timeout = "2s"
+restart_limit = 0
