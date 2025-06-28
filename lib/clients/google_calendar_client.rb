@@ -4,7 +4,12 @@ module GoogleCalendarClient
   extend self
 
   def keep_alive
-    # TODO: This will prevent the creds from going stale. Put it in clock.rb
+    service.list_calendar_lists(max_results: 10)
+    Global.logger.info("[GoogleCalendarClient] Keep-alive successful")
+    true
+  rescue => e
+    Global.logger.error("[GoogleCalendarClient] Keep-alive failed: #{e.message}")
+    raise
   end
 
   def create_event(title:, start_time:, end_time:, location: nil, description: nil, email_invites: [], reminder_minutes: nil)
