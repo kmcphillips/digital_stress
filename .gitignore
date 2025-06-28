@@ -68,6 +68,7 @@ nohup.out
 /config/config.yml
 /config/config.*.yml
 /config/config_key
+/config/google_refresh_token
 
 # mise
 /mise.local.toml

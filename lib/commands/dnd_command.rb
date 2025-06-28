@@ -33,23 +33,44 @@ class DndCommand < BaseSubcommand
         result = announcement.save
 
         if result
+          start_time = Time.new(year, month, day, 20, 0, 0, ActiveSupport::TimeZone["America/Toronto"].tzinfo.utc_offset)
+          end_time = Time.new(year, month, day, 23, 45, 0, ActiveSupport::TimeZone["America/Toronto"].tzinfo.utc_offset)
+          discord_url = "https://discord.com/channels/824835225263669258/824835225263669263"
+
+          response_message = "Quack! #{Pinger.find_emoji("d20", server: server) || ":game_die:"} D&D added on **#{result.formatted_conditions}**"
+
           begin
             guild_scheduled_event_result = DiscordRestApi.create_guild_scheduled_event(
               name: "D&D",
               description: "D&D tonight! Sharp time.",
-              location: "https://discord.com/channels/824835225263669258/824835225263669263",
-              start_time: Time.new(year, month, day, 20, 0, 0, ActiveSupport::TimeZone["America/Toronto"].tzinfo.utc_offset).iso8601,
-              end_time: Time.new(year, month, day, 23, 45, 0, ActiveSupport::TimeZone["America/Toronto"].tzinfo.utc_offset).iso8601,
+              location: discord_url,
+              start_time: start_time.iso8601,
+              end_time: end_time.iso8601,
               image: Global.root.join("data", "dnd_event_banner.png"),
               server: server
             )
 
             announcement.update(guild_scheduled_event_id: guild_scheduled_event_result["id"])
-
-            "Quack! #{Pinger.find_emoji("d20", server: server) || ":game_die:"} D&D added on **#{result.formatted_conditions}**"
           rescue => e
-            "Quack! #{Pinger.find_emoji("d20", server: server) || ":game_die:"} D&D added on **#{result.formatted_conditions}** but failed to create server event! #{e.inspect}"
+            response_message += " Failed to create server event! #{e.inspect}"
           end
+
+          begin
+            google_calendar_result = GoogleCalendarClient.create_event(
+              title: "D&D",
+              start_time: start_time,
+              end_time: end_time,
+              location: discord_url,
+              description: "D&D tonight, sharp time.",
+              email_invites: [User.patrick.email, User.dave.email, User.eliot.email, User.arturo.email]
+            )
+
+            announcement.update(google_calendar_id: google_calendar_result.id)
+          rescue => e
+            response_message += " Failed to create calendar event! #{e.inspect}"
+          end
+
+          response_message
         else
           "Quack! Rolled a nat-1 on that and could not add the date."
         end

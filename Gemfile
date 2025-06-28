@@ -30,6 +30,8 @@ gem "aws-sdk-polly"
 gem "fuzzy_match"
 gem "csv"
 gem "clockwork", require: false
+gem "google-apis-calendar_v3"
+gem "google-apis-core"
 
 group :development, :test do
   gem "rspec"

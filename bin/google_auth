@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+require "bundler/setup"
+
+require_relative "../lib/global"
+Global.environment[:db] = false
+Global.environment[:kv] = false
+
+require_relative "../lib/base"
+
+require "google/apis/calendar_v3"
+require "googleauth"
+require "webrick"
+
+port_number = 3000
+redirect_uri = "http://localhost:#{port_number}"
+refresh_token_file = Global.root.join("config", "google_refresh_token")
+
+credentials = Google::Auth::UserRefreshCredentials.new(
+  client_id: Global.config.google.client_id,
+  client_secret: Global.config.google.client_secret,
+  scope: "https://www.googleapis.com/auth/calendar",
+  redirect_uri: redirect_uri,
+  access_type: "offline"
+)
+
+server = WEBrick::HTTPServer.new(Port: port_number, AccessLog: [], Logger: WEBrick::Log.new(StringIO.new))
+trap("INT") { server.shutdown }
+
+server.mount_proc "/" do |req, res|
+  if code = req.query["code"]
+    credentials.code = code
+    credentials.fetch_access_token!
+    
+    if credentials.refresh_token
+      File.write(refresh_token_file, credentials.refresh_token)
+      puts "Refresh token saved to: #{refresh_token_file}\nCopy this value into config."
+    end
+    
+    res.body = "Authentication successful! Close this window. Quack."
+    server.shutdown
+  else
+    res.body = "No authentication code found. Quack."
+  end
+end
+
+puts "Server started on port #{port_number}"
+
+auth_url = credentials.authorization_uri(include_granted_scopes: true)
+puts "Visit this URL to authorize:\n#{auth_url}...\n"
+
+server.start

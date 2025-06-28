@@ -90,7 +90,8 @@ CREATE TABLE announcements (
   month INTEGER,
   year INTEGER,
   message TEXT,
-  guild_scheduled_event_id BIGINT
+  guild_scheduled_event_id BIGINT,
+  google_calendar_id VARCHAR(255)
 ) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE TABLE redis_0 (
   `key` VARCHAR(255),

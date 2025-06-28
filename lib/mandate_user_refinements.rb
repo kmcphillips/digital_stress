@@ -22,6 +22,10 @@ module MandateUserRefinements
       mandate_user("patrick")
     end
 
+    def arturo
+      mandate_user("arturo")
+    end
+
     private
 
     def mandate_user(name)

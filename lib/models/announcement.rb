@@ -3,9 +3,9 @@
 class Announcement
   include Comparable
 
-  attr_reader :server, :channel, :message, :day, :month, :year, :weekdays, :source, :secret, :id, :guild_scheduled_event_id
+  attr_reader :server, :channel, :message, :day, :month, :year, :weekdays, :source, :secret, :id, :guild_scheduled_event_id, :google_calendar_id
 
-  def initialize(server:, channel:, message:, source:, day: nil, month: nil, year: nil, weekdays: nil, secret: false, id: nil, guild_scheduled_event_id: nil)
+  def initialize(server:, channel:, message:, source:, day: nil, month: nil, year: nil, weekdays: nil, secret: false, id: nil, guild_scheduled_event_id: nil, google_calendar_id: nil)
     @server = server
     @channel = channel
     @message = message
@@ -17,6 +17,7 @@ class Announcement
     @secret = !!secret
     @id = id
     @guild_scheduled_event_id = guild_scheduled_event_id
+    @google_calendar_id = google_calendar_id
   end
 
   class << self
@@ -201,6 +202,7 @@ class DbAnnouncement < Announcement
         weekdays: record[:weekdays],
         secret: record[:secret],
         guild_scheduled_event_id: record[:guild_scheduled_event_id],
+        google_calendar_id: record[:google_calendar_id],
         id: record[:id]
       )
     end
@@ -214,7 +216,8 @@ class DbAnnouncement < Announcement
       month: month,
       year: year,
       message: message,
-      guild_scheduled_event_id: guild_scheduled_event_id
+      guild_scheduled_event_id: guild_scheduled_event_id,
+      google_calendar_id: google_calendar_id
     )
     @id = id
 

@@ -75,6 +75,14 @@ class AnnouncementCommand < BaseSubcommand
           end
         end
 
+        if announcement.google_calendar_id
+          begin
+            GoogleCalendarClient.delete_event(announcement.google_calendar_id)
+          rescue
+            Global.logger.error("[AnnouncementCommand] Failed to delete google calendar event #{announcement.google_calendar_id} for announcement #{announcement.id} on server #{server}")
+          end
+        end
+
         if announcement.destroy
           "Quack! Announcement deleted.\n#{format_announcement(announcement)}"
         else
