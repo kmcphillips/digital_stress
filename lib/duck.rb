@@ -6,7 +6,7 @@ class Duck
     SimpleResponder,
     TMinusResponder,
     AlchemyResponder,
-#    GoogleImageSearchResponder,
+    # GoogleImageSearchResponder,
     TemperatureResponder,
     TopicResponder,
     AiResponder

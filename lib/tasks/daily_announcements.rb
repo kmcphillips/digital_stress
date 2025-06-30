@@ -3,7 +3,7 @@
 class DailyAnnouncements < TaskBase
   def run
     announcements = Announcement.all.select { |a| a.triggers_on_day?(Date.today) }
-    Global.logger.info("[DailyAnnouncements] Found #{announcements.count} #{announcements.count == 1 ? "announcement" : "announcements"} to send")
+    Global.logger.info("[DailyAnnouncements] Found #{announcements.count} #{(announcements.count == 1) ? "announcement" : "announcements"} to send")
 
     announcements.each do |announcement|
       channel = Pinger.find_channel(server: announcement.server, channel: announcement.channel)

@@ -147,10 +147,8 @@ class ConfigAnnouncement < Announcement
       Global.config.servers.each do |server_name, server_config|
         next if server.present? && server.to_s.delete("#") != server_name.to_s
 
-        if server_config.tasks&.daily_announcements
-          server_config.tasks.daily_announcements.each do |config|
-            results << build(config, server: server_name)
-          end
+        server_config.tasks&.daily_announcements&.each do |config|
+          results << build(config, server: server_name)
         end
       end
 

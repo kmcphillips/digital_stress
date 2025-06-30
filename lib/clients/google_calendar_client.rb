@@ -20,8 +20,6 @@ module GoogleCalendarClient
           Google::Apis::CalendarV3::EventReminder.new(reminder_method: "popup", minutes: reminder_minutes.to_i)
         ]
       )
-    else
-      nil
     end
 
     event = Google::Apis::CalendarV3::Event.new(
@@ -42,12 +40,12 @@ module GoogleCalendarClient
 
   def delete_event(event_id, send_notifications: true)
     service.delete_event("primary", event_id, send_notifications: send_notifications)
-    
+
     true
   rescue e
     raise "Failed to delete event '#{event_id}': #{e.message}"
   end
-  
+
   private
 
   def service
