@@ -37,6 +37,11 @@ aws:
   access_key_id: xxx
   secret_access_key: xxx
 
+google:
+  client_id: XXX
+  client_secret: XXX
+  refresh_token: XXX
+
 duck:
   api_key: xxxxxxxxxxxxxxxxxxx
 
