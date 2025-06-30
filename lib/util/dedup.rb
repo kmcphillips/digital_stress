@@ -10,16 +10,14 @@ class Dedup
   end
 
   def found?(value)
-    k = key(value)
-    v = !!kv_store.read(k)
-    Global.logger.info("[Dedup] found?=#{v} '#{k}'")
-    v
+    result = !!kv_store.read(hashed_key(value))
+    Global.logger.info("[Dedup] found?=#{result} '#{readable_key(value)}'")
+    result
   end
 
   def register(value)
-    k = key(value)
-    Global.logger.info("[Dedup] register '#{k}'")
-    !!kv_store.write(key(value), value, ttl: CACHE_LENGTH_SECONDS)
+    Global.logger.info("[Dedup] register '#{readable_key(value)}'")
+    !!kv_store.write(hashed_key(value), "1", ttl: CACHE_LENGTH_SECONDS)
   end
 
   def list(values)
@@ -35,8 +33,12 @@ class Dedup
 
   private
 
-  def key(value)
+  def readable_key(value)
     Array(namespace).map { |v| (v.presence || "").downcase.strip }.join("__").concat("__").concat(value)
+  end
+
+  def hashed_key(value)
+    Array(namespace).map { |v| (v.presence || "").downcase.strip }.join("__").concat("__").concat(Digest::SHA256.hexdigest(value))
   end
 
   def kv_store
