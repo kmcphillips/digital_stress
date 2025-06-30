@@ -67,10 +67,13 @@ class AnnouncementCommand < BaseSubcommand
       announcement = DbAnnouncement.find(subcommand_params[0])
 
       if announcement
+        errors = []
+
         if announcement.guild_scheduled_event_id
           begin
             DiscordRestApi.delete_guild_scheduled_event(announcement.guild_scheduled_event_id, server: server)
           rescue
+            errors << "Failed to delete Discord scheduled event."
             Global.logger.error("[AnnouncementCommand] Failed to delete guild scheduled event #{announcement.guild_scheduled_event_id} for announcement #{announcement.id} on server #{server}")
           end
         end
@@ -79,12 +82,17 @@ class AnnouncementCommand < BaseSubcommand
           begin
             GoogleCalendarClient.delete_event(announcement.google_calendar_id)
           rescue
+            errors << "Failed to delete Google Calendar event."
             Global.logger.error("[AnnouncementCommand] Failed to delete google calendar event #{announcement.google_calendar_id} for announcement #{announcement.id} on server #{server}")
           end
         end
 
         if announcement.destroy
-          "Quack! Announcement deleted.\n#{format_announcement(announcement)}"
+          if errors.blank?
+            "Quack! Announcement deleted.\n#{format_announcement(announcement)}"
+          else
+            "Quack! Announcement deleted.\n#{format_announcement(announcement)}\n\nBut some errors occurred!!\n#{errors.join("\n")}"
+          end
         else
           "Quack! Could not delete announcement!"
         end
