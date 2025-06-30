@@ -4,6 +4,7 @@ ARG BUNDLE_WITHOUT="development:test"
 ARG BASE_PACKAGES="tz git vim curl imagemagick ttf-liberation msttcorefonts-installer fontconfig libc6-compat gcompat yaml-dev"
 ARG BUILD_PACKAGES="build-base sqlite"
 ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
+ENV DISCORDRB_NONACL true
 
 RUN apk add --no-cache ${BASE_PACKAGES}
 RUN mkdir /app
