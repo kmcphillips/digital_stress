@@ -2,23 +2,20 @@
 
 class DailyAnnouncements < TaskBase
   def run
-    results = []
+    announcements = Announcement.all.select { |a| a.triggers_on_day?(Date.today) }
+    Global.logger.info("[DailyAnnouncements] Found #{announcements.count} #{announcements.count == 1 ? "announcement" : "announcements"} to send")
 
-    Announcement.all.each do |announcement|
-      results << process_daily_announcement(announcement)
-    end
-
-    results.count(&:present?)
-  end
-
-  private
-
-  def process_daily_announcement(announcement)
-    if announcement.triggers_on_day?(Date.today)
+    announcements.each do |announcement|
       channel = Pinger.find_channel(server: announcement.server, channel: announcement.channel)
-      channel.send_message(announcement.rendered_message)
 
-      true
+      if channel
+        Global.logger.info("[DailyAnnouncements] Sending announcement to #{announcement.channel} on #{announcement.server}")
+        channel.send_message(announcement.rendered_message)
+      else
+        Global.logger.error("[DailyAnnouncements] Failed to find channel #{announcement.channel} on #{announcement.server}")
+      end
     end
+
+    announcements.count
   end
 end
