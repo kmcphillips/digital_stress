@@ -32,6 +32,7 @@ gem "csv"
 gem "clockwork", require: false
 gem "google-apis-calendar_v3"
 gem "google-apis-core"
+gem "google_search_results" # SerpApi
 
 group :development, :test do
   gem "rspec"

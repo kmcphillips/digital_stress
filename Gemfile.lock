@@ -94,6 +94,7 @@ GEM
       base64 (~> 0.2)
       faraday (>= 1.0, < 3.a)
     google-logging-utils (0.2.0)
+    google_search_results (2.2.0)
     googleauth (1.14.0)
       faraday (>= 1.0, < 3.a)
       google-cloud-env (~> 2.2)
@@ -309,6 +310,7 @@ DEPENDENCIES
   games_dice
   google-apis-calendar_v3
   google-apis-core
+  google_search_results
   httparty
   irb
   nokogiri

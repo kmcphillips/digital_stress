@@ -27,6 +27,7 @@ require "fuzzy_match"
 require "timeout"
 require "google/apis/calendar_v3"
 require "googleauth"
+require "google_search_results"
 
 require_relative "vendor/time_difference"
 
@@ -110,6 +111,7 @@ require_relative "clients/perplexity_client"
 require_relative "clients/aws_client"
 require_relative "clients/mandate_models"
 require_relative "clients/google_calendar_client"
+require_relative "clients/serp_api"
 
 require_relative "base_command"
 require_relative "base_subcommand"

@@ -42,6 +42,9 @@ google:
   client_secret: XXX
   refresh_token: XXX
 
+serp_api:
+  key: XXX
+
 duck:
   api_key: xxxxxxxxxxxxxxxxxxx
 
