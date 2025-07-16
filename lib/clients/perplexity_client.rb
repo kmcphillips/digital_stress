@@ -6,7 +6,11 @@ module PerplexityClient
   class Error < StandardError; end
 
   def default_model
-    "llama-3.1-sonar-large-128k-online"
+    "sonar-pro"
+  end
+
+  def models
+    client.models
   end
 
   def default_guidance
