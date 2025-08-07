@@ -6,7 +6,7 @@ module OpenaiClient
   class Error < StandardError; end
 
   def default_model
-    "gpt-4o"
+    "gpt-5"
   end
 
   def default_image_model
