@@ -79,4 +79,27 @@ module OpenaiClient
       file
     end
   end
+
+  def responses(prompt, image: nil, previous_response_id: nil, parameters: {})
+    parameters = parameters.symbolize_keys
+    parameters[:model] ||= OpenaiClient.default_model
+    parameters[:input] = prompt
+    parameters[:previous_response_id] = previous_response_id if previous_response_id.present?
+    # TODO: add image if provided from image:
+    Global.logger.info("[OpenaiClient][responses] request #{parameters} prompt:\n#{prompt}")
+    response = Global.openai_client.responses.create(parameters: parameters)
+    Global.logger.info("[OpenaiClient][responses] response #{response.inspect}")
+    if !response["error"].present?
+      result = response["output"].select { |c| c["type"] == "message" && c["role"] == "assistant" }.last&.dig("content", 0, "text") # This is where it would respond with images I think
+      raise Error, "[OpenaiClient][responses] request #{parameters} prompt:\n#{prompt} gave a blank result: #{response}" if result.blank?
+      [result, response["id"]]
+    else
+      error_message = begin
+        response["error"]
+      rescue
+        nil
+      end
+      raise Error, ":bangbang: OpenAI returned error: #{error_message}"
+    end
+  end
 end
