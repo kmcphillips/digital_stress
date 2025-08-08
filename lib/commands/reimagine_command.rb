@@ -7,7 +7,7 @@ class ReimagineCommand < BaseCommand
     if query.blank?
       "Quacking-imagine something"
     else
-      text = OpenaiClient.completion(text_prompt, openai_params).first.strip
+      text = OpenaiClient.chat(text_prompt, openai_params).first.strip
       file = OpenaiClient.image_file(text).first
       event.send_file(file, filename: "reimagine.png") if file
       text

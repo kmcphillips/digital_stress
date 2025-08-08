@@ -4,7 +4,7 @@ class DisclaimerCommand < BaseCommand
   include AfterRecorderStrikethroughAgainable
 
   def response
-    OpenaiClient.completion(prompt, openai_params).first.strip
+    OpenaiClient.chat(prompt, openai_params).first.strip
   end
 
   private

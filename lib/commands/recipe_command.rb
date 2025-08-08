@@ -14,7 +14,7 @@ class RecipeCommand < BaseCommand
         file = OpenaiClient.image_file(image_prompt(query, publication: publication)).first
       end
 
-      text = OpenaiClient.completion(text_prompt(query, publication: publication), openai_params).first.strip
+      text = OpenaiClient.chat(text_prompt(query, publication: publication), openai_params).first.strip
 
       thread.join
       event.send_file(file, filename: "recipe.png") if file

@@ -7,7 +7,7 @@ class HaikuCommand < BaseCommand
     if query.blank?
       "*Your input is blank\nI can't compose from nothing\nTry again quack quack*"
     else
-      text = OpenaiClient.completion(text_prompt(query), openai_params).first.strip
+      text = OpenaiClient.chat(text_prompt(query), openai_params).first.strip
       file = OpenaiClient.image_file(image_prompt(text)).first
       event.send_file(file, filename: "haiku.png") if file
       "*#{text}*"

@@ -10,7 +10,7 @@ class WhatCommand < BaseCommand
       elsif recent_conversation.blank?
         "Quack? What are we talking about? Doesn't look like much."
       else
-        OpenaiClient.completion(prompt, openai_params)
+        OpenaiClient.chat(prompt, openai_params)
       end
     else
       "What?"

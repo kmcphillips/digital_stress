@@ -7,7 +7,7 @@ class SongCommand < BaseCommand
     if query.blank?
       "What should we sing about?"
     else
-      OpenaiClient.completion(prompt(query), openai_params).first.strip
+      OpenaiClient.chat(prompt(query), openai_params).first.strip
     end
   end
 

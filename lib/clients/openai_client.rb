@@ -17,11 +17,6 @@ module OpenaiClient
     Global.openai_client.models.list["data"].map { |m| m["id"] }
   end
 
-  def completion(prompt, openai_params = {})
-    Global.logger.info("[OpenaiClient][completion] deprecated method proxied to chat() openai_params=#{openai_params} prompt:\n#{prompt}")
-    chat(prompt, openai_params)
-  end
-
   def chat(prompt, openai_params = {})
     parameters = openai_params.symbolize_keys
     Global.logger.info("[OpenaiClient][chat] request #{parameters} prompt:\n#{prompt}")

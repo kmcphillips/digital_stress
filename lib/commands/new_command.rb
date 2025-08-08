@@ -10,7 +10,7 @@ class NewCommand < BaseSubcommand
   end
 
   def game
-    result = OpenaiClient.completion(game_prompt(query), openai_params).first.strip
+    result = OpenaiClient.chat(game_prompt(query), openai_params).first.strip
 
     image_prompt = nil
 

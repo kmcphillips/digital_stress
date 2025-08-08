@@ -36,7 +36,7 @@ module MandateModels
       n: 2
     }
 
-    result = OpenaiClient.completion(prompt, openai_params)
+    result = OpenaiClient.chat(prompt, openai_params)
     completion = result.map { |r| r.gsub("###", "").strip }.find(&:present?)
 
     [name, completion]
@@ -63,7 +63,7 @@ module MandateModels
 
     prompt = prompt.presence || "This is a chat message from #{name}:"
 
-    result = OpenaiClient.completion(prompt, openai_params)
+    result = OpenaiClient.chat(prompt, openai_params)
     completion = result.map { |r| r.gsub("###", "").strip }.find(&:present?)
 
     [name, completion]

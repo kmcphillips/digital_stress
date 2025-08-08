@@ -4,7 +4,7 @@ class CatCommand < BaseCommand
   include AfterRecorderStrikethroughAgainable
 
   def response
-    OpenaiClient.completion("Write a short, humorous monologue about cat problems using only cat sounds.", openai_params).first.strip
+    OpenaiClient.chat("Write a short, humorous monologue about cat problems using only cat sounds.", openai_params).first.strip
   end
 
   private

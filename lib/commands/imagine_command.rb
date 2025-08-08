@@ -13,7 +13,7 @@ class ImagineCommand < BaseCommand
         file = OpenaiClient.image_file("#{scrubbed_query} #{style}").first
       end
 
-      text = OpenaiClient.completion(prompt, openai_params)
+      text = OpenaiClient.chat(prompt, openai_params)
 
       thread.join
 

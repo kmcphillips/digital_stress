@@ -38,7 +38,7 @@ class AiResponder < BaseResponder
   private
 
   def completion(prompt)
-    OpenaiClient.completion(prompt, openai_params).first.strip
+    OpenaiClient.chat(prompt, openai_params).first.strip
   end
 
   def openai_params

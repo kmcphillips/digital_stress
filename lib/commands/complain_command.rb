@@ -4,7 +4,7 @@ class ComplainCommand < BaseCommand
   include AfterRecorderStrikethroughAgainable
 
   def response
-    OpenaiClient.completion(prompt(query), openai_params).first.strip
+    OpenaiClient.chat(prompt(query), openai_params).first.strip
   end
 
   private

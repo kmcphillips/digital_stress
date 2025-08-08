@@ -46,7 +46,7 @@ class OpenaiCommand < BaseSubcommand
         presence_penalty: 0.4
       }
 
-      OpenaiClient.completion(subcommand_query.strip, openai_params)
+      OpenaiClient.chat(subcommand_query.strip, openai_params)
     end
   end
 

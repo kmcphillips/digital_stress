@@ -7,9 +7,9 @@ class DefineCommand < BaseCommand
     if query.blank?
       "Define what?"
     elsif rand < 0.2 && user.mandate_name
-      OpenaiClient.completion(wrong_prompt(query), openai_params).first.strip
+      OpenaiClient.chat(wrong_prompt(query), openai_params).first.strip
     else
-      OpenaiClient.completion(prompt(query), openai_params).first.strip
+      OpenaiClient.chat(prompt(query), openai_params).first.strip
     end
   end
 

@@ -7,9 +7,9 @@ class InsultCommand < BaseCommand
     if query.blank?
       "Who should I quacking insult?"
     elsif rand < 0.05 && user.mandate_name
-      OpenaiClient.completion(insult_person_prompt(user.mandate_name), openai_params).first.strip
+      OpenaiClient.chat(insult_person_prompt(user.mandate_name), openai_params).first.strip
     else
-      OpenaiClient.completion(insult_prompt(query), openai_params).first.strip
+      OpenaiClient.chat(insult_prompt(query), openai_params).first.strip
     end
   end
 
