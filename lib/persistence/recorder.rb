@@ -211,6 +211,17 @@ module Recorder
     end
   end
 
+  def delete_message_metadata(message_id, type = nil)
+    message_id = message_id.id if message_id.is_a?(Discordrb::Message)
+    message_id = message_id.to_s
+
+    if type.present?
+      Global.db[:message_metadata].where(message_id: message_id, type: type.to_s).delete
+    else
+      Global.db[:message_metadata].where(message_id: message_id).delete
+    end
+  end
+
   private
 
   def table
