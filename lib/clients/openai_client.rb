@@ -84,7 +84,6 @@ module OpenaiClient
     parameters = parameters.symbolize_keys
     parameters[:model] ||= OpenaiClient.default_model
     parameters[:previous_response_id] = previous_response_id if previous_response_id.present?
-
     parameters[:input] = if image_url.present?
       [
         {

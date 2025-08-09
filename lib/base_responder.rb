@@ -32,6 +32,10 @@ class BaseResponder
     event.channel&.name
   end
 
+  def attached_images
+    event.message.attachments.select { |a| a.image? }
+  end
+
   def channels
     nil
   end

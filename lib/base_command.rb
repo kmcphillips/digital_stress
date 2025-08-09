@@ -82,6 +82,10 @@ class BaseCommand
     true
   end
 
+  def attached_images
+    event.message.attachments.select { |a| a.image? }
+  end
+
   private
 
   def response

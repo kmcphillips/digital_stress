@@ -22,10 +22,4 @@ class GptCommand < BaseCommand
   def after(message:)
     Recorder.set_message_metadata(message.id, :openai_gpt_response_id, @response_id) if defined?(@response_id) && @response_id.present?
   end
-
-  private
-
-  def attached_images
-    @attached_images ||= event.message.attachments.select { |a| a.image? }
-  end
 end
