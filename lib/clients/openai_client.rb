@@ -90,7 +90,7 @@ module OpenaiClient
     response = Global.openai_client.responses.create(parameters: parameters)
     Global.logger.info("[OpenaiClient][responses] response #{response.inspect}")
     if !response["error"].present?
-      result = response["output"].select { |c| c["type"] == "message" && c["role"] == "assistant" }.last&.dig("content", 0, "text") # This is where it would respond with images I think
+      result = response["output"].reverse.find { |c| c["type"] == "message" && c["role"] == "assistant" }&.dig("content", 0, "text") # This is where it would respond with images I think
       raise Error, "[OpenaiClient][responses] request #{parameters} prompt:\n#{prompt} gave a blank result: #{response}" if result.blank?
       [result, response["id"]]
     else
