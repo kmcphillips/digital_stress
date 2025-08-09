@@ -14,12 +14,12 @@ class OpenaiCommand < BaseSubcommand
 
   def subcommands
     {
+      chat: "Chat with OpenAI GPT-5",
+      instruct: "Chat with OpenAI GPT-5",
+      image: "Generate an image with OpenAI Dall-E 2",
       imagine: "Tell it to imagine something",
       reimagine: "Tell it to imagine an image of something",
-      instruct: "Instruct it to return something",
-      image: "Generate an image with OpenAI Dall-E 2",
-      question: "Respond to a question with the fine tuned OpenAI GPT-3 model",
-      chat: "Chat with the fine tuned OpenAI GPT-3 model"
+      question: "Respond to a question with the fine tuned OpenAI GPT-3 model"
     }.freeze
   end
 
@@ -35,18 +35,13 @@ class OpenaiCommand < BaseSubcommand
 
   def instruct
     if subcommand_query.blank?
-      "Quack! Instruct something."
+      "Quack! Gotta say something."
+    elsif attached_images.one?
+      OpenaiClient.chat(subcommand_query.strip, image_url: attached_images.first.url)
+    elsif attached_images.any?
+      "Quack! Only one image at a time is supported."
     else
-      openai_params = {
-        model: OpenaiClient.default_model,
-        max_tokens: 300,
-        temperature: 0.8,
-        top_p: 1.0,
-        frequency_penalty: 0.4,
-        presence_penalty: 0.4
-      }
-
-      OpenaiClient.chat(subcommand_query.strip, openai_params)
+      OpenaiClient.chat(subcommand_query.strip)
     end
   end
 
@@ -85,16 +80,6 @@ class OpenaiCommand < BaseSubcommand
   end
 
   def chat
-    if subcommand_query.blank?
-      "Quack! Chat as who?"
-    else
-      name, completion = MandateModels.chat("", name: subcommand_query.strip.split(" ").first.gsub(/[^a-zA-Z]/, ""))
-
-      if completion.present?
-        "> **#{name.capitalize}**: #{completion.gsub("\n", "\n> ")}"
-      else
-        "Quack! Got a blank result for some reason."
-      end
-    end
+    instruct
   end
 end
