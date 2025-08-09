@@ -80,12 +80,28 @@ module OpenaiClient
     end
   end
 
-  def responses(prompt, image: nil, previous_response_id: nil, parameters: {})
+  def responses(prompt, image_url: nil, previous_response_id: nil, parameters: {})
     parameters = parameters.symbolize_keys
     parameters[:model] ||= OpenaiClient.default_model
-    parameters[:input] = prompt
     parameters[:previous_response_id] = previous_response_id if previous_response_id.present?
-    # TODO: add image if provided from image:
+
+    parameters[:input] = if image_url.present?
+      [
+        {
+          "role" => "user",
+          "content" => [
+            {"type" => "input_text", "text" => prompt},
+            {
+              "type" => "input_image",
+              "image_url" => image_url
+            }
+          ]
+        }
+      ]
+    else
+      prompt
+    end
+
     Global.logger.info("[OpenaiClient][responses] request #{parameters} prompt:\n#{prompt}")
     response = Global.openai_client.responses.create(parameters: parameters)
     Global.logger.info("[OpenaiClient][responses] response #{response.inspect}")
