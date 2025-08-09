@@ -14,6 +14,17 @@ module PerplexityClient
   end
 
   def chat(prompt, params = {})
+    image_url = params.delete(:image_url)
+
+    content = if image_url.present?
+      [
+        {type: "text", text: prompt},
+        {type: "image_url", image_url: {url: image_url}}
+      ]
+    else
+      prompt
+    end
+
     messages = [
       {
         role: "system",
@@ -21,7 +32,7 @@ module PerplexityClient
       },
       {
         role: "user",
-        content: prompt
+        content: content
       }
     ]
 

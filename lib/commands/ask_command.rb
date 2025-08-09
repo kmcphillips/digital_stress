@@ -6,8 +6,10 @@ class AskCommand < BaseCommand
   def response
     if query.blank?
       "What do you want to know?"
+    elsif attached_images.many?
+      "Quack! Only one image at a time please."
     else
-      message, citations = PerplexityClient.chat(query)
+      message, citations = PerplexityClient.chat(query, image_url: attached_images.first&.url)
       @citations = citations
       message
     end
