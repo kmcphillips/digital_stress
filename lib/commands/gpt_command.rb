@@ -4,17 +4,10 @@ class GptCommand < BaseCommand
   def response
     if query.blank?
       "Quack! Gotta say something."
+    elsif attached_images.many?
+      "Quack! Only one image at a time please."
     else
-      if attached_images.any?
-        if attached_images.one?
-          response, @response_id = OpenaiClient.responses(query, image_url: attached_images.first.url)
-        else
-          "Quack! Only one image at a time please."
-        end
-      else
-        response, @response_id = OpenaiClient.responses(query)
-      end
-
+      response, @response_id = OpenaiClient.responses(query, image_url: attached_images.first&.url)
       response
     end
   end

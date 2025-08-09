@@ -11,14 +11,10 @@ class GptResponder < BaseResponder
         response, response_id = nil, nil
 
         while_typing do
-          if attached_images.any?
-            if attached_images.one?
-              response, response_id = OpenaiClient.responses(text, previous_response_id: previous_response_id, image_url: attached_images.first.url)
-            else
-              "Quack! Only one image at a time please."
-            end
+          if attached_images.many?
+            "Quack! Only one image at a time please."
           else
-            response, response_id = OpenaiClient.responses(text, previous_response_id: previous_response_id)
+            response, response_id = OpenaiClient.responses(text, previous_response_id: previous_response_id, image_url: attached_images.first&.url)
           end
         end
 
