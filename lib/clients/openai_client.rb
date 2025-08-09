@@ -19,10 +19,18 @@ module OpenaiClient
 
   def chat(prompt, openai_params = {})
     parameters = openai_params.symbolize_keys
-    Global.logger.info("[OpenaiClient][chat] request #{parameters} prompt:\n#{prompt}")
+    image_url = parameters.delete(:image_url)
+    Global.logger.info("[OpenaiClient][chat] request #{parameters} prompt:\n#{prompt} image_url:\n#{image_url}")
     raise Error, "[OpenaiClient][chat] passed in `engine` param, use `model` instead" if parameters.key?(:engine)
     parameters[:model] ||= OpenaiClient.default_model
-    parameters[:messages] = [{role: "user", content: prompt}]
+    parameters[:messages] = if image_url.present?
+      [{role: "user", content: [
+        {type: "text", text: prompt},
+        {type: "image_url", image_url: {url: image_url}}
+      ]}]
+    else
+      [{role: "user", content: prompt}]
+    end
     response = Global.openai_client.chat(parameters: parameters)
     Global.logger.info("[OpenaiClient][chat] response #{response.inspect}")
     if !response.key?("error")
