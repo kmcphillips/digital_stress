@@ -3,8 +3,6 @@
 class BaseCommand
   attr_reader :params, :event, :bot, :user, :query
 
-  MAX_MESSAGE_LENGTH = 1999
-
   def initialize(event:, bot:, params:)
     @bot = bot
     @params = params
@@ -33,9 +31,9 @@ class BaseCommand
         message = response
         message = message.join("\n") if message.is_a?(Array)
 
-        if message&.is_a?(String) && message.length >= MAX_MESSAGE_LENGTH
-          Global.logger.warn("response of length #{message.length} is too long #{message}")
-          message = "#{message.slice(0..(MAX_MESSAGE_LENGTH - 5))} ..."
+        if Formatter.too_long?(message)
+          Global.logger.warn("[#{self.class.name}#response] response of length #{message.length} is too long #{message}")
+          message = Formatter.truncate_too_long(message)
         end
 
         Global.logger.info("response: #{message}")

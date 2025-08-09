@@ -52,4 +52,16 @@ module Formatter
       matches[i].to_i * 60 * 24
     end
   end
+
+  def too_long?(message, max_length = Duck::MAX_MESSAGE_LENGTH)
+    message.is_a?(String) && message.length >= max_length
+  end
+
+  def truncate_too_long(message, max_length = Duck::MAX_MESSAGE_LENGTH)
+    if too_long?(message, max_length)
+      "#{message.slice(0..(max_length - 5))} ..."
+    else
+      message
+    end
+  end
 end

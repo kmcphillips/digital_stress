@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Duck
+  MAX_MESSAGE_LENGTH = 1999
   COMMAND_PREFIXES = ["Duck", "duck"].freeze
   RESPONDERS = [
     SimpleResponder,
@@ -9,7 +10,8 @@ class Duck
     # GoogleImageSearchResponder,
     TemperatureResponder,
     TopicResponder,
-    AiResponder
+    AiResponder,
+    GptResponder
   ].freeze
   COMMANDS = [
     {class_name: PingCommand, command: :ping, description: "Hello, is it me you're looking for?"},
@@ -37,6 +39,7 @@ class Duck
     {class_name: QuigitalCommand, command: :quigital, description: "Engage with Quigital!"},
     {class_name: OpenaiCommand, command: :openai, aliases: [:ai], description: "Commands relating to OpenAI."},
     {class_name: OpenaiChatCommand, command: :chat, description: "Chat using OpenAI's latest model."},
+    {class_name: GptCommand, command: :gpt, description: "Do a ChatGPT style conversation with OpenAI. Use message replies to continue the conversation."},
     {class_name: ImagineCommand, command: :imagine, description: "Imagine something with AI."},
     {class_name: ReimagineCommand, command: :reimagine, description: "Imagine something with AI, feeding the text into the image."},
     {class_name: HaikuCommand, command: :haiku, description: "Compose a haiku GPT-4."},
