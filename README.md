@@ -98,6 +98,18 @@ CREATE TABLE redis_0 (
   value TEXT,
   timestamp BIGINT
 ) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE TABLE message_metadata (
+  message_id VARCHAR(255),
+  type VARCHAR(255),
+  value VARCHAR(255),
+  PRIMARY KEY (message_id, type)
+) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+To execute something like modifying the tables, use `bin/console` and run:
+```ruby
+sql_statement = "ALTER TABLE ..."
+Global.db.execute(sql_statement).to_a
 ```
 
 Some messages are omitted from being recorded based on filters. If those filters are updated, run:

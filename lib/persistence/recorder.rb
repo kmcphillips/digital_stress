@@ -188,6 +188,29 @@ module Recorder
     end
   end
 
+  def set_message_metadata(message_id, type, metadata)
+    message_id = message_id.id if message_id.is_a?(Discordrb::Message)
+    message_id = message_id.to_s
+
+    Global.db.transaction do
+      Global.db[:message_metadata].where(message_id: message_id, type: type.to_s).delete
+      Global.db[:message_metadata].insert(message_id: message_id, type: type.to_s, value: metadata)
+    end
+
+    true
+  end
+
+  def get_message_metadata(message_id, type = nil)
+    message_id = message_id.id if message_id.is_a?(Discordrb::Message)
+    message_id = message_id.to_s
+
+    if type.present?
+      Global.db[:message_metadata].where(message_id: message_id, type: type.to_s).first&.dig(:value)
+    else
+      Global.db[:message_metadata].where(message_id: message_id).all.map { |r| [r[:type], r[:value]] }.to_h
+    end
+  end
+
   private
 
   def table
