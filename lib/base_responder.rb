@@ -45,4 +45,17 @@ class BaseResponder
   def start_typing
     event.channel&.start_typing
   end
+
+  def while_typing
+    event.channel&.start_typing
+    typing_thread = Thread.new do
+      6.times do
+        sleep 4
+        event.channel&.start_typing
+      end
+    end
+    yield
+  ensure
+    typing_thread&.kill
+  end
 end
