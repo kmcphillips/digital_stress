@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 class Dnd5eParser
-  ROOT_URL = "http://dnd5e.wikidot.com"
+  ROOT_URL = "http://dnd2024.wikidot.com"
+
+  CANTRIP_REGEX = /^(?<school>[A-Za-z]+) Cantrip \((?<classes>.*)\)$/i
+  SPELL_REGEX = /^Level (?<level>\d+) (?<school>[A-Za-z]+) \((?<classes>.*)\)$/i
 
   def fetch_urls_from_index
     spell_urls = []
 
-    spells_html = HTTParty.get("#{ROOT_URL}/spells")
+    spells_html = HTTParty.get("#{ROOT_URL}/spell:all")
     raise "#{spells_html} was not success" unless spells_html.success?
     spells_doc = Nokogiri.HTML5(spells_html)
 
@@ -36,12 +39,14 @@ class Dnd5eParser
         tag.css("li").map { |li| "* #{li.text}" }
       elsif tag.name == "table"
         "[table]"
+      elsif tag.name == "h5"
+        "## #{tag.text}"
       else
         raise "unknown tag #{tag}"
       end
     end.flatten.join("\n").split("\n")
 
-    unknown_tags = spell_doc.css("#page-content").children.map(&:name).uniq - ["text", "div", "p", "ul", "table"]
+    unknown_tags = spell_doc.css("#page-content").children.map(&:name).uniq - ["text", "div", "p", "ul", "table", "h5"]
     if unknown_tags.any?
       raise "Unknown tag encountered: #{unknown_tags} in #{spell_url}"
     end
@@ -71,14 +76,15 @@ class Dnd5eParser
       elsif line.start_with?("Spell Lists. ")
         spell[:spell_lists] = line.gsub("Spell Lists. ", "")
         false
-      elsif line.start_with?(/[\d]/) || line.downcase.start_with?("cantrip")
-        tokens = line.split(" ", 2)
-        spell[:level] = tokens[0]
-        spell[:school] = tokens[1]
+      elsif (captures = line.match(SPELL_REGEX))
+        spell[:level] = captures[:level]
+        spell[:school] = captures[:school]
+        spell[:classes] = captures[:classes]
         false
-      elsif line.end_with?("cantrip")
+      elsif (captures = line.match(CANTRIP_REGEX))
         spell[:level] = "Cantrip"
-        spell[:school] = line.gsub(" cantrip", "")
+        spell[:school] = captures[:school]
+        spell[:classes] = captures[:classes]
         false
       else
         true

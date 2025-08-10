@@ -35,7 +35,7 @@ class Duck
     {class_name: AnnouncementCommand, command: :announcement, aliases: [:announcements], description: "Manage the announcements."},
     {class_name: NotificationsCommand, command: :notifications, aliases: [:notification, :notify], description: "Silence notifications."},
     {class_name: RollCommand, command: :roll, aliases: [:r], description: "Roll some dice."},
-    {class_name: DndCommand, command: :dnd, aliases: [:DND], description: "D&D 5e commands."},
+    {class_name: DndCommand, command: :dnd, aliases: [:DND], description: "D&D commands."},
     {class_name: QuigitalCommand, command: :quigital, description: "Engage with Quigital!"},
     {class_name: OpenaiCommand, command: :openai, aliases: [:ai], description: "Commands relating to OpenAI."},
     {class_name: OpenaiChatCommand, command: :chat, description: "Chat using OpenAI's latest model."},

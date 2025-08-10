@@ -25,7 +25,7 @@ module Dnd5eData
   end
 
   class Spell
-    attr_reader :name, :slug, :description, :casting_time, :source, :url, :components, :duration, :range, :spell_lists, :level, :school
+    attr_reader :name, :slug, :description, :casting_time, :source, :url, :components, :duration, :range, :spell_lists, :level, :school, :classes
 
     def initialize(attributes)
       @name = attributes[:name]
@@ -40,19 +40,28 @@ module Dnd5eData
       @spell_lists = attributes[:spell_lists]
       @level = attributes[:level]
       @school = attributes[:school]
+      @classes = attributes[:classes]
     end
 
     def to_discord_s
       [
         "**#{name}**",
         url,
-        "> #{level} (#{school})",
+        "> #{formatted_level} (#{classes})",
         "> Casting time: _#{casting_time}_",
         "> Components: _#{components}_",
         "> Duration: _#{duration}_",
         "> Range: _#{range}_",
         "> \n> #{description.gsub("\n", "\n> \n> ")}"
       ].join("\n")
+    end
+
+    def formatted_level
+      if level.downcase.include?("cantrip")
+        "#{school} Cantrip"
+      else
+        "Level #{level} #{school}"
+      end
     end
   end
 
@@ -84,6 +93,7 @@ module Dnd5eData
         String :spell_lists
         String :level
         String :school
+        String :classes
         index :slug
         index :name
       end

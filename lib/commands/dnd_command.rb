@@ -3,8 +3,8 @@
 class DndCommand < BaseSubcommand
   def subcommands
     {
+      spell: "Search for a spell by name in the 2024 ruleset.",
       dates: "Show the upcoming announcement dates.",
-      spell: "Search for a spell by name.",
       add: "Add a D&D announcement date. Usage: `#{add_usage}`"
     }.freeze
   end
