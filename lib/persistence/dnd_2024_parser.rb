@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Dnd5eParser
+class Dnd2024Parser
   ROOT_URL = "http://dnd2024.wikidot.com"
 
   CANTRIP_REGEX = /^(?<school>[A-Za-z]+) Cantrip \((?<classes>.*)\)$/i

@@ -86,8 +86,8 @@ Aws.config.update(
 require_relative "persistence/recorder"
 require_relative "persistence/learner"
 require_relative "persistence/flags"
-require_relative "persistence/dnd_5e_data"
-require_relative "persistence/dnd_5e_parser"
+require_relative "persistence/dnd_2024_data"
+require_relative "persistence/dnd_2024_parser"
 
 require_relative "util/pinger"
 require_relative "util/formatter"
@@ -128,4 +128,4 @@ require_relative "tasks/daily_announcements"
 require_relative "web_duck"
 require_relative "duck"
 
-Dnd5eData.load
+Dnd2024Data.load

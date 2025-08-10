@@ -87,7 +87,7 @@ class DndCommand < BaseSubcommand
   end
 
   def spell
-    result = Dnd5eData.find_spell(params.join(" "))
+    result = Dnd2024Data.find_spell(params.join(" "))
 
     if result
       result.to_discord_s

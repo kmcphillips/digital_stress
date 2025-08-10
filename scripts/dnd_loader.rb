@@ -2,8 +2,8 @@
 
 require_relative "../lib/base"
 
-loader = Dnd5eData.loader
-parser = Dnd5eParser.new
+loader = Dnd2024Data.loader
+parser = Dnd2024Parser.new
 count = 0
 
 puts "Resetting database"

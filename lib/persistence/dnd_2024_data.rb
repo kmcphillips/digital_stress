@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module Dnd5eData
+module Dnd2024Data
   extend self
 
-  DB_FILE = Global.root.join("data/dnd5e.sqlite3")
+  DB_FILE = Global.root.join("data/dnd2024.sqlite3")
 
   def load
     return false if defined?(@loaded)
@@ -21,7 +21,7 @@ module Dnd5eData
   end
 
   def loader
-    @loader ||= Dnd5eData::Loader.new(DB_FILE)
+    @loader ||= Dnd2024Data::Loader.new(DB_FILE)
   end
 
   class Spell
