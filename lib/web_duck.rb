@@ -8,7 +8,7 @@ class WebDuck < Sinatra::Application
   end
 
   get "/ping" do
-    "PONG (#{SystemInfo.short_summary}, discord #{Global.bot.connected? ? "connected" : "NOT connected"})"
+    "PONG (#{SystemInfo.short_summary}#{Global.bot.connected? ? "" : " Discord connection lost"})"
   end
 
   get "/heartbeat" do
@@ -18,6 +18,7 @@ class WebDuck < Sinatra::Application
     elsif !Global.db.test_connection
       status 503
       "UNHEALTHY (database connection failed)"
+    # TODO: add check for Redis connection
     else
       "HEALTHY"
     end
