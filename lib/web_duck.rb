@@ -8,7 +8,19 @@ class WebDuck < Sinatra::Application
   end
 
   get "/ping" do
-    "PONG (#{SystemInfo.short_summary})"
+    "PONG (#{SystemInfo.short_summary}, discord #{Global.bot.connected? ? "connected" : "NOT connected"})"
+  end
+
+  get "/heartbeat" do
+    if !Global.bot.connected?
+      status 503
+      "UNHEALTHY (not connected to Discord)"
+    elsif !Global.db.test_connection
+      status 503
+      "UNHEALTHY (database connection failed)"
+    else
+      "HEALTHY"
+    end
   end
 
   post "/message/:server/:channel" do
