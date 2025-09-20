@@ -13,7 +13,7 @@ class ImagineCommand < BaseCommand
         file = OpenaiClient.image_file("#{scrubbed_query} #{style}").first
       end
 
-      text = OpenaiClient.chat(prompt, openai_params)
+      text = OpenaiClient.chat(prompt)
 
       thread.join
 
@@ -30,17 +30,6 @@ class ImagineCommand < BaseCommand
 
   def scrubbed_query
     query.strip.gsub(/[.!?:;]\Z/, "")
-  end
-
-  def openai_params
-    {
-      model: OpenaiClient.default_model,
-      max_tokens: rand(120..256),
-      temperature: 0.8,
-      top_p: 1.0,
-      frequency_penalty: 1.8,
-      presence_penalty: 0.4
-    }
   end
 
   def tone

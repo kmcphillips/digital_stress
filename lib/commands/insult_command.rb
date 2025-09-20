@@ -7,9 +7,9 @@ class InsultCommand < BaseCommand
     if query.blank?
       "Who should I quacking insult?"
     elsif rand < 0.05 && user.mandate_name
-      OpenaiClient.chat(insult_person_prompt(user.mandate_name), openai_params).first.strip
+      OpenaiClient.chat(insult_person_prompt(user.mandate_name)).first.strip
     else
-      OpenaiClient.chat(insult_prompt(query), openai_params).first.strip
+      OpenaiClient.chat(insult_prompt(query)).first.strip
     end
   end
 
@@ -25,16 +25,5 @@ class InsultCommand < BaseCommand
 
   def scrub(text)
     text.strip.gsub(/^about /i, "")
-  end
-
-  def openai_params
-    {
-      model: OpenaiClient.default_model,
-      max_tokens: 256,
-      temperature: 1.0,
-      top_p: 1.0,
-      frequency_penalty: 0.0,
-      presence_penalty: 0.0
-    }
   end
 end

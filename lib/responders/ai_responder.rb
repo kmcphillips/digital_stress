@@ -38,18 +38,7 @@ class AiResponder < BaseResponder
   private
 
   def completion(prompt)
-    OpenaiClient.chat(prompt, openai_params).first.strip
-  end
-
-  def openai_params
-    {
-      model: OpenaiClient.default_model,
-      max_tokens: 256,
-      temperature: 1.0,
-      top_p: 1.0,
-      frequency_penalty: 0.0,
-      presence_penalty: 0.0
-    }
+    OpenaiClient.chat(prompt).first.strip
   end
 
   def guess_names_from_text(input)

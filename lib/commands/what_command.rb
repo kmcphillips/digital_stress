@@ -10,7 +10,7 @@ class WhatCommand < BaseCommand
       elsif recent_conversation.blank?
         "Quack? What are we talking about? Doesn't look like much."
       else
-        OpenaiClient.chat(prompt, openai_params)
+        OpenaiClient.chat(prompt)
       end
     else
       "What?"
@@ -42,16 +42,5 @@ class WhatCommand < BaseCommand
       "a confused",
       "a sarcastic and excited"
     ].sample
-  end
-
-  def openai_params
-    {
-      model: OpenaiClient.default_model,
-      max_tokens: rand(120..256),
-      temperature: 0.8,
-      top_p: 1.0,
-      frequency_penalty: 1.8,
-      presence_penalty: 0.4
-    }
   end
 end

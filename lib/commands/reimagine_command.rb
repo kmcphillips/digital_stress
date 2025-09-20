@@ -7,7 +7,7 @@ class ReimagineCommand < BaseCommand
     if query.blank?
       "Quacking-imagine something"
     else
-      text = OpenaiClient.chat(text_prompt, openai_params).first.strip
+      text = OpenaiClient.chat(text_prompt).first.strip
       file = OpenaiClient.image_file(text).first
       event.send_file(file, filename: "reimagine.png") if file
       text
@@ -22,16 +22,5 @@ class ReimagineCommand < BaseCommand
 
   def scrubbed_query
     query.strip.gsub(/[.!?:;]\Z/, "")
-  end
-
-  def openai_params
-    {
-      model: OpenaiClient.default_model,
-      max_tokens: rand(200..400),
-      temperature: 0.8,
-      top_p: 1.0,
-      frequency_penalty: 1.8,
-      presence_penalty: 0.4
-    }
   end
 end

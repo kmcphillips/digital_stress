@@ -14,7 +14,7 @@ class RecipeCommand < BaseCommand
         file = OpenaiClient.image_file(image_prompt(query, publication: publication)).first
       end
 
-      text = OpenaiClient.chat(text_prompt(query, publication: publication), openai_params).first.strip
+      text = OpenaiClient.chat(text_prompt(query, publication: publication)).first.strip
 
       thread.join
       event.send_file(file, filename: "recipe.png") if file
@@ -40,16 +40,5 @@ class RecipeCommand < BaseCommand
       "Modernist Cuisine",
       "Betty Crocker’s Cookbook"
     ]
-  end
-
-  def openai_params
-    {
-      model: OpenaiClient.default_model,
-      max_tokens: 256,
-      temperature: 1.0,
-      top_p: 1.0,
-      frequency_penalty: 0.0,
-      presence_penalty: 0.0
-    }
   end
 end

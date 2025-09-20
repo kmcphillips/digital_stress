@@ -7,9 +7,9 @@ class DefineCommand < BaseCommand
     if query.blank?
       "Define what?"
     elsif rand < 0.2 && user.mandate_name
-      OpenaiClient.chat(wrong_prompt(query), openai_params).first.strip
+      OpenaiClient.chat(wrong_prompt(query)).first.strip
     else
-      OpenaiClient.chat(prompt(query), openai_params).first.strip
+      OpenaiClient.chat(prompt(query)).first.strip
     end
   end
 
@@ -21,16 +21,5 @@ class DefineCommand < BaseCommand
 
   def wrong_prompt(text)
     "Give an amusing but incorrect definition of: #{text.strip}"
-  end
-
-  def openai_params
-    {
-      model: OpenaiClient.default_model,
-      max_tokens: 256,
-      temperature: 1.0,
-      top_p: 1.0,
-      frequency_penalty: 0.0,
-      presence_penalty: 0.0
-    }
   end
 end

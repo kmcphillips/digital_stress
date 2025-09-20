@@ -10,7 +10,7 @@ class NewCommand < BaseSubcommand
   end
 
   def game
-    result = OpenaiClient.chat(game_prompt(query), openai_params).first.strip
+    result = OpenaiClient.chat(game_prompt(query)).first.strip
 
     image_prompt = nil
 
@@ -55,16 +55,5 @@ class NewCommand < BaseSubcommand
     ].sample
 
     "Think of an imaginary video game. The game should #{about_fragment}have some bizarre or nonsensical elements, and at least four-player multiplayer. Tell me the name, tagline, and a one-sentence description of the game. Then tell me the price, platforms, and metacritic score. Then tell me a slightly contrarian opinion about the game in #{review_style}, in a paragraph by itself wrapped in " + ". Then give me an AI image prompt that generates a screenshot of the game, wrapped in {}."
-  end
-
-  def openai_params
-    {
-      model: OpenaiClient.default_model,
-      max_tokens: 256,
-      temperature: 0.85,
-      top_p: 1.0,
-      frequency_penalty: 0.0,
-      presence_penalty: 0.0
-    }
   end
 end
