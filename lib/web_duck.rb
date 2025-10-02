@@ -9,7 +9,10 @@ class WebDuck < Sinatra::Application
 
   get "/ping" do
     summary = SystemInfo.short_summary
-    summary += " Discord connection lost" if !Global.bot.connected?
+    if !Global.bot.connected?
+      status 503
+      summary += " Discord connection lost"
+    end
     "PONG (#{summary})"
   end
 
