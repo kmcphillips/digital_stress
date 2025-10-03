@@ -4,6 +4,7 @@ class Announcement
   include Comparable
 
   attr_reader :server, :channel, :message, :day, :month, :year, :weekdays, :source, :secret, :id, :guild_scheduled_event_id, :google_calendar_id
+  attr_accessor :extended_attributes
 
   def initialize(server:, channel:, message:, source:, day: nil, month: nil, year: nil, weekdays: nil, secret: false, id: nil, guild_scheduled_event_id: nil, google_calendar_id: nil)
     @server = server
@@ -18,6 +19,7 @@ class Announcement
     @id = id
     @guild_scheduled_event_id = guild_scheduled_event_id
     @google_calendar_id = google_calendar_id
+    @extended_attributes = {}
   end
 
   class << self
@@ -51,6 +53,10 @@ class Announcement
 
       Date::MONTHNAMES.index(str) || Date::ABBR_MONTHNAMES.index(str)
     end
+  end
+
+  def unique_id
+    raise NotImplementedError
   end
 
   def save
@@ -140,6 +146,10 @@ class ConfigAnnouncement < Announcement
     super(**args.merge(source: :config))
   end
 
+  def unique_id
+    "#{server}-#{channel}-#{Digest::MD5.hexdigest(comparable_attributes.map(&:to_s).to_s)}"
+  end
+
   class << self
     def all(server: nil)
       results = []
@@ -175,6 +185,10 @@ end
 class DbAnnouncement < Announcement
   def initialize(**args)
     super(**args.merge(source: :db))
+  end
+
+  def unique_id
+    "#{server}-#{channel}-#{id}"
   end
 
   class << self

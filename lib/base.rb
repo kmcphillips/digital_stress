@@ -28,6 +28,9 @@ require "timeout"
 require "google/apis/calendar_v3"
 require "googleauth"
 require "google_search_results"
+require "tzinfo"
+require "icalendar"
+require "icalendar/tzinfo"
 
 require_relative "vendor/time_difference"
 

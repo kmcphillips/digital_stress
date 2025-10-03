@@ -115,6 +115,12 @@ GEM
       multi_xml (>= 0.5.2)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
+    icalendar (2.12.0)
+      base64
+      ice_cube (~> 0.16)
+      logger
+      ostruct
+    ice_cube (0.17.0)
     io-console (0.8.1)
     irb (1.15.2)
       pp (>= 0.6.0)
@@ -312,6 +318,7 @@ DEPENDENCIES
   google-apis-core
   google_search_results
   httparty
+  icalendar
   irb
   nokogiri
   perplexity_api
@@ -327,6 +334,7 @@ DEPENDENCIES
   stringio
   systemcall
   twilio-ruby
+  tzinfo
   webrick
   wikipedia-client
 

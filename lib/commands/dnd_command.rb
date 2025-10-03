@@ -33,6 +33,7 @@ class DndCommand < BaseSubcommand
         result = announcement.save
 
         if result
+          # TODO: DRY from Calendar
           start_time = Time.new(year, month, day, 20, 0, 0, ActiveSupport::TimeZone["America/Toronto"].tzinfo.utc_offset)
           end_time = Time.new(year, month, day, 23, 45, 0, ActiveSupport::TimeZone["America/Toronto"].tzinfo.utc_offset)
           discord_url = "https://discord.com/channels/824835225263669258/824835225263669263"

@@ -33,6 +33,8 @@ gem "clockwork", require: false
 gem "google-apis-calendar_v3"
 gem "google-apis-core"
 gem "google_search_results" # SerpApi
+gem "icalendar"
+gem "tzinfo"
 
 group :development, :test do
   gem "rspec"

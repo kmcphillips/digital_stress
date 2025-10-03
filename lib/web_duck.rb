@@ -29,6 +29,32 @@ class WebDuck < Sinatra::Application
     end
   end
 
+  get "/calendar/dnd.ics" do
+    announcements = Announcement
+      .all(server: "mandatemandate")
+      .reject(&:expired?)
+      .reject(&:secret)
+      .select { |x| x.channel == "dnd" }
+      .sort_by(&:id)
+      .each { |x|
+      x.extended_attributes = {
+        start_time: DateTime.new(x.year, x.month, x.day, 20, 0, 0),
+        end_time: DateTime.new(x.year, x.month, x.day, 23, 45, 0),
+        discord_url: "https://discord.com/channels/824835225263669258/824835225263669263",
+        summary: "D&D",
+        description: "D&D tonight, sharp time."
+      }
+    }
+
+    calendar = Calendar.new(announcements,
+      name: "D&D mandate",
+      hostname: Global.config.web_auth.host,
+      url: "https://#{Global.config.web_auth.host}/calendar/dnd.ics")
+
+    content_type "text/calendar"
+    calendar.to_ics
+  end
+
   post "/message/:server/:channel" do
     web_auth!
 
