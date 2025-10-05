@@ -18,8 +18,8 @@ class AskCommand < BaseCommand
   def after(message:)
     if defined?(@citations) && @citations.present?
       flags = (1 << 2) # SUPPRESS_EMBEDS
-      citations_message = @citations.each_with_index.map { |citation, index| "[#{index + 1}] #{citation}" }.join("\n")
-      message.reply!("Citations:\n#{citations_message}", flags: flags) if citations_message.present?
+      citations_message = @citations.each_with_index.map { |citation, index| "[#{index + 1}](#{citation})" }.join(", ")
+      message.reply!("(Citations #{citations_message})", flags: flags) if citations_message.present?
     end
   end
 end
