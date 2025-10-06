@@ -91,7 +91,14 @@ CREATE TABLE announcements (
   year INTEGER,
   message TEXT,
   guild_scheduled_event_id BIGINT,
-  google_calendar_id VARCHAR(255)
+  google_calendar_id VARCHAR(255),
+  url TEXT,
+  calendar_summary TEXT,
+  calendar_description TEXT,
+  calendar_start_time BIGINT,
+  calendar_end_time BIGINT,
+  timestamp BIGINT,
+  cancelled_timestamp BIGINT
 ) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE TABLE redis_0 (
   `key` VARCHAR(255),

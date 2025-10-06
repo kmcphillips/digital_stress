@@ -13,7 +13,7 @@ GIT
       rest-client (>= 2.0.0)
 
 GEM
-  remote: https://rubygems.org/
+  remote: https://gem.coop/
   specs:
     activesupport (8.0.2.1)
       base64
