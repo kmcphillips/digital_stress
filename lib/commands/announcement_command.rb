@@ -15,7 +15,7 @@ class AnnouncementCommand < BaseSubcommand
     server_name = server
     server_name = params[1] if pm? && params[1].present?
 
-    announcements = Announcement.all(server: server_name).reject(&:expired?)
+    announcements = Announcement.all_upcoming(server: server_name)
     announcements = announcements.reject(&:secret) unless pm?
 
     if announcements.any?
@@ -55,7 +55,7 @@ class AnnouncementCommand < BaseSubcommand
 
   def delete
     if subcommand_params.length == 0
-      announcements = DbAnnouncement.all(server: server).reject(&:expired?)
+      announcements = DbAnnouncement.all_upcoming(server: server)
       announcements = announcements.reject(&:secret) unless pm?
 
       if announcements.any?
@@ -87,7 +87,7 @@ class AnnouncementCommand < BaseSubcommand
           end
         end
 
-        if announcement.destroy
+        if announcement.cancel
           if errors.blank?
             "Quack! Announcement deleted.\n#{format_announcement(announcement)}"
           else

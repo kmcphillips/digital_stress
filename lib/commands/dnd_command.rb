@@ -18,6 +18,9 @@ class DndCommand < BaseSubcommand
       "Quack! Usage: `#{add_usage}`"
     else
       year, month, day = Announcement.coerce_date(year: subcommand_params[0], month: subcommand_params[1], day: subcommand_params[2])
+      start_hour, start_minute, start_second = [20, 0, 0]
+      end_hour, end_minute, end_second = [23, 45, 0]
+      discord_url = "https://discord.com/channels/824835225263669258/824835225263669263"
 
       if !year || !month || !day
         "Quack! Could not parse date. Usage: `#{add_usage}`"
@@ -28,15 +31,18 @@ class DndCommand < BaseSubcommand
           message: add_message,
           day: day,
           month: month,
-          year: year
+          year: year,
+          url: discord_url,
+          calendar_start_time: DateTime.new(year, month, day, start_hour, start_minute, start_second).to_i,
+          calendar_end_time: DateTime.new(year, month, day, end_hour, end_minute, end_second).to_i,
+          calendar_summary: "D&D",
+          calendar_description: "D&D tonight, sharp time."
         )
         result = announcement.save
 
         if result
-          # TODO: DRY from Calendar
-          start_time = Time.new(year, month, day, 20, 0, 0, ActiveSupport::TimeZone["America/Toronto"].tzinfo.utc_offset)
-          end_time = Time.new(year, month, day, 23, 45, 0, ActiveSupport::TimeZone["America/Toronto"].tzinfo.utc_offset)
-          discord_url = "https://discord.com/channels/824835225263669258/824835225263669263"
+          start_time = Time.new(year, month, day, start_hour, start_minute, start_second, ActiveSupport::TimeZone["America/Toronto"].tzinfo.utc_offset)
+          end_time = Time.new(year, month, day, end_hour, end_minute, end_second, ActiveSupport::TimeZone["America/Toronto"].tzinfo.utc_offset)
 
           response_message = "Quack! #{Pinger.find_emoji("d20", server: server) || ":game_die:"} D&D added on **#{result.formatted_conditions}**"
 
@@ -57,13 +63,19 @@ class DndCommand < BaseSubcommand
           end
 
           begin
+            google_emails = if server == "mandatemandate"
+              [User.patrick.email, User.dave.email, User.eliot.email, User.arturo.email]
+            else
+              []
+            end
+
             google_calendar_result = GoogleCalendarClient.create_event(
               title: "D&D",
               start_time: start_time,
               end_time: end_time,
               location: discord_url,
               description: "D&D tonight, sharp time.",
-              email_invites: [User.patrick.email, User.dave.email, User.eliot.email, User.arturo.email]
+              email_invites: google_emails
             )
 
             announcement.update(google_calendar_id: google_calendar_result.id)

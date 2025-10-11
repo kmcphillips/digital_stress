@@ -3,10 +3,33 @@
 class Announcement
   include Comparable
 
-  attr_reader :server, :channel, :message, :day, :month, :year, :weekdays, :source, :secret, :id, :guild_scheduled_event_id, :google_calendar_id
-  attr_accessor :extended_attributes
+  LONG_EXPIRATION_DAYS = 365.days
 
-  def initialize(server:, channel:, message:, source:, day: nil, month: nil, year: nil, weekdays: nil, secret: false, id: nil, guild_scheduled_event_id: nil, google_calendar_id: nil)
+  attr_reader :id, :server, :channel, :message, :day, :month, :year, :weekdays, :source, :secret,
+    :guild_scheduled_event_id, :google_calendar_id, :url, :calendar_summary, :calendar_description,
+    :calendar_start_time, :calendar_end_time, :cancelled_timestamp, :timestamp
+
+  def initialize(
+    server:,
+    channel:,
+    message:,
+    source:,
+    day: nil,
+    month: nil,
+    year: nil,
+    weekdays: nil,
+    secret: false,
+    id: nil,
+    guild_scheduled_event_id: nil,
+    google_calendar_id: nil,
+    url: nil,
+    calendar_summary: nil,
+    calendar_description: nil,
+    calendar_start_time: nil,
+    calendar_end_time: nil,
+    cancelled_timestamp: nil,
+    timestamp: nil
+  )
     @server = server
     @channel = channel
     @message = message
@@ -19,12 +42,26 @@ class Announcement
     @id = id
     @guild_scheduled_event_id = guild_scheduled_event_id
     @google_calendar_id = google_calendar_id
-    @extended_attributes = {}
+    @url = url
+    @calendar_summary = calendar_summary
+    @calendar_description = calendar_description
+    @calendar_start_time = calendar_start_time
+    @calendar_end_time = calendar_end_time
+    @cancelled_timestamp = cancelled_timestamp
+    @timestamp = timestamp
   end
 
   class << self
     def all(server: nil)
       (ConfigAnnouncement.all(server: server) + DbAnnouncement.all(server: server)).sort
+    end
+
+    def all_active(server: nil)
+      all(server: server).reject(&:cancelled?)
+    end
+
+    def all_upcoming(server: nil)
+      all_active(server: server).reject(&:expired?)
     end
 
     def build(*)
@@ -64,6 +101,10 @@ class Announcement
   end
 
   def destroy
+    raise NotImplementedError
+  end
+
+  def cancel
     raise NotImplementedError
   end
 
@@ -127,6 +168,15 @@ class Announcement
   def expired?
     # TODO: this only looks at y/m/d full combinations
     !!(date && date < Date.today)
+  end
+
+  def long_expired?
+    # TODO: this only looks at y/m/d full combinations
+    !!(date && date < Date.today - LONG_EXPIRATION_DAYS)
+  end
+
+  def cancelled?
+    !!cancelled_timestamp
   end
 
   def rendered_message
@@ -205,6 +255,7 @@ class DbAnnouncement < Announcement
 
     def build(record)
       new(
+        id: record[:id],
         server: record[:server].presence.to_s.delete("#"),
         channel: record[:channel].presence.to_s.delete("#"),
         message: record[:message].to_s,
@@ -215,7 +266,13 @@ class DbAnnouncement < Announcement
         secret: record[:secret],
         guild_scheduled_event_id: record[:guild_scheduled_event_id],
         google_calendar_id: record[:google_calendar_id],
-        id: record[:id]
+        url: record[:url].to_s,
+        calendar_summary: record[:calendar_summary].to_s,
+        calendar_description: record[:calendar_description].to_s,
+        calendar_start_time: record[:calendar_start_time],
+        calendar_end_time: record[:calendar_end_time],
+        cancelled_timestamp: record[:cancelled_timestamp],
+        timestamp: record[:timestamp]
       )
     end
   end
@@ -227,9 +284,16 @@ class DbAnnouncement < Announcement
       day: day,
       month: month,
       year: year,
-      message: message,
+      message: message.presence,
       guild_scheduled_event_id: guild_scheduled_event_id,
-      google_calendar_id: google_calendar_id
+      google_calendar_id: google_calendar_id,
+      url: url.presence,
+      calendar_summary: calendar_summary.presence,
+      calendar_description: calendar_description,
+      calendar_start_time: calendar_start_time&.to_i,
+      calendar_end_time: calendar_end_time&.to_i,
+      cancelled_timestamp: cancelled_timestamp&.to_i,
+      timestamp: Time.now.to_i
     )
     @id = id
 
@@ -241,11 +305,22 @@ class DbAnnouncement < Announcement
       raise ArgumentError, "Cannot delete an announcement without an id"
     else
       count = Global.db[:announcements].where(id: id).delete
-      !!(count == 1)
+      count > 0
+    end
+  end
+
+  def cancel
+    if id.blank?
+      raise ArgumentError, "Cannot cancel an announcement without an id"
+    else
+      timestamp = Time.now.to_i
+      count = Global.db[:announcements].where(id: id).update(cancelled_timestamp: timestamp)
+      @cancelled_timestamp = timestamp if count == 1
+      count > 0
     end
   end
 
   def update(**args)
-    Global.db[:announcements].where(id: id).update(args)
+    Global.db[:announcements].where(id: id).update(args) # TODO: I think this needs to update the values on the instance as well
   end
 end
