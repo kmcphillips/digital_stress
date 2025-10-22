@@ -34,6 +34,7 @@ class WebDuck < Sinatra::Application
       .all(server: "mandatemandate")
       .reject(&:secret)
       .reject(&:long_expired?)
+      .reject(&:cancelled?)
       .select { |x| x.channel == "dnd" }
       .sort_by(&:id)
 
