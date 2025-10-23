@@ -60,8 +60,10 @@ module Learner
       .last
   end
 
-  def random(server:, channel:, prevent_recent: false)
+  def random(server:, channel:, prevent_recent: false, count: nil)
     raise "server cannot be blank" unless server.present?
+    raise "count must be a positive integer" if count.present? && count <= 0
+    raise "cannot prevent_recent and return more than one record" if prevent_recent && count.present? && count > 1 # This is arbitrary but removes complication
 
     scope = table
       .where(server: server)
@@ -80,15 +82,23 @@ module Learner
       end
     end
 
-    record = scope.first
-    record_recent(record, server: server, channel: channel) if record
-
-    record
+    if count && count > 1
+      scope.limit(count).all
+    else
+      record = scope.first
+      record_recent(record, server: server, channel: channel) if prevent_recent && record
+      record
+    end
   end
 
-  def random_message(server:, channel:, prevent_recent: false)
-    result = random(server: server, channel: channel, prevent_recent: prevent_recent)
-    result[:message] if result
+  def random_message(server:, channel:, prevent_recent: false, count: nil)
+    result = random(server: server, channel: channel, prevent_recent: prevent_recent, count: count)
+
+    if result.is_a?(Array)
+      result.compact.map { |r| r[:message].to_s }
+    elsif result
+      result[:message].to_s
+    end # else nil
   end
 
   def find(id)
