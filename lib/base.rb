@@ -97,6 +97,7 @@ require_relative "util/formatter"
 require_relative "util/dedup"
 require_relative "util/quacker"
 require_relative "util/system_info"
+require_relative "util/with_typing"
 
 Dir.glob(Global.root.join("lib/models/*.rb")).each { |file| require_relative file }
 require_relative "mandate_user_refinements"

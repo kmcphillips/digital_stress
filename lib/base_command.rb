@@ -9,43 +9,33 @@ class BaseCommand
     @query = params.join(" ")
     @event = event
     @user = User.from_discord(event.author, server: server)
-    @typing_thread = nil
   end
 
   def respond
     Global.logger.info("command.#{@event.command.name}(#{params})")
-    if typing?
-      @event.channel.start_typing
-      @typing_thread = Thread.new do
-        6.times do
-          sleep 4
-          @event.channel.start_typing
+
+    WithTyping.threaded(event.channel, enable: typing?) do
+      if channels.present? && !(channels.include?("#{server}##{channel}") || channels.include?(server.to_s))
+        ":closed_lock_with_key: Quack! Not permitted!"
+      else
+        begin
+          message = response
+          message = message.join("\n") if message.is_a?(Array)
+
+          if Formatter.too_long?(message)
+            Global.logger.warn("[#{self.class.name}#response] response of length #{message.length} is too long #{message}")
+            message = Formatter.truncate_too_long(message)
+          end
+
+          Global.logger.info("response: #{message}")
+        rescue => e
+          Global.logger.error("#{self.class.name}#response returned error #{e.message}")
+          Global.logger.error(e)
+          message = ":bangbang: Quack error: #{e.message}"
         end
+        message
       end
     end
-
-    if channels.present? && !(channels.include?("#{server}##{channel}") || channels.include?(server.to_s))
-      ":closed_lock_with_key: Quack! Not permitted!"
-    else
-      begin
-        message = response
-        message = message.join("\n") if message.is_a?(Array)
-
-        if Formatter.too_long?(message)
-          Global.logger.warn("[#{self.class.name}#response] response of length #{message.length} is too long #{message}")
-          message = Formatter.truncate_too_long(message)
-        end
-
-        Global.logger.info("response: #{message}")
-      rescue => e
-        Global.logger.error("#{self.class.name}#response returned error #{e.message}")
-        Global.logger.error(e)
-        message = ":bangbang: Quack error: #{e.message}"
-      end
-      message
-    end
-  ensure
-    @typing_thread&.kill
   end
 
   def after(message:)
