@@ -131,9 +131,20 @@ class Duck
     bot.mention do |event|
       if event.message && !event.message.reply?
         Global.logger.info("mention #{event.author.name}: #{event.message.content}")
-        event.channel.start_typing
-        response = Learner.random_message(server: event.server&.name, channel: event.channel&.name, prevent_recent: true) || Quacker.quack
-        sleep(0.6)
+        server = event.server&.name.presence
+        channel = event.channel&.name.presence
+        response = if server && channel && Flags.active?("duck_generated", server: server)
+          WithTyping.threaded(event.channel, enable: true) do
+            Global.logger.info("DuckGenerator.generate(server: #{server}, channel: #{channel}, message: #{event.message.content})")
+            response = DuckGenerator.generate(server: server, channel: channel, message: event.message.content)
+            Global.logger.info("DuckGenerator.generate response: #{response}")
+            response
+          end
+        else
+          event.channel.start_typing
+          Learner.random_message(server: server, channel: channel, prevent_recent: true) || Quacker.quack
+          sleep(0.6)
+        end
         event.respond(response)
       end
     end

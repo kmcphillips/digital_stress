@@ -129,6 +129,8 @@ Dir.glob(Global.root.join("lib/responders/*_responder.rb")).each { |file| requir
 require_relative "tasks/task_base"
 require_relative "tasks/daily_announcements"
 
+require_relative "duck_generator"
+
 require_relative "web_duck"
 require_relative "duck"
 

@@ -19,6 +19,7 @@ class OpenaiCommand < BaseSubcommand
       image: "Generate an image with OpenAI Dall-E 2",
       imagine: "Tell it to imagine something",
       reimagine: "Tell it to imagine an image of something",
+      duck: "Toggle AI generated Duck responses",
       question: "Respond to a question with the fine tuned OpenAI GPT-3 model"
     }.freeze
   end
@@ -74,6 +75,16 @@ class OpenaiCommand < BaseSubcommand
       else
         "Quack! Got a blank result for some reason."
       end
+    end
+  end
+
+  def duck
+    if Flags.active?("duck_generated", server: server)
+      Flags.deactivate("duck_generated", server: server)
+      ":speech_balloon: Quack! Duck responses are now **learned** responses only."
+    else
+      Flags.activate("duck_generated", server: server)
+      ":speech_balloon: Quack! Duck responses are now **AI generated**."
     end
   end
 
