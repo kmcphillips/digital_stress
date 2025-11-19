@@ -41,8 +41,9 @@ class DndCommand < BaseSubcommand
         result = announcement.save
 
         if result
-          start_time = Time.new(year, month, day, start_hour, start_minute, start_second, ActiveSupport::TimeZone["America/Toronto"].tzinfo.utc_offset)
-          end_time = Time.new(year, month, day, end_hour, end_minute, end_second, ActiveSupport::TimeZone["America/Toronto"].tzinfo.utc_offset)
+          timezone = ActiveSupport::TimeZone["America/Toronto"]
+          start_time = timezone.local(year, month, day, start_hour, start_minute, start_second)
+          end_time = timezone.local(year, month, day, end_hour, end_minute, end_second)
 
           response_message = "Quack! #{Pinger.find_emoji("d20", server: server) || ":game_die:"} D&D added on **#{result.formatted_conditions}**"
 
