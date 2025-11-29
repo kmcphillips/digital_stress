@@ -51,6 +51,7 @@ class Duck
     {class_name: InsultCommand, command: :insult, description: "Insult someone or something with GPT-4"},
     {class_name: ComplainCommand, command: :complain, description: "Complain about something with GPT-4"},
     {class_name: SongCommand, command: :song, aliases: [:sing], description: "Compose some lyrics with GPT-4"},
+    {class_name: MonopolyCommand, command: :monopoly, description: "Create a monopoly card"},
     {class_name: DefineCommand, command: :define, aliases: [:definition, :def], description: "Get the possibly correct definition of something with GPT-4"},
     {class_name: NewCommand, command: :new, description: "Make a new something with GPT-4"},
     {class_name: SummaryCommand, command: :summary, aliases: [:summarize, :summarise], description: "Summarise the day of conversation using GPT-4"},
