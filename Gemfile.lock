@@ -1,15 +1,15 @@
 GIT
   remote: https://github.com/shardlab/discordrb
-  revision: db0882f1c5a3718141fd5bb5144a8588a99859d6
+  revision: fde3e228e96ac893e795db5e10d1280a25a66f86
   specs:
-    discordrb (3.6.1)
+    discordrb (3.7.0)
       base64 (~> 0.2)
-      discordrb-webhooks (~> 3.6.1)
+      discordrb-webhooks (~> 3.7.0)
       ffi (>= 1.9.24)
       opus-ruby
       rest-client (>= 2.0.0)
       websocket-client-simple (>= 0.9.0)
-    discordrb-webhooks (3.6.1)
+    discordrb-webhooks (3.7.0)
       rest-client (>= 2.0.0)
 
 GEM
@@ -28,12 +28,12 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
-    addressable (2.8.7)
-      public_suffix (>= 2.0.2, < 7.0)
+    addressable (2.8.8)
+      public_suffix (>= 2.0.2, < 8.0)
     ast (2.4.3)
     aws-eventstream (1.4.0)
-    aws-partitions (1.1186.0)
-    aws-sdk-core (3.239.0)
+    aws-partitions (1.1188.0)
+    aws-sdk-core (3.239.2)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
@@ -41,8 +41,8 @@ GEM
       bigdecimal
       jmespath (~> 1, >= 1.6.1)
       logger
-    aws-sdk-polly (1.115.0)
-      aws-sdk-core (~> 3, >= 3.234.0)
+    aws-sdk-polly (1.116.0)
+      aws-sdk-core (~> 3, >= 3.239.1)
       aws-sigv4 (~> 1.5)
     aws-sigv4 (1.12.1)
       aws-eventstream (~> 1, >= 1.0.2)
@@ -55,7 +55,7 @@ GEM
     config (5.6.1)
       deep_merge (~> 1.2, >= 1.2.1)
       ostruct
-    connection_pool (2.5.4)
+    connection_pool (2.5.5)
     csv (3.3.5)
     date (3.5.0)
     declarative (0.0.20)
@@ -97,7 +97,7 @@ GEM
       faraday (>= 1.0, < 3.a)
     google-logging-utils (0.2.0)
     google_search_results (2.2.0)
-    googleauth (1.15.1)
+    googleauth (1.16.0)
       faraday (>= 1.0, < 3.a)
       google-cloud-env (~> 2.2)
       google-logging-utils (~> 0.1)
@@ -171,7 +171,7 @@ GEM
     psych (5.2.6)
       date
       stringio
-    public_suffix (6.0.2)
+    public_suffix (7.0.0)
     racc (1.8.1)
     rack (3.2.4)
     rack-protection (4.2.1)
@@ -184,7 +184,7 @@ GEM
     rackup (2.2.1)
       rack (>= 3)
     rainbow (3.1.1)
-    rdoc (6.15.1)
+    rdoc (6.16.1)
       erb
       psych (>= 4.0.0)
       tsort
@@ -258,9 +258,9 @@ GEM
       rack-protection (= 4.2.1)
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
-    sqlite3 (2.8.0-arm64-darwin)
-    sqlite3 (2.8.0-x86_64-linux-gnu)
-    sqlite3 (2.8.0-x86_64-linux-musl)
+    sqlite3 (2.8.1-arm64-darwin)
+    sqlite3 (2.8.1-x86_64-linux-gnu)
+    sqlite3 (2.8.1-x86_64-linux-musl)
     standard (1.52.0)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.0)
@@ -291,7 +291,7 @@ GEM
       unicode-emoji (~> 4.1)
     unicode-emoji (4.1.0)
     uri (1.1.1)
-    webrick (1.9.1)
+    webrick (1.9.2)
     websocket (1.2.11)
     websocket-client-simple (0.9.0)
       base64
