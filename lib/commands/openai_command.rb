@@ -48,7 +48,9 @@ class OpenaiCommand < BaseSubcommand
     if subcommand_query.blank?
       "Quack! What do you want an image of?"
     else
-      OpenaiClient.image(subcommand_query.strip).first || "Quack! Failed to get a response from DALL-E."
+      file = OpenaiClient.image_file(subcommand_query.strip).first
+      event.send_file(file, filename: "image.png") if file
+      nil
     end
   end
 

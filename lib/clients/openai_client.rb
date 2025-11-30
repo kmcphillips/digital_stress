@@ -10,7 +10,8 @@ module OpenaiClient
   end
 
   def default_image_model
-    "dall-e-3"
+    # This appears to now always be base 64 encoded data so no URLs returned
+    "gpt-image-1" # "gpt-image-1-mini"
   end
 
   def models
@@ -45,22 +46,26 @@ module OpenaiClient
       end
       raise Error, ":bangbang: OpenAI returned error: #{error_message}"
     end
+  rescue Faraday::Error => e
+    Global.logger.error("[OpenaiClient][chat] Faraday error: #{e.message}")
+    Global.logger.error("[OpenaiClient][chat] response #{e.response_body}") if e.respond_to?(:response_body)
+    raise
   end
 
+  # As of gpt-image-1 this appears to only return base 64 so this won't return URls anymore and probably isn't needed, just use `image_file`.
   def image(prompt, openai_params = {})
     parameters = openai_params.symbolize_keys
     Global.logger.info("[OpenaiClient][image] request #{parameters} prompt:\n#{prompt}")
     parameters[:model] ||= OpenaiClient.default_image_model
     parameters[:prompt] = prompt
-    parameters[:size] ||= "1792x1024"
+    parameters[:size] ||= "1536x1024"
     response = Global.openai_client.images.generate(parameters: parameters)
     Global.logger.info("[OpenaiClient][image] response #{response.inspect}")
     if !response.key?("error")
-      if parameters[:response_format] == "b64_json"
-        result = response["data"].map { |c| c["b64_json"] }
-        if result.blank?
-          raise Error, "[OpenaiClient][image] request #{parameters} prompt:\n#{prompt} gave a blank b64_json result: #{response}"
-        end
+      if response["output_format"] == "png"
+        raise Error, "[OpenaiClient][image] expected data to have length of 1 but got #{response["data"].count}" if response["data"].count != 1
+        raise Error, "[OpenaiClient][image] data does not include a b64_json key" unless response["data"][0].keys.include?("b64_json")
+        result = [response["data"][0]["b64_json"]]
       else
         result = response["data"].map { |c| c["url"] }
         if result.blank?
@@ -76,10 +81,14 @@ module OpenaiClient
       end
       raise Error, ":bangbang: OpenAI returned error: #{error_message}"
     end
+  rescue Faraday::Error => e
+    Global.logger.error("[OpenaiClient][image] Faraday error: #{e.message}")
+    Global.logger.error("[OpenaiClient][image] response #{e.response_body}") if e.respond_to?(:response_body)
+    raise
   end
 
   def image_file(prompt, openai_params = {})
-    parameters = openai_params.symbolize_keys.merge(response_format: "b64_json")
+    parameters = openai_params.symbolize_keys
     image(prompt, parameters).map do |b64_json|
       file = Tempfile.create(["dalle", ".png"], binmode: true)
       file.write(Base64.decode64(b64_json))
@@ -124,5 +133,9 @@ module OpenaiClient
       end
       raise Error, ":bangbang: OpenAI returned error: #{error_message}"
     end
+  rescue Faraday::Error => e
+    Global.logger.error("[OpenaiClient][responses] Faraday error: #{e.message}")
+    Global.logger.error("[OpenaiClient][responses] response #{e.response_body}") if e.respond_to?(:response_body)
+    raise
   end
 end

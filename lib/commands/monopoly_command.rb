@@ -7,7 +7,7 @@ class MonopolyCommand < BaseCommand
     if query.blank?
       "Quack! This isn't free parking. What do you want the card to be about?"
     else
-      file = OpenaiClient.image_file(image_prompt(query)).first
+      file = OpenaiClient.image_file(image_prompt(query), size: "1024x1024").first
       event.send_file(file, filename: "monopoly.png") if file
       nil
     end
