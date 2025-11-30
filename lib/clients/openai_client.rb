@@ -89,8 +89,9 @@ module OpenaiClient
 
   def image_file(prompt, openai_params = {})
     parameters = openai_params.symbolize_keys
+    temp_filename = ((parameters[:model].presence || OpenaiClient.default_image_model).presence || "image").gsub("-", "_")
     image(prompt, parameters).map do |b64_json|
-      file = Tempfile.create(["dalle", ".png"], binmode: true)
+      file = Tempfile.create([temp_filename, ".png"], binmode: true)
       file.write(Base64.decode64(b64_json))
       file.rewind
       file
