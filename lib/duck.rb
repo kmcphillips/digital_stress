@@ -144,7 +144,7 @@ class Duck
         server = event.server&.name.presence
         channel = event.channel&.name.presence
         response = if server && channel && Flags.active?("duck_generated", server: server)
-          WithTyping.threaded(event.channel, enable: true) do
+          WithTyping.threaded(event.channel, enable: true, times: 10) do
             Global.logger.info("DuckGenerator.generate(server: #{server}, channel: #{channel}, message: #{event.message.content})")
             response = DuckGenerator.generate(server: server, channel: channel, message: event.message.content)
             Global.logger.info("DuckGenerator.generate response: #{response}")
