@@ -24,9 +24,7 @@ class QuigitalCommand < BaseSubcommand
     if query.blank?
       "Quack? Nothing to say."
     else
-      file = AwsClient.polly_say(subcommand_query)
-      event.send_file(file, filename: "quigital.mp3")
-      nil
+      AwsClient.polly_say(subcommand_query) || "Quack! Failed to generate a voice message."
     end
   end
 

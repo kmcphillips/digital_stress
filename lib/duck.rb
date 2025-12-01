@@ -119,9 +119,18 @@ class Duck
         response = instance.respond
         if response.present?
           begin
-            message = event.respond(response)
+            if response.is_a?(File)
+              extension = File.extname(response.path).delete_prefix(".")
+              filename = "quack_#{Time.now.to_i}.#{extension}"
+              event.send_file(response, filename: filename)
+              message = nil
+            else
+              message = event.respond(response)
+            end
           rescue Discordrb::Errors::InvalidFormBody
-            message = event.respond("Quack!! Error in error. Response looks too long!! #{response.first(1800)}")
+            error_message = "Quack!! Error in error. Response looks too long!!"
+            error_message += " #{response.first(1800)}" if response.present? && response.respond_to?(:first)
+            message = event.respond(error_message)
           end
         end
         instance.after(message: message)
