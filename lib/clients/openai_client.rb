@@ -53,7 +53,7 @@ module OpenaiClient
   end
 
   # As of gpt-image-1 this appears to only return base 64 so this won't return URls anymore and probably isn't needed, just use `image_file`.
-  def image(prompt, openai_params = {})
+  def image_file(prompt, openai_params = {})
     parameters = openai_params.symbolize_keys
     Global.logger.info("[OpenaiClient][image] request #{parameters} prompt:\n#{prompt}")
     parameters[:model] ||= OpenaiClient.default_image_model
@@ -65,7 +65,13 @@ module OpenaiClient
       if response["output_format"] == "png"
         raise Error, "[OpenaiClient][image] expected data to have length of 1 but got #{response["data"].count}" if response["data"].count != 1
         raise Error, "[OpenaiClient][image] data does not include a b64_json key" unless response["data"][0].keys.include?("b64_json")
-        result = [response["data"][0]["b64_json"]]
+        temp_filename = ((parameters[:model].presence || OpenaiClient.default_image_model).presence || "image").gsub("-", "_")
+        result = [response["data"][0]["b64_json"]].map do |b64_json|
+          file = Tempfile.create([temp_filename, ".png"], binmode: true)
+          file.write(Base64.decode64(b64_json))
+          file.rewind
+          file
+        end
       else
         result = response["data"].map { |c| c["url"] }
         if result.blank?
@@ -85,17 +91,6 @@ module OpenaiClient
     Global.logger.error("[OpenaiClient][image] Faraday error: #{e.message}")
     Global.logger.error("[OpenaiClient][image] response #{e.response_body}") if e.respond_to?(:response_body)
     raise
-  end
-
-  def image_file(prompt, openai_params = {})
-    parameters = openai_params.symbolize_keys
-    temp_filename = ((parameters[:model].presence || OpenaiClient.default_image_model).presence || "image").gsub("-", "_")
-    image(prompt, parameters).map do |b64_json|
-      file = Tempfile.create([temp_filename, ".png"], binmode: true)
-      file.write(Base64.decode64(b64_json))
-      file.rewind
-      file
-    end
   end
 
   def responses(prompt, image_url: nil, previous_response_id: nil, parameters: {})
