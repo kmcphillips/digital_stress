@@ -14,7 +14,7 @@ class BaseCommand
   def respond
     Global.logger.info("command.#{@event.command.name}(#{params})")
 
-    WithTyping.threaded(event.channel, enable: typing?) do
+    WithTyping.threaded(event.channel, times: typing_times, enable: typing?) do
       if channels.present? && !(channels.include?("#{server}##{channel}") || channels.include?(server.to_s))
         ":closed_lock_with_key: Quack! Not permitted!"
       else
@@ -70,6 +70,10 @@ class BaseCommand
 
   def typing?
     true
+  end
+
+  def typing_times
+    6
   end
 
   def attached_images

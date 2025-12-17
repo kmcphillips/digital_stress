@@ -26,6 +26,10 @@ class OpenaiCommand < BaseSubcommand
 
   private
 
+  def typing_times
+    12
+  end
+
   def imagine
     ImagineCommand.new(event: event, bot: bot, params: params.dup.drop(1)).response
   end
