@@ -20,6 +20,10 @@ module Flags
   private
 
   def key(flag:, server:)
+    raise ArgumentError, "server cannot be blank" unless server.present?
+    raise ArgumentError, "flag cannot be blank" unless flag.present?
+    raise ArgumentError, "flag must be a String or Symbol" unless flag.is_a?(String) || flag.is_a?(Symbol)
+
     "flag:#{flag}:#{server}"
   end
 
