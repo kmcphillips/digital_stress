@@ -64,8 +64,8 @@ module OpenaiClient
     if !response.key?("error")
       if response["output_format"] == "png"
         raise Error, "[OpenaiClient][image] expected data to have length of 1 but got #{response["data"].count}" if response["data"].count != 1
-        raise Error, "[OpenaiClient][image] data does not include a b64_json key" unless response["data"][0].keys.include?("b64_json")
-        temp_filename = ((parameters[:model].presence || OpenaiClient.default_image_model).presence || "image").gsub("-", "_")
+        raise Error, "[OpenaiClient][image] data does not include a b64_json key" unless response["data"][0].key?("b64_json")
+        temp_filename = ((parameters[:model].presence || OpenaiClient.default_image_model).presence || "image").tr("-", "_")
         result = [response["data"][0]["b64_json"]].map do |b64_json|
           file = Tempfile.create([temp_filename, ".png"], binmode: true)
           file.write(Base64.decode64(b64_json))
