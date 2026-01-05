@@ -1,0 +1,4 @@
+{
+  "rubyLsp.rubyVersionManager": "mise",
+  "standardRuby.mode": "enableViaGemfile"
+}
