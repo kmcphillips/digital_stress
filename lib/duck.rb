@@ -146,15 +146,14 @@ class Duck
         response = if server && channel && Flags.active?("duck_generated", server: server)
           WithTyping.threaded(event.channel, enable: true, times: 10) do
             Global.logger.info("DuckGenerator.generate(server: #{server}, channel: #{channel}, message: #{event.message.content})")
-            response = DuckGenerator.generate(server: server, channel: channel, message: event.message.content)
-            Global.logger.info("DuckGenerator.generate response: #{response}")
-            response
+            DuckGenerator.generate(server: server, channel: channel, message: event.message.content).tap do |response|
+              Global.logger.info("DuckGenerator.generate response: #{response}")
+            end
           end
         else
           event.channel.start_typing
-          response = Learner.random_message(server: server, channel: channel, prevent_recent: true) || Quacker.quack
           sleep(0.6)
-          response
+          Learner.random_message(server: server, channel: channel, prevent_recent: true) || Quacker.quack
         end
         event.respond(response)
       end
