@@ -152,8 +152,9 @@ class Duck
           end
         else
           event.channel.start_typing
-          Learner.random_message(server: server, channel: channel, prevent_recent: true) || Quacker.quack
+          response = Learner.random_message(server: server, channel: channel, prevent_recent: true) || Quacker.quack
           sleep(0.6)
+          response
         end
         event.respond(response)
       end
