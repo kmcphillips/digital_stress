@@ -20,34 +20,19 @@ class AlchemyCommand < BaseCommand
       present = []
       missing = []
 
-      if party.present?(:earth)
-        present << "🏔"
-      else
-        missing << User.eliot
-      end
-
-      if party.present?(:fire)
-        present << "🔥"
-      else
-        missing << User.kevin
-      end
-
-      if party.present?(:water)
-        present << "🌊"
-      else
-        missing << User.dave
-      end
-
-      if party.present?(:wind)
-        present << "🌬️"
-      else
-        missing << User.patrick
+      party.elements.each do |element|
+        name = party.name_for(element)
+        if party.present?(element)
+          present << name
+        else
+          missing << name
+        end
       end
 
       present.shuffle!
       missing.shuffle!
 
-      "✅ #{present.join(" ")} ... But no word yet from #{missing.map(&:mention).to_sentence}"
+      "✅ #{present.join(" ")} ... But no word yet from #{missing.to_sentence}"
     end
   end
 

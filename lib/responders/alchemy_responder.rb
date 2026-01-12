@@ -98,38 +98,44 @@ class AlchemyResponder < BaseResponder
     end
 
     def size
-      [
-        !!kv_store.read(key(:fire)),
-        !!kv_store.read(key(:earth)),
-        !!kv_store.read(key(:water)),
-        !!kv_store.read(key(:wind))
-      ].count(true)
+      elements.map { |element| !!kv_store.read(key(element)) }.count(true)
+    end
+
+    def elements
+      @elements ||= elements_for_users.keys.freeze
+    end
+
+    def elements_for_users
+      @elements_for_users = {
+        earth: User.eliot,
+        fire: User.kevin,
+        water: User.dave,
+        wind: User.patrick
+      }.freeze
     end
 
     def full_strength?
-      size == 4
+      size == elements.size
     end
 
     def clear
-      kv_store.delete(key(:fire))
-      kv_store.delete(key(:earth))
-      kv_store.delete(key(:water))
-      kv_store.delete(key(:wind))
+      elements.each do |element|
+        kv_store.delete(key(element))
+      end
 
       true
     end
 
     def element_for?(element, author)
-      user = User.from_discord(author, server: server)
+      user_for(element) == User.from_discord(author, server: server)
+    end
 
-      case element
-      when :fire then user.kevin?
-      when :earth then user.eliot?
-      when :water then user.dave?
-      when :wind then user.patrick?
-      else
-        raise "Unknown element '#{element}'"
-      end
+    def name_for(element)
+      user_for(element)&.mandate_display_name
+    end
+
+    def user_for(element)
+      elements_for_users[element&.to_sym] || raise("Unknown element '#{element.inspect}'")
     end
 
     private
