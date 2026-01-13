@@ -1,4 +1,4 @@
-FROM ruby:3.4.7-alpine AS base
+FROM ruby:4.0.1-alpine AS base
 ARG BUNDLER_VERSION=4.0.2
 ARG BUNDLE_WITHOUT="development:test"
 ARG BASE_PACKAGES="tz git vim curl imagemagick ttf-liberation msttcorefonts-installer fontconfig libc6-compat gcompat yaml-dev"
