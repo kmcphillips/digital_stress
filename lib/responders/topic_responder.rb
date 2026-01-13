@@ -55,7 +55,11 @@ class TopicResponder < BaseResponder
     "A hacker aesthetic image for a chat channel named:",
     "A hyper modern sleak logo for a chat channel named:",
     "A very minimalistic logo for a chat channel named:",
-    "A stereotypical Canadian image which tastefully includes a duck and the chat channel name:"
+    "A stereotypical Canadian image which tastefully includes a duck and the chat channel name:",
+    "A displeased duck pointing at the chat channel name:",
+    "A duck motif around the chat channel name:",
+    "A duck yelling out:",
+    "Lots of duck quacking, and in the middle the chat channel name:"
   ].freeze
 
   def image_prompt(topic_name)
