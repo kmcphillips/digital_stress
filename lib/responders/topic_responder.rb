@@ -40,16 +40,25 @@ class TopicResponder < BaseResponder
 
   private
 
+  IMAGE_PROMPTS = [
+    "A cartoonish image matching the topic:",
+    "A modern looking banner image for a chat channel named:",
+    "A duck holding a sign that says:",
+    "A corporate tech company flat styled animated person pointing to the word:",
+    "A 90s style image to be used in a chat channel named:",
+    "Pixel art for the banner of a chat channel named:",
+    "A logo for a chat channel named:",
+    "A duck near the word:",
+    "A very boring looking duck looking at a sign that says:",
+    "Some extreme 80s imagery for a chat channel named:",
+    "Typographic and image style of a kid's toy, that involves a duck, and is called:",
+    "A hacker aesthetic image for a chat channel named:",
+    "A hyper modern sleak logo for a chat channel named:",
+    "A very minimalistic logo for a chat channel named:",
+    "A stereotypical Canadian image which tastefully includes a duck and the chat channel name:"
+  ].freeze
+
   def image_prompt(topic_name)
-    [
-      "A cartoonish image matching the topic: #{topic_name}",
-      "A modern looking banner image for a chat channel named: #{topic_name}",
-      "A duck holding a sign that says: #{topic_name}",
-      "A corporate tech company flat styled animated person pointing to the word: #{topic_name}",
-      "A 90s style image to be used in a chat channel named: #{topic_name}",
-      "Pixel art for the banner of a chat channel named: #{topic_name}",
-      "A logo for a chat channel named: #{topic_name}",
-      "A duck near the word: #{topic_name}"
-    ].sample
+    "#{IMAGE_PROMPTS.sample} #{topic_name}"
   end
 end
