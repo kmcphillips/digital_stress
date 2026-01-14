@@ -12,9 +12,6 @@ web_auth:
   username: username
   password: password
 
-azure:
-  key: xxxxx
-
 giphy:
   key: xxxxx
 

@@ -105,7 +105,6 @@ User.include(MandateUserRefinements)
 
 require_relative "clients/discord_rest_api"
 require_relative "clients/steam"
-require_relative "clients/azure"
 require_relative "clients/gif"
 require_relative "clients/wolfram_alpha"
 require_relative "clients/texter"
