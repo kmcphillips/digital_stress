@@ -21,7 +21,7 @@ module OpenaiClient
   def chat(prompt, openai_params = {})
     parameters = openai_params.symbolize_keys
     image_url = parameters.delete(:image_url)
-    Global.logger.info("[OpenaiClient][chat] request #{parameters} prompt:\n#{prompt} image_url:\n#{image_url}")
+    Global.logger.info("[OpenaiClient][chat] request #{parameters} prompt: #{prompt} image_url: #{image_url}")
     raise Error, "[OpenaiClient][chat] passed in `engine` param, use `model` instead" if parameters.key?(:engine)
     parameters[:model] ||= OpenaiClient.default_model
     parameters[:messages] = if image_url.present?
@@ -36,14 +36,10 @@ module OpenaiClient
     Global.logger.info("[OpenaiClient][chat] response #{response.inspect}")
     if !response.key?("error")
       result = response["choices"].map { |c| c.dig("message", "content") }
-      raise Error, "[OpenaiClient][chat] request #{parameters} prompt:\n#{prompt} gave a blank result: #{response}" if result.blank?
+      raise Error, "[OpenaiClient][chat] request #{parameters} prompt: #{prompt} gave a blank result: #{response}" if result.blank?
       result
     else
-      error_message = begin
-        response["error"]
-      rescue
-        nil
-      end
+      error_message = extract_error_message(response)
       raise Error, ":bangbang: OpenAI returned error: #{error_message}"
     end
   rescue Faraday::Error => e
@@ -55,7 +51,7 @@ module OpenaiClient
   # As of gpt-image-1 this appears to only return base 64 so this won't return URls anymore and probably isn't needed, just use `image_file`.
   def image_file(prompt, openai_params = {})
     parameters = openai_params.symbolize_keys
-    Global.logger.info("[OpenaiClient][image] request #{parameters} prompt:\n#{prompt}")
+    Global.logger.info("[OpenaiClient][image] request #{parameters} prompt: #{prompt}")
     parameters[:model] ||= OpenaiClient.default_image_model
     parameters[:prompt] = prompt
     parameters[:size] ||= "1536x1024"
@@ -75,16 +71,12 @@ module OpenaiClient
       else
         result = response["data"].map { |c| c["url"] }
         if result.blank?
-          raise Error, "[OpenaiClient][image] request #{parameters} prompt:\n#{prompt} gave a blank url result: #{response}"
+          raise Error, "[OpenaiClient][image] request #{parameters} prompt: #{prompt} gave a blank url result: #{response}"
         end
       end
       result
     else
-      error_message = begin
-        response["error"]
-      rescue
-        nil
-      end
+      error_message = extract_error_message(response)
       raise Error, ":bangbang: OpenAI returned error: #{error_message}"
     end
   rescue Faraday::Error => e
@@ -114,24 +106,30 @@ module OpenaiClient
       prompt
     end
 
-    Global.logger.info("[OpenaiClient][responses] request #{parameters} prompt:\n#{prompt}")
+    Global.logger.info("[OpenaiClient][responses] request #{parameters} prompt: #{prompt}")
     response = Global.openai_client.responses.create(parameters: parameters)
     Global.logger.info("[OpenaiClient][responses] response #{response.inspect}")
     if !response["error"].present?
       result = response["output"].reverse.find { |c| c["type"] == "message" && c["role"] == "assistant" }&.dig("content", 0, "text") # This is where it would respond with images I think
-      raise Error, "[OpenaiClient][responses] request #{parameters} prompt:\n#{prompt} gave a blank result: #{response}" if result.blank?
+      raise Error, "[OpenaiClient][responses] request #{parameters} prompt: #{prompt} gave a blank result: #{response}" if result.blank?
       [result, response["id"]]
     else
-      error_message = begin
-        response["error"]
-      rescue
-        nil
-      end
+      error_message = extract_error_message(response)
       raise Error, ":bangbang: OpenAI returned error: #{error_message}"
     end
   rescue Faraday::Error => e
     Global.logger.error("[OpenaiClient][responses] Faraday error: #{e.message}")
     Global.logger.error("[OpenaiClient][responses] response #{e.response_body}") if e.respond_to?(:response_body)
     raise
+  end
+
+  private
+
+  def extract_error_message(response)
+    m = response["error"]
+    m = m["message"].presence || m.to_s if m.is_a?(Hash)
+    m
+  rescue
+    nil
   end
 end
