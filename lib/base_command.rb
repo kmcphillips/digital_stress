@@ -15,7 +15,9 @@ class BaseCommand
     Global.logger.info("command.#{@event.command.name}(#{params})")
 
     WithTyping.threaded(event.channel, times: typing_times, enable: typing?) do
-      if channels.present? && !(channels.include?("#{server}##{channel}") || channels.include?(server.to_s))
+      if !allowed_in_pm? && pm?
+        ":closed_lock_with_key: Quack! Not permitted in DMs."
+      elsif channels.present? && !(channels.include?("#{server}##{channel}") || channels.include?(server.to_s))
         ":closed_lock_with_key: Quack! Not permitted!"
       else
         begin
@@ -58,6 +60,10 @@ class BaseCommand
 
   def channels
     nil
+  end
+
+  def allowed_in_pm?
+    true
   end
 
   def pm?

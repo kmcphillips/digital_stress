@@ -3,6 +3,10 @@
 class ToggleTheRecordCommand < BaseCommand
   MAX_MINUTES = (60 * 24 * 3) + 1
 
+  def allowed_in_pm?
+    false
+  end
+
   def response
     if Recorder.record_channel?(channel: channel, server: server)
       if record? # on the record

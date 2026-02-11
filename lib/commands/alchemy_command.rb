@@ -9,6 +9,10 @@ class AlchemyCommand < BaseCommand
     ]
   end
 
+  def allowed_in_pm?
+    false
+  end
+
   def response
     party = AlchemyResponder::Party.new(server: server, channel: channel)
 

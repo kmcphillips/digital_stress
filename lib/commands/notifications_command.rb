@@ -8,6 +8,10 @@ class NotificationsCommand < BaseSubcommand
     "duck-bot-test#testing"
   ].freeze
 
+  def allowed_in_pm?
+    false
+  end
+
   def subcommands
     {
       mute: "Temporarily silence notifications.",
