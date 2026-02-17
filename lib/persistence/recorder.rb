@@ -66,8 +66,8 @@ module Recorder
       .where(server: server, channel: channel)
       .where { timestamp > (Time.now - minutes.minutes).to_i }
       .map do |r|
-      table.where(id: r[:id]).delete
-      r
+        table.where(id: r[:id]).delete
+        r
     end
   end
 
