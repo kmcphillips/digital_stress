@@ -53,4 +53,8 @@ class BaseResponder
   def while_typing(&block)
     WithTyping.threaded(event.channel, &block)
   end
+
+  def responder_image(filename)
+    "https://#{Global.domain}/images/r/#{filename}"
+  end
 end

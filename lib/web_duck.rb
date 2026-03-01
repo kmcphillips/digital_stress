@@ -2,6 +2,8 @@
 
 class WebDuck < Sinatra::Application
   set :port, Global.config.web_auth.port
+  set :static, true
+  set :public_folder, File.expand_path("../public", __dir__)
 
   get "/" do
     Quacker.quack

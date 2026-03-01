@@ -19,11 +19,12 @@ class SimpleResponder < BaseResponder
     react_match(/(noot|neet)/i, "👢")
     react_match(/(good|great|nice|best) duck/i, "❤️")
 
-    respond_match(/hang(ing)?.?in.?there/i, "https://i.imgur.com/1FlykyH.jpg")
+    respond_match(/hang(ing)?.?in.?there/i, responder_image("hang_in_there.jpg"))
     respond_match(/\bheat\b/i, "don't be hwat...", chance: 0.08)
-    respond_match(/several people are typing/i, "https://i.kym-cdn.com/photos/images/newsfeed/001/249/060/9c3.gif")
+    respond_match(/several people are typing/i, responder_image("several_people_are_typing.gif"))
     respond_match(/\Afuck(\Z| .)/i, "You talking to me?", channels: MANDATE_CHANNELS, chance: 0.3)
     respond_match(/\Adick(\Z| .)/i, "Call me Richard", channels: MANDATE_CHANNELS)
-    respond_match(/pickle.?surprise/i, "https://cdn.discordapp.com/attachments/250717538063745024/1054566918536843274/Eliot_ultimate_pickle_surprise_8bf66f6a-b3a1-441d-a530-241e7c37d8b5.png")
+    respond_match(/pickle.?surprise/i, responder_image("pickle_surprise.png"))
+    respond_match(/yes to recover/i, responder_image("say_yes_to_recovery.png"))
   end
 end
