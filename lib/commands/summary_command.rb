@@ -57,15 +57,6 @@ class SummaryCommand < BaseCommand
   end
 
   def call_open_ai(conversation)
-    openai_params = {
-      temperature: 0.7,
-      max_tokens: 200,
-      top_p: 1.0,
-      frequency_penalty: 0.0,
-      presence_penalty: 1
-    }
-    prompt = "Provide a summary of this chat conversation:\n\n#{conversation}\n\n"
-
-    OpenaiClient.chat(prompt, openai_params).first
+    OpenaiClient.chat("Provide a summary of this chat conversation:\n\n#{conversation}\n\n").first
   end
 end
