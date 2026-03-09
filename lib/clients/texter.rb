@@ -3,11 +3,11 @@
 module Texter
   extend self
 
-  def send_text(phone_number:, message:)
+  def send_text(phone_number:, message:, country_code: nil)
     Global.logger.info("[Texter][send_text] phone_number: #{phone_number} message: #{message}")
 
     response = twilio_client.messages.create(
-      from: outgoing_phone_number,
+      from: outgoing_phone_number(country_code: country_code),
       to: phone_number,
       body: message
     )
@@ -31,7 +31,8 @@ module Texter
     Global.config.twilio.auth_token
   end
 
-  def outgoing_phone_number
-    Global.config.twilio.outgoing_phone_number
+  def outgoing_phone_number(country_code: nil)
+    country_code = country_code.presence&.to_s&.strip&.downcase&.presence || "default"
+    Global.config.twilio.outgoing_phone_numbers[country_code] || raise("No outgoing phone number found for country code: #{country_code}")
   end
 end

@@ -5,7 +5,7 @@ class User
     obj[server_name.to_s] = cfg.users.map(&:to_h).map { |u| [u[:id], u] }.to_h
   end
 
-  attr_reader :username, :id, :server, :discriminator, :location, :phone_number, :email
+  attr_reader :username, :id, :server, :discriminator, :location, :phone_number, :email, :country_code
 
   def initialize(username:, id:, server:, discriminator:)
     @username = username
@@ -15,12 +15,14 @@ class User
     @location = nil
     @phone_number = nil
     @email = nil
+    @country_code = nil
 
     # Load extras from the config.yml Global.config object
     @config = USERS.dig(server, id)
     @location = @config[:location] if @config
     @phone_number = Formatter.phone_number(@config[:phone_number]) if @config
     @email = @config[:email] if @config
+    @country_code = @config[:country_code] if @config
   end
 
   class << self
