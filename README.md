@@ -59,12 +59,12 @@ GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES ON digital
 CREATE TABLE messages (
   id INTEGER AUTO_INCREMENT PRIMARY KEY,
   timestamp INTEGER,
-  user_id INTEGER,
+  user_id BIGINT,
   username VARCHAR(255),
   message TEXT ,
   server VARCHAR(255),
   channel VARCHAR(255),
-  message_id INTEGER
+  message_id BIGINT
 ) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE TABLE learned (
   id INTEGER AUTO_INCREMENT PRIMARY KEY,
