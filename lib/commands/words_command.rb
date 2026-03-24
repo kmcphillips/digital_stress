@@ -3,28 +3,49 @@
 # Take some of the private methods from SummaryCommand to DRY
 class WordsCommand < SummaryCommand
   def response
+    random = false
+
     if event.channel.pm?
       "Quack, I can't summarize a direct message."
     elsif !Recorder.record_channel?(server: server, channel: channel)
       "Quack, I can't provide a summary of a channel I am not recording."
     else
       if query.present?
-        days = Formatter.parse_days_from(query)
-        return "Quack, could not parse the number of days from '#{query}'." if days.blank?
-        return "Quack, needs to be at least 1 day." if days < 1
-        return "Quack, needs to be less than #{MAX_DAYS} days." if days > MAX_DAYS
+        if query.downcase.strip == "random"
+          days = 1
+          random = true
+        else
+          days = Formatter.parse_days_from(query)
+          return "Quack, could not parse the number of days from '#{query}'." if days.blank?
+          return "Quack, needs to be at least 1 day." if days < 1
+          return "Quack, needs to be less than #{MAX_DAYS} days." if days > MAX_DAYS
+        end
       else
         days = 5
       end
 
-      start_time = start_of_day(1)
-      end_time = Time.now.utc
+      start_message_id = nil
+
+      if random
+        random_message = Recorder.random(server: server, channel: channel)
+        random_time = Time.at(random_message[:timestamp])
+        start_time = Time.new(
+          random_time.year,
+          random_time.month,
+          random_time.day,
+          8, 0, 0, "UTC" # 8AM UTC is 3AM/4AM EST/EDT
+        )
+        end_time = start_time + 1.day
+      else
+        start_time = start_of_day(1)
+        end_time = Time.now.utc
+      end
 
       responses = []
 
       days.times do |day|
         messages = Recorder.all_between(server: server, channel: channel, start_time: start_time, end_time: end_time)
-        date_string = start_time.strftime("%B %d")
+        start_message_id = messages.first[:message_id] if random
 
         summary = if messages.empty?
           "_silence_"
@@ -33,7 +54,12 @@ class WordsCommand < SummaryCommand
           "**#{call_open_ai(conversation)}**"
         end
 
-        responses << "* #{date_string}: #{summary}"
+        if start_message_id.present?
+          link = "https://discord.com/channels/#{event.server.id}/#{event.channel.id}/#{start_message_id}"
+          responses << "* #{start_time.strftime("%B %d, %Y")}: #{summary} #{link}"
+        else
+          responses << "* #{start_time.strftime("%B %d")}: #{summary}"
+        end
 
         end_time = start_time
         start_time = start_of_day(day + 2)

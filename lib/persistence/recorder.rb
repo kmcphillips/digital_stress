@@ -148,6 +148,14 @@ module Recorder
       .order(Sequel.desc(:timestamp))
   end
 
+  def random(server:, channel:)
+    table
+      .where(server: server, channel: channel)
+      .order(Sequel.lit("RAND()"))
+      .limit(1)
+      .first
+  end
+
   def off_the_record?(server:, channel:)
     !!kv_store.read(otr_key(server: server, channel: channel))
   end
