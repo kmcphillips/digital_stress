@@ -54,7 +54,8 @@ class Duck
     {class_name: MonopolyCommand, command: :monopoly, description: "Create a monopoly card"},
     {class_name: DefineCommand, command: :define, aliases: [:definition, :def], description: "Get the possibly correct definition of something with GPT-4"},
     {class_name: NewCommand, command: :new, description: "Make a new something with GPT-4"},
-    {class_name: SummaryCommand, command: :summary, aliases: [:summarize, :summarise], description: "Summarise the day of conversation using GPT-4"},
+    {class_name: SummaryCommand, command: :summary, aliases: [:summarize, :summarise], description: "Summarize the conversation. Defaults to the last day, but pass in `3 days` or whatever number to specify the number of days."},
+    {class_name: WordsCommand, command: :words, aliases: [:word, :words], description: "Summarize each day's conversation in a single word. Pass in `3 days` or whatever number to specify the number of days."},
     {class_name: AskCommand, command: :ask, aliases: [:perplexity, :question, :query], description: "Ask a question with Perplexity"}
   ].freeze
 

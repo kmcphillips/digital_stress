@@ -44,12 +44,20 @@ module Formatter
   def parse_minutes_from(str)
     if str.blank?
       nil
-    elsif (matches = str.match(/(\d+\s?m)/))
+    elsif (matches = str.strip.match(/(\d+)\s?m/))
       matches[1].to_i
-    elsif (matches = str.match(/(\d+\s?h)/))
+    elsif (matches = str.strip.match(/(\d+)\s?h/))
       matches[1].to_i * 60
-    elsif (matches = str.match(/(\d+\s?d)/))
-      matches[i].to_i * 60 * 24
+    elsif (matches = str.strip.match(/(\d+)\s?d/))
+      matches[1].to_i * 60 * 24
+    end
+  end
+
+  def parse_days_from(str)
+    if str.blank?
+      nil
+    elsif (matches = str.strip.match(/(\d+)\s?d/))
+      matches[1].to_i
     end
   end
 

@@ -8,9 +8,9 @@ module Recorder
     936929561302675456 # Midjourney Bot
   ].freeze
   RECORD_CHANNELS = [
+    # "duck-bot-test#testing",
     "mandatemandate#general",
     "mandatemandate#dnd"
-    # "duck-bot-test#testing",
   ].freeze
   OFF_THE_RECORD_SECONDS = 2.hours
   OFF_THE_RECORD_EMOJI = [
@@ -137,6 +137,14 @@ module Recorder
     table
       .where(server: server, channel: channel)
       .where { timestamp > since.to_i }
+      .order(Sequel.desc(:timestamp))
+  end
+
+  def all_between(server:, channel:, start_time:, end_time:)
+    table
+      .where(server: server, channel: channel)
+      .where { timestamp >= start_time.to_i }
+      .where { timestamp <= end_time.to_i }
       .order(Sequel.desc(:timestamp))
   end
 

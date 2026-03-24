@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class SummaryCommand < BaseCommand
+  MAX_DAYS = 20
+
   def response
     if event.channel.pm?
       "Quack, I can't summarize a direct message."
@@ -8,36 +10,22 @@ class SummaryCommand < BaseCommand
       "Quack, I can't provide a summary of a channel I am not recording."
     else
       if query.present?
-        days = /^(\d+)\s?+d/i.match(query)
-        days = days[1].to_i if days
-
+        days = Formatter.parse_days_from(query)
         return "Quack, could not parse the number of days from '#{query}'." if days.blank?
+        return "Quack, needs to be at least 1 day." if days < 1
+        return "Quack, needs to be less than #{MAX_DAYS} days." if days > MAX_DAYS
       else
         days = 1
       end
 
       date = start_of_day(days)
-      date_string = date.strftime("%B %d, %Y")
+      date_string = date.strftime("%B %d")
       messages = Recorder.all_since(server: server, channel: channel, since: date)
 
       if messages.empty?
         "Quack, no messages to summarize since #{date_string}."
       else
-        conversation = ""
-        message_count = 0
-
-        messages.each do |message|
-          name = User.from_id(message[:user_id], server: server)&.mandate_display_name.presence || message[:username]
-          message_text = "#{name}: #{message[:message]}"
-
-          if conversation.split.size + message_text.split.size > max_length_in_words
-            break
-          else
-            message_count += 1
-            conversation = "#{message_text}\n#{conversation}"
-          end
-        end
-
+        conversation, message_count = summarize_messages(messages)
         summary = call_open_ai(conversation)
 
         if message_count == messages.count
@@ -49,7 +37,7 @@ class SummaryCommand < BaseCommand
     end
   end
 
-  private
+  protected
 
   def max_length_in_words
     1400
@@ -67,6 +55,25 @@ class SummaryCommand < BaseCommand
     days = [(days.to_i - 1), 0].max
     result -= days.days
     result
+  end
+
+  def summarize_messages(messages)
+    conversation = ""
+    message_count = 0
+
+    messages.each do |message|
+      name = User.from_id(message[:user_id], server: server)&.mandate_display_name.presence || message[:username]
+      message_text = "#{name}: #{message[:message]}"
+
+      if conversation.split.size + message_text.split.size > max_length_in_words
+        break
+      else
+        message_count += 1
+        conversation = "#{message_text}\n#{conversation}"
+      end
+    end
+
+    [conversation, message_count]
   end
 
   def call_open_ai(conversation)
