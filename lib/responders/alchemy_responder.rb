@@ -25,7 +25,7 @@ class AlchemyResponder < BaseResponder
     "That's ✅✅✅✅ / 4",
     "Full strength."
   ].freeze
-  CHARS_INTO_MESSAGE = 30
+  CHARS_INTO_MESSAGE = 60
 
   @parties = {}
 
