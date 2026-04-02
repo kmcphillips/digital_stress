@@ -73,7 +73,7 @@ class WordsCommand < SummaryCommand
 
   def call_open_ai(conversation)
     OpenaiClient.chat(
-      "You must return a single word, no formatting or spacing or explanation, just one word. Your task is to look at the following conversation and assign one word to it as a summary or to capture the theme or emotion of that conversation. It is a conversation in a casual chat between friends. Try to be clever about what that word is, be interesting or creative. The conversation you need to summarize in one word is:\n\n#{conversation}\n",
+      "You must return a single word, no formatting or spacing or explanation, just one word, with the first letter of the word capitalized. Your task is to look at the following conversation and assign one word to it as a summary or to capture the theme or emotion of that conversation. It is a conversation in a casual chat between friends. Try to be clever about what that word is, be interesting or creative. The conversation you need to summarize in one word is:\n\n#{conversation}\n",
       model: "gpt-5-mini"
     ).first
   end
