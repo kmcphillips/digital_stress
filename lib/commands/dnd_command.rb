@@ -14,10 +14,13 @@ class DndCommand < BaseSubcommand
   end
 
   def add
-    if subcommand_params.length != 3
+    parts = subcommand_params.dup
+    parts = parts.first.split("/") if parts.length == 1 && parts.include?("/")
+
+    if parts.length != 3
       "Quack! Usage: `#{add_usage}`"
     else
-      year, month, day = Announcement.coerce_date(year: subcommand_params[0], month: subcommand_params[1], day: subcommand_params[2])
+      year, month, day = Announcement.coerce_date(year: parts[0], month: parts[1], day: parts[2])
       start_hour, start_minute, start_second = [20, 0, 0]
       end_hour, end_minute, end_second = [23, 45, 0]
       discord_url = "https://discord.com/channels/824835225263669258/824835225263669263"
