@@ -56,9 +56,9 @@ class WordsCommand < SummaryCommand
 
         if start_message_id.present?
           link = "https://discord.com/channels/#{event.server.id}/#{event.channel.id}/#{start_message_id}"
-          responses << "* #{start_time.strftime("%B %d, %Y")}: #{summary} #{link}"
+          responses << "* #{start_time.strftime("%B %-d, %Y")}: #{summary} #{link}"
         else
-          responses << "* #{start_time.strftime("%B %d")}: #{summary}"
+          responses << "* #{start_time.strftime("%B %-d")}: #{summary}"
         end
 
         end_time = start_time
