@@ -28,10 +28,14 @@ class SummaryCommand < BaseCommand
         conversation, message_count = summarize_messages(messages)
         summary = call_open_ai(conversation)
 
-        if message_count == messages.count
-          "#{summary}\n**(Summary of all #{message_count} messages since #{date_string})**"
-        else
+        if messages.count == 1
+          "#{summary}\n**(Summary of the only message since #{date_string})**"
+        elsif messages.count == 2
+          "#{summary}\n**(Summary of the two messages since #{date_string})**"
+        elsif message_count == messages.count
           "#{summary}\n**(Summary of #{message_count} messages since #{date_string})**"
+        else
+          "#{summary}\n**(Summary of only the most recent #{message_count} messages since #{date_string})**"
         end
       end
     end
