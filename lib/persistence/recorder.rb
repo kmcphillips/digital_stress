@@ -246,15 +246,23 @@ module Recorder
     end
   end
 
-  def describe_image(event)
-    message_id = event&.message&.id
-    return unless message_id.present?
-    return if event.channel.pm?
+  def describe_image(event_or_message)
+    if event_or_message.is_a?(Discordrb::Events::Event)
+      event = event_or_message
+      message = event&.message
+    else
+      event = nil
+      message = event_or_message
+    end
 
-    attached_images = event.message.attachments.select { |a| a.image? }
+    message_id = message&.id
+    return unless message_id.present?
+    return if event && event.channel.pm?
+
+    attached_images = message.attachments.select { |a| a.image? }
     urls = []
     urls = attached_images.map(&:url) if attached_images.any?
-    urls << extract_image_url(event.message.content) if event.message.content.present?
+    urls << extract_image_url(message.content) if message.content.present?
     urls.compact_blank!
 
     if urls.any?
