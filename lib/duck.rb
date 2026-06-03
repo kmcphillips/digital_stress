@@ -99,6 +99,14 @@ class Duck
         else
           event.message.react("❓")
         end
+      elsif Recorder.image_description_emoji?(event.emoji&.name)
+        description = Recorder.image_description(event.message&.id)
+
+        if description.present?
+          event.message.reply!("_(#{description})_")
+        elsif Recorder.image_description_pending?(event.message&.id)
+          event.message.react(Recorder::IMAGE_DESCRIPTION_PENDING_EMOJI)
+        end
       end
     end
 
@@ -184,6 +192,17 @@ class Duck
           Global.logger.error(e)
           message = ":bangbang: Quack error in #{responder_class}: #{e.message}"
           event.respond(message)
+        end
+      end
+    end
+
+    bot.message do |event|
+      if !event.channel.pm? && Recorder.record_channel?(server: event.server&.name, channel: event.channel&.name)
+        description = Recorder.describe_image(event)
+
+        if description.present? && event.channel.load_message(event.message.id).reactions.any? { |r| Recorder.image_description_emoji?(r&.name) }
+          event.message.delete_own_reaction(Recorder::IMAGE_DESCRIPTION_PENDING_EMOJI)
+          event.message.reply!("_(#{description})_")
         end
       end
     end

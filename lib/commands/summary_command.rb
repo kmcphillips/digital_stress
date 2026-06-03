@@ -19,7 +19,7 @@ class SummaryCommand < BaseCommand
       end
 
       date = start_of_day(days)
-      date_string = date.strftime("%B %d")
+      date_string = date.strftime("%B %-d")
       messages = Recorder.all_since(server: server, channel: channel, since: date)
 
       if messages.empty?
@@ -63,13 +63,21 @@ class SummaryCommand < BaseCommand
 
     messages.each do |message|
       name = User.from_id(message[:user_id], server: server)&.mandate_display_name.presence || message[:username]
-      message_text = "#{name}: #{message[:message]}"
 
-      if conversation.split.size + message_text.split.size > max_length_in_words
+      if message[:message].present?
+        message_text = "#{name}: #{message[:message]}"
+        next_conversation = "#{message_text}\n#{conversation}"
+      end
+
+      if (image_description = Recorder.image_description(message[:message_id]))
+        next_conversation = "[#{name} uploaded an image containing: #{image_description}]\n#{next_conversation}"
+      end
+
+      if next_conversation.split.size > max_length_in_words
         break
       else
         message_count += 1
-        conversation = "#{message_text}\n#{conversation}"
+        conversation = next_conversation
       end
     end
 

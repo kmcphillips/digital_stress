@@ -108,7 +108,7 @@ CREATE TABLE redis_0 (
 CREATE TABLE message_metadata (
   message_id VARCHAR(255),
   type VARCHAR(255),
-  value VARCHAR(255),
+  value TEXT,
   PRIMARY KEY (message_id, type)
 ) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```

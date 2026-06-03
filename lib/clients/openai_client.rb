@@ -28,7 +28,7 @@ module OpenaiClient
       parameters[:messages] = if image_url.present?
         [{role: "user", content: [
           {type: "text", text: prompt},
-          {type: "image_url", image_url: {url: image_url}}
+          *Array(image_url).map { |url| {type: "image_url", image_url: {url: url}} }
         ]}]
       else
         [{role: "user", content: prompt}]

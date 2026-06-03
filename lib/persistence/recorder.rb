@@ -17,14 +17,22 @@ module Recorder
     "⏸️",
     "❎"
   ].freeze
+  IMAGE_DESCRIPTION_EMOJI = [
+    "👀",
+    "🔍",
+    "🔎",
+    "👁️"
+  ].freeze
+  IMAGE_DESCRIPTION_PENDING_EMOJI = "⏳"
   AGAIN_COMMAND_SECONDS = 1.hour
+  IMAGE_URL_REGEX = /\Ahttps?:\/\/[^\s]+\.(jpg|jpeg|png|gif|webp)(?:\?.*)?\z/i
 
   def record(event)
     if record_event?(event)
       args = {
         username: event.author.name,
         user_id: event.author.id,
-        message: event.message.content,
+        message: event.message.content.presence || "",
         message_id: event.message.id,
         timestamp: Formatter.parse_timestamp(event.timestamp),
         server: event.server.name,
@@ -221,9 +229,9 @@ module Recorder
     message_id = message_id.to_s
 
     if type.present?
-      Global.db[:message_metadata].where(message_id: message_id, type: type.to_s).first&.dig(:value)
+      Global.db[:message_metadata].where(message_id: message_id, type: type.to_s).first&.dig(:value).to_s.presence
     else
-      Global.db[:message_metadata].where(message_id: message_id).all.map { |r| [r[:type], r[:value]] }.to_h
+      Global.db[:message_metadata].where(message_id: message_id).all.map { |r| [r[:type], r[:value].to_s.presence] }.to_h
     end
   end
 
@@ -236,6 +244,46 @@ module Recorder
     else
       Global.db[:message_metadata].where(message_id: message_id).delete
     end
+  end
+
+  def describe_image(event)
+    message_id = event&.message&.id
+    return unless message_id.present?
+    return if event.channel.pm?
+
+    attached_images = event.message.attachments.select { |a| a.image? }
+    urls = []
+    urls = attached_images.map(&:url) if attached_images.any?
+    urls << extract_image_url(event.message.content) if event.message.content.present?
+    urls.compact_blank!
+
+    if urls.any?
+      Global.logger.info("describing images (#{urls.size}) message_id=#{message_id} URLs: #{urls.join("  ")}")
+      set_message_metadata(message_id, :image_description_pending, "pending-#{Time.now.to_i}")
+
+      image_description = if urls.one?
+        OpenaiClient.chat("Describe the attached image in a few short sentences.", image_url: urls.first).first
+      else
+        OpenaiClient.chat("Describe the attached images as a group or in a couple short sentences. Do not use bullet points or label them as first/second/etc, just describe them as a person would describe them together.", image_url: urls).first
+      end
+      Global.logger.info("image description message_id=#{message_id}: #{image_description}")
+
+      set_message_metadata(message_id, :image_description, image_description)
+      delete_message_metadata(message_id, :image_description_pending)
+      image_description
+    end
+  end
+
+  def image_description(message_id)
+    get_message_metadata(message_id, :image_description).presence
+  end
+
+  def image_description_pending?(message_id)
+    get_message_metadata(message_id, :image_description_pending).present?
+  end
+
+  def image_description_emoji?(emoji)
+    IMAGE_DESCRIPTION_EMOJI.include?(emoji)
   end
 
   private
@@ -252,7 +300,7 @@ module Recorder
     text = text.downcase
 
     # TODO technically this isn't correct as the AlchemyResponder should also filter on server and channel to know
-    text.blank? || MESSAGE_IGNORED_PREFIXES.any? { |prefix| text.starts_with?(prefix) } || AlchemyResponder.element_from_message(text).present?
+    MESSAGE_IGNORED_PREFIXES.any? { |prefix| text.starts_with?(prefix) } || AlchemyResponder.element_from_message(text).present?
   end
 
   def ignore_user?(user_id)
@@ -266,5 +314,9 @@ module Recorder
   def againable_key(server:, channel:, user_id:)
     raise "invalid againable_key #{server} / #{channel} / #{user_id}" if [server, channel, user_id].any?(&:blank?)
     "againable:#{server}:#{channel}:#{user_id}"
+  end
+
+  def extract_image_url(text)
+    text.split.find { |s| s.match?(IMAGE_URL_REGEX) }
   end
 end
