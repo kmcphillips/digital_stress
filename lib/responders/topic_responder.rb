@@ -63,6 +63,6 @@ class TopicResponder < BaseResponder
   ].freeze
 
   def image_prompt(topic_name)
-    "#{IMAGE_PROMPTS.sample} #{topic_name}"
+    "You are producing an image banner for a chat channel. It should be #{IMAGE_PROMPTS.sample} #{topic_name}. If possible include some imagery that is related to the topic."
   end
 end
