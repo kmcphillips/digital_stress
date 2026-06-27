@@ -37,7 +37,7 @@ class Duck
     {class_name: RollCommand, command: :roll, aliases: [:r], description: "Roll some dice."},
     {class_name: DndCommand, command: :dnd, aliases: [:DND], description: "D&D commands."},
     {class_name: QuigitalCommand, command: :quigital, description: "Engage with Quigital!"},
-    {class_name: OpenaiCommand, command: :openai, aliases: [:ai], description: "Commands relating to OpenAI."},
+    {class_name: AiCommand, command: :ai, aliases: [:openai], description: "Call out to various AI models."},
     {class_name: OpenaiChatCommand, command: :chat, description: "Chat using OpenAI's latest model."},
     {class_name: GptCommand, command: :gpt, description: "Do a ChatGPT style conversation with OpenAI. Use message replies to continue the conversation."},
     {class_name: ImagineCommand, command: :imagine, description: "Imagine something with AI."},

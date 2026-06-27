@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OpenaiCommand < BaseSubcommand
+class AiCommand < BaseSubcommand
   include AfterRecorderStrikethroughAgainable
 
   CHANNELS = [
@@ -14,9 +14,8 @@ class OpenaiCommand < BaseSubcommand
 
   def subcommands
     {
-      chat: "Chat with OpenAI GPT-5",
-      instruct: "Chat with OpenAI GPT-5",
-      image: "Generate an image with OpenAI Dall-E 2",
+      chat: "Chat with OpenAI GPT",
+      image: "Generate an image with OpenAI",
       imagine: "Tell it to imagine something",
       reimagine: "Tell it to imagine an image of something",
       duck: "Toggle AI generated Duck responses",
@@ -38,7 +37,7 @@ class OpenaiCommand < BaseSubcommand
     ReimagineCommand.new(event: event, bot: bot, params: params.dup.drop(1)).response
   end
 
-  def instruct
+  def chat
     if subcommand_query.blank?
       "Quack! Gotta say something."
     elsif attached_images.many?
@@ -90,9 +89,5 @@ class OpenaiCommand < BaseSubcommand
       Flags.activate("duck_generated", server: server)
       ":speech_balloon: Quack! Duck responses are now **AI generated**."
     end
-  end
-
-  def chat
-    instruct
   end
 end
