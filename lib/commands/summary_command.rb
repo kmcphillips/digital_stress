@@ -10,7 +10,7 @@ class SummaryCommand < BaseCommand
       "Quack, I can't provide a summary of a channel I am not recording."
     else
       if query.present?
-        days = Formatter.parse_days_from(query)
+        days = Formatter.parse_days_from(query) || Formatter.parse_integer_from(query)
         return "Quack, could not parse the number of days from '#{query}'." if days.blank?
         return "Quack, needs to be at least 1 day." if days < 1
         return "Quack, needs to be less than #{MAX_DAYS} days." if days > MAX_DAYS

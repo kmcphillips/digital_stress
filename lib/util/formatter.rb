@@ -41,14 +41,19 @@ module Formatter
     string
   end
 
+  MINUTES_MATCHER_REGEX = /(\d+)\s?m(?:in(?:utes?)?)?/i
+  HOURS_MATCHER_REGEX = /(\d+)\s?h(?:ours?)?/i
+  DAYS_MATCHER_REGEX = /(\d+)\s?d(?:ays?)?/i
+  INTEGER_MATCHER_REGEX = /(\d+)/i
+
   def parse_minutes_from(str)
     if str.blank?
       nil
-    elsif (matches = str.strip.match(/(\d+)\s?m/))
+    elsif (matches = str.strip.match(MINUTES_MATCHER_REGEX))
       matches[1].to_i
-    elsif (matches = str.strip.match(/(\d+)\s?h/))
+    elsif (matches = str.strip.match(HOURS_MATCHER_REGEX))
       matches[1].to_i * 60
-    elsif (matches = str.strip.match(/(\d+)\s?d/))
+    elsif (matches = str.strip.match(DAYS_MATCHER_REGEX))
       matches[1].to_i * 60 * 24
     end
   end
@@ -56,7 +61,15 @@ module Formatter
   def parse_days_from(str)
     if str.blank?
       nil
-    elsif (matches = str.strip.match(/(\d+)\s?d/))
+    elsif (matches = str.strip.match(DAYS_MATCHER_REGEX))
+      matches[1].to_i
+    end
+  end
+
+  def parse_integer_from(str)
+    if str.blank?
+      nil
+    elsif (matches = str.strip.match(INTEGER_MATCHER_REGEX))
       matches[1].to_i
     end
   end
