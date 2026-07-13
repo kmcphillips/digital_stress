@@ -257,7 +257,7 @@ module Recorder
 
     message_id = message&.id
     return unless message_id.present?
-    return if event && event.channel.pm?
+    return if event&.channel&.pm?
 
     attached_images = message.attachments.select { |a| a.image? }
     urls = []

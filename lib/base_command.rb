@@ -17,7 +17,7 @@ class BaseCommand
     WithTyping.threaded(event.channel, times: typing_times, enable: typing?) do
       if !allowed_in_pm? && pm?
         ":closed_lock_with_key: Quack! Not permitted in DMs."
-      elsif !pm? &&channels.present? && !(channels.include?("#{server}##{channel}") || channels.include?(server.to_s))
+      elsif !pm? && channels.present? && !(channels.include?("#{server}##{channel}") || channels.include?(server.to_s))
         ":closed_lock_with_key: Quack! Not permitted!"
       else
         begin
