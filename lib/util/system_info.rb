@@ -20,7 +20,7 @@ module SystemInfo
   end
 
   def ip_address
-    system_call("hostname -I").split(" ").first.presence
+    Socket.ip_address_list.find { |ai| ai.ipv4? && !ai.ipv4_loopback? }&.ip_address.presence
   end
 
   def hostname

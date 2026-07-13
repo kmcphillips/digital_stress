@@ -31,6 +31,7 @@ require "google_search_results"
 require "tzinfo"
 require "icalendar"
 require "icalendar/tzinfo"
+require "socket"
 
 require_relative "vendor/time_difference"
 
