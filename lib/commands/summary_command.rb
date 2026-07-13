@@ -15,7 +15,7 @@ class SummaryCommand < BaseCommand
         return "Quack, needs to be at least 1 day." if days < 1
         return "Quack, needs to be less than #{MAX_DAYS} days." if days > MAX_DAYS
       else
-        days = 1
+        days = 7
       end
 
       date = start_of_day(days)
