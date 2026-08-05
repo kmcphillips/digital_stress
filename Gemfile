@@ -2,7 +2,7 @@
 
 source "https://gem.coop"
 
-ruby "4.0.5"
+ruby "4.0.6"
 
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
