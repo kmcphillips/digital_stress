@@ -1,7 +1,7 @@
 FROM ruby:4.0.6-alpine AS base
 ARG BUNDLER_VERSION=4.0.17
 ARG BUNDLE_WITHOUT="development:test"
-ARG BASE_PACKAGES="tz git vim curl imagemagick ttf-liberation msttcorefonts-installer fontconfig libc6-compat gcompat yaml-dev"
+ARG BASE_PACKAGES="tz git vim curl imagemagick ttf-liberation fontconfig libc6-compat gcompat yaml-dev"
 ARG BUILD_PACKAGES="build-base sqlite"
 ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
 ENV DISCORDRB_NONACL true
@@ -9,7 +9,7 @@ ENV DISCORDRB_NONACL true
 RUN apk add --no-cache ${BASE_PACKAGES}
 RUN mkdir /app
 WORKDIR /app
-RUN update-ms-fonts && fc-cache -f
+RUN fc-cache -f
 RUN git config --global --add safe.directory /app
 RUN gem update --system --no-document && \
     gem install -N bundler -v ${BUNDLER_VERSION}

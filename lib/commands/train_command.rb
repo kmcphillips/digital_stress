@@ -81,7 +81,7 @@ class TrainCommand < BaseCommand
     extend self
 
     SIGN_TEMPLATE_PATH = Global.root.join("data", "train_accident_template.png")
-    FONT_NAME = "Arial"
+    FONT_NAME = "Liberation-Sans"
 
     def it_has_been_days_file(days)
       raise "Cannot find file '#{SIGN_TEMPLATE_PATH}'" unless File.exist?(SIGN_TEMPLATE_PATH)
