@@ -100,6 +100,9 @@ class DndCommand < BaseSubcommand
   end
 
   def add_message
+    "@everyone #{generate_ai_message}"
+  rescue => e
+    Global.logger.error("[DndCommand][add_message] Error generating message from AI: #{e.inspect}")
     "@everyone :man_mage: D&D tonight! Sharp time 8PM Eastern."
   end
 
@@ -111,5 +114,9 @@ class DndCommand < BaseSubcommand
     else
       "Quack! Nothing found??"
     end
+  end
+
+  def generate_ai_message
+    OpenaiClient.chat("You are a chatbot called 'Duck' in a chat with fiends. You are notifying everyone that tonight at 8pm we are playing D&D (Dungeons and Dragons). Write one or two short sentences of text for that notification. Include maybe a 'Quack' since you are a duck, or maybe write in theme for D&D, or maybe just be direct, or maybe do something different. I want this to vary each time. But the message is tonight at 8pm sharp we are playing Dungeons and Dragons together. Do not say 'Gather' or 'Gather your party'.")
   end
 end
