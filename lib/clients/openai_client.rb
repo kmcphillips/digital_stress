@@ -48,7 +48,7 @@ module OpenaiClient
 
   # As of gpt-image-1 this appears to only return base 64 so this won't return URls anymore and probably isn't needed, just use `image_file`.
   def image_file(prompt, openai_params = {})
-    with_error_handling("image") do
+    with_error_handling("image", raise_on_error: true) do
       parameters = openai_params.symbolize_keys
       Global.logger.info("[OpenaiClient][image] request #{parameters} prompt: #{prompt}")
       parameters[:model] ||= OpenaiClient.default_image_model
@@ -136,7 +136,7 @@ module OpenaiClient
     nil
   end
 
-  def with_error_handling(context_name)
+  def with_error_handling(context_name, raise_on_error: false)
     yield
   rescue Faraday::Error => e
     Global.logger.error("[OpenaiClient][#{context_name}] Faraday error: #{e.message}")
@@ -144,6 +144,7 @@ module OpenaiClient
       Global.logger.error("[OpenaiClient][#{context_name}] response #{e.response_body}")
       error_message = extract_error_message(e.response_body)
       if error_message.present?
+        raise Error, "OpenAI #{context_name} returned error: #{error_message}" if raise_on_error
         ":bangbang: OpenAI #{context_name} returned error: #{error_message}"
       else
         raise
