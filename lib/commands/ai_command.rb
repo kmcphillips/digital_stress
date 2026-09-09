@@ -50,8 +50,10 @@ class AiCommand < BaseSubcommand
   def image
     if subcommand_query.blank?
       "Quack! What do you want an image of?"
+    elsif attached_images.many?
+      "Quack! Only one image at a time is supported."
     else
-      OpenaiClient.image_file(subcommand_query.strip).first || "Quack! Failed to generate an image."
+      OpenaiClient.image_file(subcommand_query.strip, image_url: attached_images.first&.url).first || "Quack! Failed to generate an image."
     end
   end
 

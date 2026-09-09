@@ -48,18 +48,31 @@ module OpenaiClient
 
   # As of gpt-image-1 this appears to only return base 64 so this won't return URls anymore and probably isn't needed, just use `image_file`.
   def image_file(prompt, openai_params = {})
-    with_error_handling("image", raise_on_error: true) do
-      parameters = openai_params.symbolize_keys
-      Global.logger.info("[OpenaiClient][image] request #{parameters} prompt: #{prompt}")
+    parameters = openai_params.symbolize_keys
+    image_url = parameters.delete(:image_url)
+    editing_image = image_url.present?
+    context_name = editing_image ? "image_edit" : "image_generate"
+
+    with_error_handling(context_name, raise_on_error: true) do
+      Global.logger.info("[OpenaiClient][#{context_name}] request #{parameters} prompt: #{prompt} image_url: #{image_url}")
       parameters[:model] ||= OpenaiClient.default_image_model
-      parameters[:prompt] = prompt
       parameters[:size] ||= "1536x1024"
-      response = Global.openai_client.images.generate(parameters: parameters)
-      Global.logger.info("[OpenaiClient][image] response #{response.inspect}")
+      parameters[:prompt] = prompt
+
+      response = if editing_image
+        with_downloaded_image(image_url) do |file|
+          parameters[:image] = file
+          Global.openai_client.images.edit(parameters: parameters)
+        end
+      else
+        Global.openai_client.images.generate(parameters: parameters)
+      end
+
+      Global.logger.info("[OpenaiClient][#{context_name}] response #{response.inspect}")
       if !response.key?("error")
         if response["output_format"] == "png"
-          raise Error, "[OpenaiClient][image] expected data to have length of 1 but got #{response["data"].count}" if response["data"].count != 1
-          raise Error, "[OpenaiClient][image] data does not include a b64_json key" unless response["data"][0].key?("b64_json")
+          raise Error, "[OpenaiClient][#{context_name}] expected data to have length of 1 but got #{response["data"].count}" if response["data"].count != 1
+          raise Error, "[OpenaiClient][#{context_name}] data does not include a b64_json key" unless response["data"][0].key?("b64_json")
           temp_filename = ((parameters[:model].presence || OpenaiClient.default_image_model).presence || "image").tr("-", "_")
           result = [response["data"][0]["b64_json"]].map do |b64_json|
             file = Tempfile.create([temp_filename, ".png"], binmode: true)
@@ -70,7 +83,7 @@ module OpenaiClient
         else
           result = response["data"].map { |c| c["url"] }
           if result.blank?
-            raise Error, "[OpenaiClient][image] request #{parameters} prompt: #{prompt} gave a blank url result: #{response}"
+            raise Error, "[OpenaiClient][#{context_name}] request #{parameters} prompt: #{prompt} gave a blank url result: #{response}"
           end
         end
         result
@@ -118,6 +131,18 @@ module OpenaiClient
   end
 
   private
+
+  def with_downloaded_image(url)
+    response = HTTParty.get(url)
+    raise Error, "Failed to download image: HTTP #{response.code}" unless response.success?
+
+    ext = File.extname(URI.parse(url).path).presence || ".png"
+    Tempfile.create(["openai_edit", ext], binmode: true) do |file|
+      file.write(response.body)
+      file.rewind
+      yield file
+    end
+  end
 
   def extract_error_message(response)
     if response.is_a?(Hash)
