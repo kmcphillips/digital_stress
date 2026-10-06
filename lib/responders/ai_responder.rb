@@ -12,7 +12,7 @@ class AiResponder < BaseResponder
 
   def respond
     respond_match(/kitchen.?noise/i) do
-      completion("Play a popular song using only kitchen noises.")
+      completion("Give the test of the the sounds of a popular song using only kitchen noises.")
     end
 
     # respond_match(/\?\Z/i, chance: 0.05) do
