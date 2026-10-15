@@ -25,4 +25,3 @@ FROM base AS app
 WORKDIR /app
 COPY --from=gems /usr/local/bundle /usr/local/bundle
 COPY . .
-
