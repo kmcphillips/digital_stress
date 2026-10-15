@@ -2,15 +2,16 @@ discord:
   token: xxxxx
   debug_log: true
 
-redis:
-  url: redis://127.0.0.1:6379/0
+kv:
+  url: "mysql://kevin:kevin@127.0.0.1:3306/duck_test?compress=true"
 
-mysql:
-  url: 'mysql://user:pass@127.0.0.1:3306/duck_test'
+db:
+  url: "mysql://kevin:kevin@127.0.0.1:3306/duck_test?compress=true"
 
 web_auth:
   username: username
   password: password
+  host: example.com
 
 giphy:
   key: xxxxx
@@ -19,18 +20,32 @@ wolfram_alpha:
   appid: xxxxx
 
 twilio:
-  outgoing_phone_number: "+15554443333"
+  outgoing_phone_numbers:
+    default: "+15552223333"
+    ca: "+15552223333"
+    us: "+15554445555"
   account_sid: ACxxxx
   auth_token: xxxxx
 
 openai:
   access_token: xxxxx
 
+perplexity:
+  key: xxxxx
+
 aws:
-  access_key_id: xxx
-  secret_access_key: xxx
+  access_key_id: xxxxx
+  secret_access_key: xxxxx
+
+google:
+  client_id: "xxx.apps.googleusercontent.com"
+  client_secret: xxxxx
+  refresh_token: xxxxx
+
+serp_api:
+  key: 9acdbe3324ff8a9acf106a90f94471ed12654e6e296b289bb597493d2ec16b84
 
 duck:
-  api_key: xxxxxxxxxxxxxxxxxx
+  api_key: xxxxx
 
 servers: {}

@@ -49,69 +49,15 @@ fly deploy
 
 Some static data is stored in SQLite instances, but those are read only, such as D&D data.
 
-Transactional data uses a MySQL DB with the following:
+Transactional data uses a MySQL DB. Start by creating the user with something like:
 
 ```sql
 CREATE DATABASE digital_stress_db CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 CREATE USER 'digital_stress_user'@'%' IDENTIFIED BY '12345';
 GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES ON digital_stress_db.* TO 'digital_stress_user'@'%' WITH GRANT OPTION;
-
-CREATE TABLE messages (
-  id INTEGER AUTO_INCREMENT PRIMARY KEY,
-  timestamp INTEGER,
-  user_id BIGINT,
-  username VARCHAR(255),
-  message TEXT ,
-  server VARCHAR(255),
-  channel VARCHAR(255),
-  message_id BIGINT
-) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE TABLE learned (
-  id INTEGER AUTO_INCREMENT PRIMARY KEY,
-  timestamp BIGINT,
-  user_id BIGINT,
-  message TEXT,
-  server VARCHAR(255),
-  channel VARCHAR(255),
-  message_id BIGINT
-) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE TABLE train_accidents (
-  id INTEGER AUTO_INCREMENT PRIMARY KEY,
-  timestamp BIGINT,
-  user_id BIGINT,
-  server VARCHAR(255),
-  channel VARCHAR(255)
-) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE TABLE announcements (
-  id INTEGER AUTO_INCREMENT PRIMARY KEY,
-  server VARCHAR(255),
-  channel VARCHAR(255),
-  day INTEGER,
-  month INTEGER,
-  year INTEGER,
-  message TEXT,
-  guild_scheduled_event_id BIGINT,
-  google_calendar_id VARCHAR(255),
-  url TEXT,
-  calendar_summary TEXT,
-  calendar_description TEXT,
-  calendar_start_time BIGINT,
-  calendar_end_time BIGINT,
-  timestamp BIGINT,
-  cancelled_timestamp BIGINT
-) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE TABLE redis_0 (
-  `key` VARCHAR(255),
-  value TEXT,
-  timestamp BIGINT
-) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE TABLE message_metadata (
-  message_id VARCHAR(255),
-  type VARCHAR(255),
-  value TEXT,
-  PRIMARY KEY (message_id, type)
-) CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
+
+And initialize the DB with the schema in `duck.mysql.sql`.
 
 To execute something like modifying the tables, use `bin/console` and run:
 ```ruby
@@ -133,3 +79,7 @@ To release the mod in the format Factorio expects it to be uploaded:
 cd factorio_mod
 zip -r duck_x.y.z.zip duck
 ```
+
+## Tests
+
+Create a MySQL database configured in `config_spec.yml` and load it with `duck.mysql.sql`.

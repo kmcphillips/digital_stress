@@ -97,9 +97,16 @@ end
 
 require_relative "../lib/global"
 
-Global.environment[:config] ||= Global.root.join("spec/support/config_spec.yml")
+Global.environment[:config] ||= Global.root.join("spec/support/config_spec.yml.enc")
 Global.environment[:log] ||= Global.root.join("log/bot.spec.log")
-Global.environment[:db] ||= Global.root.join("db/chat.spec.sqlite3") # These will no longer work and should be MySQL
-Global.environment[:kv] ||= Global.root.join("db/chat.spec.sqlite3")
+# The `db` and `kv` are configured from the DB URL in config_spec.yml, which points to a MySQL database locally
 
 require_relative "../lib/base"
+
+RSpec.configure do |config|
+  config.before(:each) do
+    database = Global.db.opts[:database].to_s
+    raise "Will not truncate `#{database}` as it does not end in `_test` and that's sketchy" unless database.end_with?("_test")
+    Global.db.tables.each { |table| Global.db[table].truncate }
+  end
+end
