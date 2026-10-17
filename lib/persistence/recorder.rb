@@ -156,6 +156,29 @@ module Recorder
       .order(Sequel.desc(:timestamp))
   end
 
+  def messages_between(server:, channel:, from_message_id:, through_message_id:)
+    raise "from_message_id must be present and a number" if from_message_id.blank? || from_message_id.to_i.zero?
+    raise "through_message_id must be present and a number" if through_message_id.blank? || through_message_id.to_i.zero?
+    raise "from_message_id must be less than through_message_id" if from_message_id.to_i > through_message_id.to_i
+
+    table
+      .where(server: server, channel: channel)
+      .where { message_id >= from_message_id.to_i }
+      .where { message_id <= through_message_id.to_i }
+      .order(:timestamp, :id)
+      .all
+  end
+
+  def messages_before(server:, channel:, before_message_id:, window_length_seconds:)
+    table
+      .where(server: server, channel: channel)
+      .where { message_id < before_message_id.to_i }
+      .where { timestamp > (Time.now - window_length_seconds.seconds).to_i }
+      .order(Sequel.desc(:timestamp), Sequel.desc(:id))
+      .all
+      .reverse
+  end
+
   def random(server:, channel:)
     table
       .where(server: server, channel: channel)

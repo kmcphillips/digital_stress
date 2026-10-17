@@ -207,6 +207,19 @@ class Duck
       end
     end
 
+    bot.message do |event|
+      server = event.server&.name
+      channel = event.channel&.name
+
+      if !event.channel.pm? &&
+          Recorder.record_channel?(server: server, channel: channel) &&
+          !Recorder.off_the_record?(server: server, channel: channel)
+
+        # TODO: Process message for batch here
+        Global.logger.debug("Message batch for #{server}/#{channel} starting at #{event.message.id} at #{event.timestamp}")
+      end
+    end
+
     Global.logger.info("Starting Duck")
 
     bot.run(true)
