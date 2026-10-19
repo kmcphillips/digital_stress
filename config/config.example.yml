@@ -1,3 +1,5 @@
+env: development
+
 discord:
   token: XXXX
   debug_log: false

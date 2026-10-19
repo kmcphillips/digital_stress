@@ -54,6 +54,8 @@ logger_file.sync = true
 Global.logger = Logger.new(logger_file, level: (Global.config.discord.debug_log ? Logger::DEBUG : Logger::INFO))
 Discordrb::LOGGER.streams << logger_file if Global.config.discord.debug_log
 
+Global.logger.info("Initializing with env=#{Global.env}")
+
 if Global.environment[:db] != false
   datastore_url = Global.environment[:db].presence || ENV["DUCK_DB"].presence || Global.config.db.url.presence
   Global.logger.info("Selecting db: Global.environment[:db]: #{Global.environment[:db].inspect} || ENV['DUCK_DB']: #{ENV["DUCK_DB"].inspect} || Global.config.db.url: #{Global.config.db.url.inspect}")
