@@ -13,9 +13,9 @@ class SimpleResponder < BaseResponder
 
   def respond
     react_match(/\bhwat\b/i, "🔥")
-    react_match(/(italy|italian)/i, "🤌")
     react_match(/(noot|neet)/i, "👢")
     react_match(/(good|great|nice|best) duck/i, "❤️")
+    react_match(/celery/i, "celeryman")
 
     respond_match(/hang(ing)?.?in.?there/i, responder_image("hang_in_there.jpg"))
     respond_match(/\bheat\b/i, "don't be hwat...", chance: 0.08)
