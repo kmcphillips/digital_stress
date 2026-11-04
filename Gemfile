@@ -35,6 +35,7 @@ gem "google-apis-core"
 gem "google_search_results" # SerpApi
 gem "icalendar"
 gem "tzinfo"
+gem "json", "< 3.0.0" # wrong number of arguments errors somewhere
 
 group :development, :test do
   gem "rspec"
