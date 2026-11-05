@@ -11,7 +11,7 @@ module OpenaiClient
 
   def default_image_model
     # This appears to now always be base 64 encoded data so no URLs returned
-    "gpt-image-2.5-flare"
+    "gpt-image-2.6-flare"
   end
 
   def models
