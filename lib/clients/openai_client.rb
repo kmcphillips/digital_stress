@@ -6,12 +6,14 @@ module OpenaiClient
   class Error < StandardError; end
 
   def default_model
-    "gpt-5.5"
+    "gpt-6.1-terra"
   end
 
   def default_image_model
     # This appears to now always be base 64 encoded data so no URLs returned
-    "gpt-image-2.6-flare"
+    # flare is faster, sunburst is better
+    # can also pass `quality:` set to high/medium/low, but default is `auto`
+    "gpt-image-2.6-sunburst" 
   end
 
   def models
